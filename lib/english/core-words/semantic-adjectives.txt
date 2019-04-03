@@ -1,0 +1,7 @@
+lexical : 
+singular
+plural
+to do with
+class
+category
+type of

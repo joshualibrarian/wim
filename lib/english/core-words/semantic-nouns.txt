@@ -1,0 +1,34 @@
+word : lexeme
+part of speech : word class, lexical class, lexical category
+
+noun
+verb
+adjective
+adverb
+pronoun
+preposition
+conjunction
+interjection
+numeral
+article
+determiner
+exclamation
+same as : synonym
+antonym
+complimentary pair
+gradable pair
+relational opposite
+homonym
+polysym
+homophone
+homograph
+hyponym
+hypernym
+taxonym
+holonym
+meronym
+metonym
+synecdoche
+contiguity
+pertainym
+attribute
