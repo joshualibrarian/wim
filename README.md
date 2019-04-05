@@ -29,14 +29,18 @@ Since the WIM aims to ditch the web browser in the entirety, and would rather no
 
 And frankly, it just has everything we need, from encrypted, portable persistence, networking, a dynamic class-loading architecture, to a well defined security consciousness, with everything we need to build our sandbox already in place.  Java just makes the most sense for this project, at least initially.
 
-## Item 
+## Major Components
 
-The fundamental unit of organization, of addressability, is called an item.  Any kind of data can be encapsulated in an item, from document to program or anything else.  These items can be related *through* any item(s), *to* any item.  It is a coherent unit that can be shared and stays selectively synchronized with other copies of itself.  It has a unique identifier across the system and forms the base addressable unit.  Almost everything you'll encounter as a user on this system is an item of one kind or another.  See the [specification](doc/item.md) for details.
+What is the web?  At its heart it is a file format (HTML), or these days a whole set of file formats, a relational scheme (hyperlinking), and a protocol (HTTP) with its addressing scheme.  The *World Information Map* is a complete replacement for the World Wide Web, and it, too, has these components at its core:
 
-## Networking
+### Item 
+
+The fundamental unit of organization, of addressability, is called an item.  Any kind of data can be encapsulated in an item, from document to program or anything else.  These items can be related *through* any item(s), *to* any item.  It is a coherent unit that can be shared and stays selectively synchronized with other copies of itself.  It has a unique identifier across the system and forms the base addressable unit.  Almost everything you'll encounter as a user on this system is an item of one kind or another, and everything else is contained in one.  See the [specification](doc/item.md) for details.
+
+### Networking
 
 The WIM uses a relatively simple [network protocol](doc/protocol.md), which allows items or parts of items to be transferred, allows queries to be made and facilities anonymity with Tor-style onion routing.  Though a completely custom protocol, it uses the same ports as SMTP, and the system recognizes such services and interacts with them according, allowing the WIM to take over the email namespace slowly over time.
 
-## Addressing
+### Addressing
 
 Items are each uniquely addressable across the system.  Though backwards-compatible to the email namespace, the WIM is flexible to allow for almost any namespace.  The [addressing scheme](doc/addressing.md) is very robust and allows for referencing not just items, but parts of items.

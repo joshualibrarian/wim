@@ -26,6 +26,11 @@ public class JdoStore implements Store {
 	}
 
 	@Override
+	public boolean contains(Item item) {
+		return false;	// TODO: stub
+	}
+	
+	@Override
 	public void put(Item item) {
 		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();

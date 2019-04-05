@@ -1,9 +1,9 @@
-package zone.wim.test.item;
+package zone.wim.item;
 
 import org.junit.jupiter.api.*;
 
 import zone.wim.item.*;
-import zone.wim.token.MediaType;
+import zone.wim.token.MediaItemType;
 import zone.wim.exception.*;
 
 
@@ -12,9 +12,9 @@ public class MediaTypeTest {
 	@Test
 	void testParsePass() {
 		try {
-			MediaType token = MediaType.parse("image/jpeg");
+			MediaItemType token = MediaItemType.parse("image/jpeg");
 			
-			assert (token instanceof MediaType);
+			assert (token instanceof MediaItemType);
 		} catch (Throwable e) {
 			e.printStackTrace();
 		}
@@ -24,7 +24,7 @@ public class MediaTypeTest {
 	@Test
 	void testParseFail() {
 		try {
-			MediaType.parse("INVALID MIME TYPE");
+			MediaItemType.parse("INVALID MIME TYPE");
 			
 		} catch (Throwable e) {
 			assert (e instanceof TypeException.Invalid);

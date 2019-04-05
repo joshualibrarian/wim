@@ -14,7 +14,6 @@ import zone.wim.exception.ItemException.*;
 public class JpaStore implements Store {
 	private static Logger LOGGER = Logger.getLogger(JpaStore.class.getCanonicalName());
 
-	private Path path;
 	private EntityManagerFactory emf;
 	private EntityManager em;
 	
@@ -35,6 +34,10 @@ public class JpaStore implements Store {
 		em.getTransaction().commit();
 	}
 	
+	@Override
+	public boolean contains(Item item) {
+		return em.contains(item);
+	}
 	@Override
 	public Item get(String address) throws NotFound {
 		try {

@@ -7,7 +7,6 @@ public class MessageDecoder extends DelimiterBasedFrameDecoder {
 
 	public MessageDecoder(int maxFrameLength, ByteBuf delimiter) {
 		super(maxFrameLength, delimiter);
-		// TODO Auto-generated constructor stub
 	}
 	
 }

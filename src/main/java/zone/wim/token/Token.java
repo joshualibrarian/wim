@@ -67,4 +67,6 @@ public interface Token {
 		return matchingTokens;
 	}
 	
+	public abstract String get();
+	
 }

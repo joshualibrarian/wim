@@ -12,6 +12,10 @@ public class AddressException {
 		public Invalid(String address) {
 			super(address);
 		}
+		
+		public Invalid(Throwable cause) {
+			super(cause);
+		}
 	}
 	
 	public static class Duplicate extends Exception {

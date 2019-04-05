@@ -1,4 +1,4 @@
-package zone.wim.test.item;
+package zone.wim.item;
 
 import org.junit.jupiter.api.Test;
 

@@ -1,4 +1,4 @@
-package zone.wim.test.library;
+package zone.wim.library;
 
 import java.net.*;
 import java.nio.file.*;
@@ -39,10 +39,12 @@ public class JpaStoreTest {
 		try {
 			hostItem = new HostItem(HOST);
 			store.put(hostItem);
+			
+			assert (store.contains(hostItem));
+
 			store.close();
 			
 		} catch (SignersOnly e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		

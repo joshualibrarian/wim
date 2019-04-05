@@ -10,7 +10,7 @@ import zone.wim.token.Token;
 
 public interface Store {
 
-	public static enum StoreType {
+	public enum StoreType {
 		JDO, JPA
 	}
 	
@@ -30,6 +30,8 @@ public interface Store {
 	}
 
 	public void open();
+	
+	public boolean contains(Item item);
 	
 	public void put(Item item);
 	

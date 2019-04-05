@@ -59,6 +59,7 @@ dependencies {
 	implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
     implementation group: 'commons-daemon', name: 'commons-daemon', version: '1.1.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '1.20'
+    implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
 	
 	// persistence
 	//API (JPA & JDO)

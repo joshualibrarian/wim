@@ -4,7 +4,7 @@ The WMM networking protocol is a (unicode) text-based TCP/IP protocol.
 
 ## Initialization
 
-This protocol begins it's initializtion process exactly as the SMTP protocol does.  Optionally (but active by default) with TLS, an (initially ASCII) text-based TCP/IP connection is made and from a client to a server.  Since "servers" routinely make outgoing connections to other hosts and clients can recieve connections if they are network accessible, in the context of this document, *client* refers always to the host initiating the connection, and *server*, to the host on the recieving end of that connection.
+This protocol begins its initialization process exactly as the SMTP protocol does.  Optionally (but active by default) with TLS, an (initially ASCII) text-based TCP/IP connection is made and from a client to a server.  Since "servers" routinely make outgoing connections to other hosts and clients can receive connections if they are network accessible, in the context of this document, *client* refers always to the host initiating the connection, and *server*, to the host on the receiving end of that connection.
 
 When initially connecting to a new host, the client does not know if it will find another WMM peer or an actual SMTP server.  The server response line includes a marker, as any SMTP client would, signifying what kind of host they've found:
 
@@ -14,7 +14,7 @@ If an actual SMTP client has connected to our server to deliver some mail from o
 
 
 
-If so, we will know for certan and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will recieve that delivery and import it as a simple item.
+If so, we will know for certain and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will recieve that delivery and import it as a simple item.
 
 When we do know that we have connected with a WMM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that hostmainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
 

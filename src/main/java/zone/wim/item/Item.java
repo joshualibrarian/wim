@@ -41,10 +41,12 @@ public class Item {
 		if (!(this instanceof Signer)) {
 			throw new SignersOnly(address.get());
 		}
+		setAddress(address);
+		initialize();
 	}
 	
 	public Item(Address address, Signer creator) {
-		this.setAddress(address);
+		setAddress(address);
 		if (creator != null) {
 			this.creator = new Reference(creator);
 		}
@@ -52,13 +54,13 @@ public class Item {
 	}
 	
 	private void initialize() {
-		// need other constructors for these uses
 		draft = true;
 		security = 0;
 
 		manifests = new ArrayList<Manifest>();
 		relations = new ArrayList<Relation>();
 		contents = new ArrayList<Content>();
+		tokens = new ArrayList<Token>();
 	}
 
 	protected void setAddress(Address address) {
@@ -88,4 +90,18 @@ public class Item {
 		return address;
 	}
 	
+	@Override
+	public boolean equals(Object obj) {
+		if (obj instanceof Item) {
+			Item other = (Item)obj;
+			return addressKey == other.addressKey;
+		}
+		
+		return false;
+	}
+	
+	@Override
+	public int hashCode() {
+	    return addressKey.hashCode();
+	}
 }

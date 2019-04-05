@@ -1,4 +1,4 @@
-package zone.wim.test.library;
+package zone.wim.library;
 
 import java.net.InetAddress;
 import java.net.UnknownHostException;

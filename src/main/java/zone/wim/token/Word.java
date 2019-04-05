@@ -8,4 +8,10 @@ public class Word implements Token {
 		// TODO stub
 		throw new TypeException.Invalid(className);
 	}
+
+	@Override
+	public String get() {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }
