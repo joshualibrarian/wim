@@ -51,6 +51,13 @@ public class Library implements Daemon {
 		LOGGER.info("Library()");
 	}
 
+	@Override
+	public void init(DaemonContext context) throws DaemonInitException {
+		ARGS = context.getArguments();
+		RUNNING_AS_DAEMON = true;
+		init();
+	}
+
 	private void init() {
 		configure();
 		
@@ -131,16 +138,9 @@ public class Library implements Daemon {
 //			TerminalClient tc = new TerminalClient();
 		}
 
-//		if (showGraphicalClient) {
+		if (GRAPHICAL_CLIENT) {
 			Application.launch(DesktopClient.class, args);
-//		}
-	}
-
-	@Override
-	public void init(DaemonContext context) throws DaemonInitException {
-		ARGS = context.getArguments();
-		RUNNING_AS_DAEMON = true;
-		init();
+		}
 	}
 
 	public void shutdown() throws ShutdownException {

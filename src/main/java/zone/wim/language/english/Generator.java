@@ -38,15 +38,16 @@ public class Generator {
 	public Generator(Signer user) {
 		this.user = user;
 		library = Library.instance();
+		
 		try {
 			// TODO check it if exists before creating it
-			english = (Language)user.createItem("language.english", Language.class);
+			english = (Language)user.createItem("lang.english", Language.class);
 		} catch (Invalid e) {
 			e.printStackTrace();
 		}
 	}
 	
-	protected void initWordNet() throws NotFound {
+	protected void initWordnet() throws NotFound {
 		try { 
 			URL url = new URL("file", null, DICTIONARY_PATH);
 			wordNet = new Dictionary(url);
