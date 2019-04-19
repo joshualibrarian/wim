@@ -19,4 +19,5 @@ public interface ItemType extends Type {
 	public default Class<? extends Item> getClazz() {
 		return Item.class;
 	}
+	
 }

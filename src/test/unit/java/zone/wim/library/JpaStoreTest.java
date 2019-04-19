@@ -35,34 +35,29 @@ public class JpaStoreTest {
 	void persistItemToStore() {
 		
 		store.open();
-		HostItem hostItem;
-		try {
-			hostItem = new HostItem(HOST);
-			store.put(hostItem);
+		Host hostItem;
+		hostItem = Host.create(HOST);
+		store.put(hostItem);
 			
-			assert (store.contains(hostItem));
+		assert (store.contains(hostItem));
 
-			store.close();
+		store.close();
 			
-		} catch (SignersOnly e) {
-			e.printStackTrace();
-		}
-		
 	}
 	
 	void retrieveItemFromStore() {
 		
 		store.open();
-		HostItem hostItem = null;
+		Host hostItem = null;
 		try {
-			hostItem = (HostItem) store.get(HOST.getHostAddress());
+			hostItem = (Host) store.get(HOST.getHostAddress());
 		} catch (NotFound e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}
 		
 		LOGGER.info("hostItem: " + hostItem);
-		assert (hostItem instanceof HostItem);
+		assert (hostItem instanceof Host);
 		
 	}
 }

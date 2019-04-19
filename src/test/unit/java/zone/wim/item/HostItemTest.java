@@ -11,21 +11,12 @@ import zone.wim.item.*;
 
 public class HostItemTest {
 	static Logger LOGGER = Logger.getLogger(HostItemTest.class.getCanonicalName());
+
 	@Test
-	void testConstructor() {
-		InetAddress localhost;
-		try {
-			localhost = InetAddress.getLocalHost();
-			HostItem hostItem = new HostItem(localhost);
-			LOGGER.info(localhost.toString());
-			
-		} catch (UnknownHostException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (SignersOnly e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
+	void creationTest() {
+		InetAddress localhost = InetAddress.getLoopbackAddress();
+		Host hostItem = Host.create(localhost);
+		assert (hostItem instanceof Host);
+		LOGGER.info(localhost.toString());
 	}
-	
 }

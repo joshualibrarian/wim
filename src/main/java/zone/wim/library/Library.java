@@ -1,167 +1,164 @@
 package zone.wim.library;
 
-import java.net.InetAddress;
+import static picocli.CommandLine.Option;
 
-import java.net.UnknownHostException;
-import java.nio.file.FileSystems;
-import java.nio.file.Path;
+import java.net.*;
 import java.security.Security;
 import java.util.*;
-import java.util.concurrent.*;
-import java.util.logging.LogManager;
-import java.util.logging.Logger;
-
-import org.apache.commons.cli.*;
+import java.util.logging.*;
 import org.apache.commons.daemon.*;
 import org.bouncycastle.jce.provider.BouncyCastleProvider;
-
 import javafx.application.Application;
+import picocli.CommandLine;
 import zone.wim.client.DesktopClient;
-import zone.wim.exception.ShutdownException;
+import zone.wim.exception.ItemException.*;
+import zone.wim.exception.LibraryException.*;
+import zone.wim.exception.*;
 import zone.wim.item.*;
 import zone.wim.socket.*;
+import zone.wim.token.*;
 import zone.wim.library.Store.*;
 
-public class Library implements Daemon {
+public class Library implements Daemon, Runnable {
 	private static Logger LOGGER = Logger.getLogger(Library.class.getCanonicalName());
 	public static List<Integer> PORTS = Arrays.asList(25, 465, 587, 2525, 25025);
-
-	private static String[] ARGS;
-	private static Library INSTANCE;
-
-	private static Store.StoreType STORE_TYPE = StoreType.JDO;
-	private static boolean RUNNING_AS_DAEMON = false;
-	private static boolean GRAPHICAL_CLIENT;
-	private static boolean TERMINAL_CLIENT;
-	private static Path LOCAL_PATH;
+	private static Library INSTANCE = null;
 	
-	public static Library instance() {
-		if (!(INSTANCE instanceof Library)) {
-			INSTANCE = new Library();
-		}
-		return INSTANCE;
+	public static synchronized Library instance() throws NotInitialized {
+		if (INSTANCE != null && INSTANCE.isInitialized) {
+			return INSTANCE;
+		} else throw new NotInitialized();
 	}
-
-	private Store store;
-	private InetAddress localhost;
-	private HostItem localhostItem;
-	private ExecutorService executorService = Executors.newCachedThreadPool();
 	
-	public Library() {
+	public static void main(String[] args) {
+		INSTANCE = new Library();
+		CommandLine.run(INSTANCE, args);
+		try {
+			INSTANCE.start();
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+	}
+	
+	@Option(names = { "-l", "--local-path" }, description = "specify the local filesystem path")
+	private String localPath = "data/";
+	
+	@Option(names = { "-p", "--persistence-type" }, description = "select type of persistence store")
+	private StoreType storeType = StoreType.JPA;
+	
+	@Option(names = { "-s", "--server" }, description = "run the local server and receive incoming connections")
+	private boolean runServer = false;
+	
+	@Option(names = { "-g", "--graphical-client" }, description = "activate the graphical client")
+    private boolean graphicalClient = false;
+	
+	@Option(names = { "-t", "--terminal-client" }, description = "activate the terminal client")
+	private boolean terminalClient = false;
+	
+	@Option(names = { "-u", "--untrusted-host" }, description = "treat the local host as untrusted")
+	private boolean untrustedHost = false;
+	
+	private boolean runningAsDaemon = false;
+	private boolean isInitialized = false;
+	
+	private Store store;
+	private SocketServer server;
+
+//	private InetAddress localhost;
+	private Host localhost;
+	
+	private Library() {
 		LOGGER.info("Library()");
 	}
 
 	@Override
-	public void init(DaemonContext context) throws DaemonInitException {
-		ARGS = context.getArguments();
-		RUNNING_AS_DAEMON = true;
+	public void run() {
 		init();
+	}
+	
+	@Override
+	public void init(DaemonContext context) throws DaemonInitException {
+		runningAsDaemon = true;
+		INSTANCE = this;
+		CommandLine.run(this,  context.getArguments());
 	}
 
 	private void init() {
-		configure();
-		
-		store = Store.getStore(StoreType.JPA);
+		LOGGER.info("init()");
 //		System.setSecurityManager(new SecurityManager());		
 		Security.addProvider(new BouncyCastleProvider());
 
-		try {
-			localhost = InetAddress.getLocalHost();
-			
-		} catch (UnknownHostException uhe) {
-			// TODO how can this ever happen with localhost?
-			uhe.printStackTrace();
-		}
+		store = Store.getStore(storeType);
+		server = new SocketServer();
 
+		localhost = getLocalhost();
+		
 		Runtime.getRuntime().addShutdownHook(new Thread("app-shutdown-hook") {
 			@Override
 			public void run() {
 				try {
-					shutdown();
+					Library.this.stop();
 					destroy();
 				} catch (ShutdownException e) {
-					// TODO Auto-generated catch block
+					e.printStackTrace();
+				} catch (Exception e) {
 					e.printStackTrace();
 				}
 				System.out.println("Bye! 🙇‍♂️👋🖖");
 			}
 		});
-	}
-	
-	private void configure() {
-		parseOptions();
-	}
-	
-	private void parseOptions() {
-		Options options = new Options();
-		options.addOption("p", "path", true, "local path to library data");
-		options.addOption("t", "terminal", false, "show the local terminal client");
-		options.addOption("g", "graphic", true, "show the local graphical client");
-		options.addOption("o", "outgoing", false, "allow only outgoing connections");
-		options.addOption("u", "untrusted", false, "treat the current host client as untrusted");
 		
-		CommandLineParser parser = new DefaultParser();
-
-		try {
-			CommandLine cmd = parser.parse(options, ARGS);
-			String pathString = Optional.ofNullable(cmd.getOptionValue("p")).orElse(System.getProperty("user.home"));
-			LOCAL_PATH = resolvePath(pathString);
-		} catch (ParseException pe) {
-			// show help text here
-			System.exit(0);
-		} 
+		isInitialized = true;
 	}
 	
-	private Path resolvePath(String pathString) {
-		return FileSystems.getDefault().getPath(pathString);
-	}
-	
-	public void start() throws Exception {
-		LOGGER.info("Starting up daemon.");
-		store.open();
-		executorService.execute(new SocketServer());
-	}
-
-	public static void main(String[] args) {
-		Library.ARGS = args;
-		Library.instance().init();
-		
+	public Host getLocalhost() {
+		InetAddress host = InetAddress.getLoopbackAddress();
 		try {
-			Library.instance().start();
-		} catch (Exception e) {
-			// TODO something here
-			e.printStackTrace();
-		}
-		
-		if (TERMINAL_CLIENT) {
-			System.out.println("SHOW TERMINAL!");
-//			TerminalClient tc = new TerminalClient();
-		}
-
-		if (GRAPHICAL_CLIENT) {
-			Application.launch(DesktopClient.class, args);
-		}
-	}
-
-	public void shutdown() throws ShutdownException {
-		try {
-			stop();
-			destroy();
-		} catch (Exception e) {
-			// TODO lots of error handling
-			e.printStackTrace();
+			String address = host.getHostAddress();
+			return (Host) store.get(address, Host.class);
+		} catch (NotFound e) {
+			return Host.create(host);
 		}
 	}
 	
 	@Override
-	public void stop() throws Exception {
-		LOGGER.info("Stopping daemon.");
+	public void start() throws Exception {
+		LOGGER.info("start()");
+		store.open();
+		
+		if (runServer) {
+			server.start();
+		}
+		
+		if (terminalClient) {
+			LOGGER.info("SHOW TERMINAL CLIENT!");
+		}
 
+		if (graphicalClient) {
+			LOGGER.info("SHOW GRAPHICAL CLIENT!");
+			Application.launch(DesktopClient.class, new String[0]);
+		}
+	}
+
+	public void shutdown() throws Exception {
+		stop();
+		destroy();
+	}
+	
+	@Override
+	public void stop() throws Exception {
+		LOGGER.info("stop()");
+		store.close();
+		if (runServer) {
+			server.stop();
+		}
 	}
 
 	@Override
 	public void destroy() {
 		LOGGER.info("destroy()");
+		isInitialized = false;
+		INSTANCE = null;
 	}
 	
 	public Item getItemByAddress(String address) {

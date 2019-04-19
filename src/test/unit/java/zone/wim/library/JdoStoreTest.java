@@ -37,16 +37,12 @@ public class JdoStoreTest {
 	
 	void persistItemToStore() {
 
-		HostItem hostItem;
+		Host hostItem;
 		store.open();
 		
-		try {
-			hostItem = new HostItem(HOST);
-			store.put(hostItem);
-			store.close();
-		} catch (SignersOnly e) {
-			e.printStackTrace();
-		}
+		hostItem = Host.create(HOST);
+		store.put(hostItem);
+		store.close();
 		
 	}
 	
@@ -54,13 +50,13 @@ public class JdoStoreTest {
 		
 		store.open();
 		
-		HostItem hostItem = null;
+		Host hostItem = null;
 		try {
-			hostItem = (HostItem) store.get(HOST.getHostAddress());
+			hostItem = (Host) store.get(HOST.getHostAddress());
 		} catch (NotFound e) {
 			e.printStackTrace();
 		}
 		
-		assert (hostItem instanceof HostItem);
+		assert (hostItem instanceof Host);
 	}
 }

@@ -8,6 +8,7 @@ import javax.persistence.Embeddable;
 import zone.wim.exception.AddressException;
 import zone.wim.exception.AddressException.*;
 import zone.wim.item.Reference;
+import zone.wim.item.Signer;
 
 @Embeddable
 @EmbeddedOnly
@@ -36,8 +37,18 @@ public interface Address extends Token {
 		return (Address)results.get(0);
 	}
 	
+	public Address generate(Signer creator, String name, ItemType type) throws Invalid;
+	
 	public String get();
-	public String getUserPart();
-	public String getPathPart();
+	
+	public String getSitePart();
+	
+	public default String getUserPart() {
+		return null;
+	}
+	public default String getThingPart() {
+		return null;
+	}
+	
 	public boolean validate(String addressToValidate);
 }

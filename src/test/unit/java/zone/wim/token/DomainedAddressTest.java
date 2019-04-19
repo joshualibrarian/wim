@@ -1,4 +1,4 @@
-package zone.wim.item;
+package zone.wim.token;
 
 import org.junit.jupiter.api.*;
 
@@ -13,7 +13,7 @@ public class DomainedAddressTest {
 	@Test
 	void RegexTest() {
 		try {
-			LOGGER.info(DomainedAddress.Regex.CAPTURE);
+			LOGGER.info(DomainedAddress.Regex.COMPLETE);
 			DomainedAddress address = DomainedAddress.parse("@test.net");
 			assert (address instanceof DomainedAddress);
 		} catch (Throwable e) {

@@ -1,23 +1,27 @@
 package zone.wim.token;
 
-import java.io.Serializable;
-
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
+import java.util.regex.*;
 
 import zone.wim.exception.AddressException.*;
+import zone.wim.item.*;
 
 public class DomainedAddress implements Address {
 
+	public static String SITE_CHAR = "@";
+	public static String THING_CHAR = "/";
+	
 	public static class Regex {
-		public static String NEGATED_SET = "[^" + Address.Regex.RESERVED_CHARS + "\\/@]+";
-		public static String USERNAME 	= NEGATED_SET;
-		public static String DOMAIN 	= NEGATED_SET;
-		public static String SERVER		= "@" + DOMAIN;
-		public static String USER		= "(?:" + USERNAME + ")?" + SERVER;
-		public static String CAPTURE 	= "(?<user>" + USER + ")" 
-										+ "(?:\\/(?<path>" + USERNAME + "))?";
-		public static Pattern ADDRESS 	= Pattern.compile(CAPTURE, Pattern.UNICODE_CHARACTER_CLASS);
+		public static String SITE_CHAR  = DomainedAddress.SITE_CHAR;
+		public static String THING_CHAR = "\\" + DomainedAddress.THING_CHAR;
+		public static String NEGATED 	= "[^" + Address.Regex.RESERVED_CHARS 
+										+ SITE_CHAR + THING_CHAR + "]+";
+		public static String USERNAME 	= NEGATED;
+		public static String DOMAIN 	= NEGATED;
+		public static String SITE		= "(?<site>" + SITE_CHAR + DOMAIN + ")";
+		public static String USER		= "(?<user>" + USERNAME + ")?";
+		public static String THING		= THING_CHAR + "(?<thing>" + NEGATED + ")?";
+		public static String COMPLETE 	= USER + SITE + THING;
+		public static Pattern ADDRESS 	= Pattern.compile(COMPLETE, Pattern.UNICODE_CHARACTER_CLASS);
 	}
 	
 	public static DomainedAddress parse(String address) throws Throwable {
@@ -26,8 +30,9 @@ public class DomainedAddress implements Address {
 	}
 	
 	private String address;
-	private transient String userPart;
-	private transient String pathPart;
+	private String sitePart;
+	private String userPart;
+	private String thingPart;
 	
 	public DomainedAddress(String address) throws Invalid {
 		LOGGER.info("DomainedAddress(" + address + ")");
@@ -37,29 +42,59 @@ public class DomainedAddress implements Address {
 			throw new Invalid(address);
 		}
 		
-		pathPart = m.group("path");
+		sitePart = m.group("site");
+		thingPart = m.group("thing");
 		userPart = m.group("user");
 		this.address = address;
 	}
-	
+
+	@Override
+	public DomainedAddress generate(Signer creator, String name, ItemType type) throws Invalid {
+		String a = null;
+		if (creator instanceof Host) {
+			if (type.getClazz().equals(Site.class)) {
+				// TODO: this is where we check with every known peer 
+				// TODO: on widest setting to confirm uniqueness
+				a = SITE_CHAR + name;
+				
+			} else {
+				throw new Invalid("hosts many only create sites");
+			}
+		} else if (creator instanceof Site) {
+			if (type.getClazz().equals(User.class)) {
+				a = name + creator.getAddress().get();
+			} 
+		}
+		
+		if (a == null) {
+			a = creator.getAddress().get() + THING_CHAR + name;
+		}
+		
+		return new DomainedAddress(a);
+	}
+
 	@Override
 	public String get() {
 		return address;
 	}
 
 	@Override
+	public String getSitePart() {
+		return sitePart;
+	}
+	
+	@Override
 	public String getUserPart() {
 		return userPart;
 	}
 
 	@Override
-	public String getPathPart() {
-		return pathPart;
+	public String getThingPart() {
+		return thingPart;
 	}
 
 	@Override
 	public boolean validate(String addressToValidate) {
-		// TODO Auto-generated method stub
 		return false;
 	}
 

@@ -7,11 +7,12 @@ import javax.jdo.annotations.*;
 import javax.persistence.*;
 import zone.wim.client.*;
 import zone.wim.token.*;
+import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
 
 @PersistenceCapable
 @MappedSuperclass
-public class Item {
+public abstract class Item {
 	private static Logger LOGGER = Logger.getLogger(Item.class.getName());
 
 	@PrimaryKey
@@ -32,12 +33,12 @@ public class Item {
 	protected transient Reference creator;
 	protected transient int security = 0;
 
-	public Item() {
+	protected Item() {
 		LOGGER.info("Item()");
 		initialize();
 	}
 	
-	public Item(Address address) throws SignersOnly {
+	protected Item(Address address) throws SignersOnly {
 		if (!(this instanceof Signer)) {
 			throw new SignersOnly(address.get());
 		}
@@ -45,7 +46,7 @@ public class Item {
 		initialize();
 	}
 	
-	public Item(Address address, Signer creator) {
+	protected Item(Address address, Signer creator) {
 		setAddress(address);
 		if (creator != null) {
 			this.creator = new Reference(creator);
@@ -104,4 +105,7 @@ public class Item {
 	public int hashCode() {
 	    return addressKey.hashCode();
 	}
+	
+//	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
+
 }

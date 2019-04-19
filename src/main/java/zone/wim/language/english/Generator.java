@@ -25,6 +25,7 @@ import zone.wim.token.ClassItemType;
 import zone.wim.token.DomainedAddress;
 import zone.wim.exception.*;
 import zone.wim.exception.AddressException.Invalid;
+import zone.wim.exception.LibraryException.NotInitialized;
 
 public class Generator {
 	public static Logger LOGGER = Logger.getLogger(Generator.class.getCanonicalName());
@@ -37,7 +38,11 @@ public class Generator {
 
 	public Generator(Signer user) {
 		this.user = user;
-		library = Library.instance();
+		try {
+			library = Library.instance();
+		} catch (NotInitialized e1) {
+			e1.printStackTrace();
+		}
 		
 		try {
 			// TODO check it if exists before creating it
@@ -128,7 +133,7 @@ public class Generator {
 	
 	Lexeme createLexeme(PartOfSpeech pos, IWord word) {
 		Lexeme lexeme = null;
-		Class<? extends Lexeme> clazz = pos.getClazz();
+		Class<? extends Lexeme> clazz = pos.getLexemeType();
 		
 		try {
 			Constructor<? extends Lexeme> constructor = clazz.getConstructor(String.class);

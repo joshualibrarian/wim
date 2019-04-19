@@ -1,6 +1,5 @@
 package zone.wim.token;
 
-import zone.wim.exception.*;
 import zone.wim.exception.TypeException.*;
 import zone.wim.item.*;
 

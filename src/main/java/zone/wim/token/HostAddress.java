@@ -1,8 +1,12 @@
 package zone.wim.token;
 
 import java.net.InetAddress;
+import java.net.UnknownHostException;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
+
+import zone.wim.exception.AddressException.Invalid;
+import zone.wim.item.Signer;
 
 import java.util.logging.Logger;
 
@@ -34,20 +38,26 @@ public class HostAddress implements Address {
 	}
 
 	@Override
-	public String getUserPart() {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
-	@Override
-	public String getPathPart() {
-		// TODO Auto-generated method stub
-		return null;
+	public String getSitePart() {
+		return text;
 	}
 
 	@Override
 	public boolean validate(String addressToValidate) {
+		// TODO
 		return false;
+	}
+
+	@Override
+	public Address generate(Signer creator, String name, ItemType type) throws Invalid {
+		
+		InetAddress a;
+		try {
+			a = InetAddress.getByName(name);
+			return new HostAddress(a);
+		} catch (UnknownHostException e) {
+			throw new Invalid(e);
+		}
 	}
 
 }

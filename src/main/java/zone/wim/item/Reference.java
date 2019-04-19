@@ -8,6 +8,8 @@ import java.io.ObjectOutput;
 import java.io.ObjectOutputStream;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
+
+import zone.wim.exception.LibraryException.NotInitialized;
 import zone.wim.library.Library;
 import zone.wim.token.Address;
 
@@ -16,7 +18,7 @@ public class Reference {
 	
 	public static final String MANIFEST_CHAR = "~";
 	public static final String RELATION_CHAR = ";";
-	public static final String CONTENT_CHAR = "!";
+	public static final String CONTENT_CHAR = "*";
 	public static final String SUMMARY_CHAR = "^";
 	
 	transient private Item item = null;
@@ -42,7 +44,12 @@ public class Reference {
 	
 	public Item item() { 
 		if (item == null) {
-			item = Library.instance().getItemByAddress(address.get());
+			try {
+				item = Library.instance().getItemByAddress(address.get());
+			} catch (NotInitialized e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
 		}
 		
 		return item; 

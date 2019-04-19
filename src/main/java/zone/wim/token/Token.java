@@ -28,14 +28,15 @@ public interface Token {
 	 * @throws Throwable
 	 */
 	public static List<Token> parse(String tokenText) throws Throwable {
-		return parse(tokenText, null);
+		return parse(tokenText, Token.class);
 	}
 	
 	public static List<Token> parse(String tokenText, Class<? extends Token> type) throws Throwable {
-		if (type == null) {
-			type = Token.class;
-		}
-		
+//		if (type == null) {
+//			type = Token.class;
+//		}
+
+		// TODO we need to be caching these classes, and possibly pre-ordering the first several
 		ClassInfoList tokenTypes = new ClassGraph().enableClassInfo().scan()
 			.getClassesImplementing(type.getCanonicalName());
 		

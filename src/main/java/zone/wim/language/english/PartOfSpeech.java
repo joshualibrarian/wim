@@ -7,7 +7,7 @@ import zone.wim.item.*;
 public enum PartOfSpeech {
 	
 	ADJECTIVE {
-		public Class<? extends Lexeme> getClazz() {
+		public Class<? extends Lexeme> getLexemeType() {
 			return Adjective.class;
 		}
 		public POS getWordnetPOS() {
@@ -15,7 +15,7 @@ public enum PartOfSpeech {
 		}
 	},
 	VERB {
-		public Class<? extends Lexeme> getClazz() {
+		public Class<? extends Lexeme> getLexemeType() {
 			return Verb.class;
 		}
 		public POS getWordnetPOS() {
@@ -23,7 +23,7 @@ public enum PartOfSpeech {
 		}
 	},
 	ADVERB {
-		public Class<? extends Lexeme> getClazz() {
+		public Class<? extends Lexeme> getLexemeType() {
 			return Adverb.class;
 		}
 		public POS getWordnetPOS() {
@@ -31,7 +31,7 @@ public enum PartOfSpeech {
 		}
 	},
 	NOUN {
-		public Class<? extends Lexeme> getClazz() {
+		public Class<? extends Lexeme> getLexemeType() {
 			return Noun.class;
 		}
 		
@@ -40,7 +40,7 @@ public enum PartOfSpeech {
 		}
 	};
 	
-	public abstract Class<? extends Lexeme> getClazz();
+	public abstract Class<? extends Lexeme> getLexemeType();
 	public abstract POS getWordnetPOS();
 	
 	public static PartOfSpeech getByWordnetPOS(POS pos) {

@@ -18,15 +18,14 @@ import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
 import zone.wim.library.Library;
 
-public class SocketServer implements Runnable {	
+public class SocketServer {	
 	private static Logger LOGGER = Logger.getLogger(SocketServer.class.getCanonicalName());
 //	Server serverItem;
 	
 	EventLoopGroup bossGroup;
     EventLoopGroup workerGroup;
 	
-	@Override
-	public void run() {
+	public void start() {
         bossGroup = new NioEventLoopGroup();
         workerGroup = new NioEventLoopGroup();
 
@@ -65,9 +64,13 @@ public class SocketServer implements Runnable {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally {
-			LOGGER.info("shutting down SocketServer()");
-            workerGroup.shutdownGracefully();
-            bossGroup.shutdownGracefully();
-        }
+			stop();
+		}
 	}
+	
+	public void stop() {
+		LOGGER.info("shutting down SocketServer()");
+        workerGroup.shutdownGracefully();
+        bossGroup.shutdownGracefully();
+    }
 }

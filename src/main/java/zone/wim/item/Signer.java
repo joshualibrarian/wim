@@ -2,6 +2,7 @@ package zone.wim.item;
 
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.Method;
 import java.security.*;
 import java.security.spec.*;
 
@@ -18,14 +19,13 @@ public abstract class Signer extends Item {
 	
 	transient private boolean isAuthenticated = false;
 	
-	public Signer() {}
+	@SuppressWarnings("unused")
+	private Signer() {
+		super();
+	}
 	
 	public Signer(Address address) throws SignersOnly {
 		super(address);
-	}
-	
-	public Signer(Address address, Signer creator) {
-		super(address, creator);
 	}
 	
 	private void generateKeypair() {
@@ -49,13 +49,16 @@ public abstract class Signer extends Item {
 	
 	public Item createItem(String name, Class<? extends Item> clazz) throws Invalid {
 		ItemType type = new ClassItemType(clazz);
-		return createItem(name, type);
+		Address a = generateAddress(name, type);
+		
+		return createItem(a, type);
 	}
 	
+	
 	public Item createItem(String name, ItemType type) throws Invalid {
-		Address address = generateAddress(name, type);
+		Address a = generateAddress(name, type);
 		
-		return createItem(address, type);
+		return createItem(a, type);
 	}
 	
 	public Item createItem(Address address, ItemType type) {
@@ -81,5 +84,8 @@ public abstract class Signer extends Item {
 		return item;
 	}
 	
-	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
+	private Address generateAddress(String name, ItemType type) throws Invalid {
+		return address.generate(this,  name, type);
+	}
+	
 }

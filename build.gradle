@@ -9,6 +9,8 @@ plugins {
 
 sourceCompatibility = '12'
 targetCompatibility = '12'
+
+group = 'zone.wim'
 version = '0.0.1'
 
 application {
@@ -65,11 +67,12 @@ repositories {
 dependencies {
     // apache commons
     implementation group: 'commons-codec', name: 'commons-codec', version:'1.0.15'
-	implementation group: 'commons-cli', name: 'commons-cli', version: '1.4'
 	implementation group: 'commons-validator', name: 'commons-validator', version: '1.6'
     implementation group: 'commons-daemon', name: 'commons-daemon', version: '1.1.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '1.20'
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.3'
+	
+	implementation 'info.picocli:picocli:4.0.0-alpha-1'
 	
 	// persistence API (JPA & JDO)
 	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
@@ -97,13 +100,6 @@ dependencies {
     implementation group: 'org.apache.tika', name: 'tika-parsers', version:'1.18'
     implementation group: 'io.github.classgraph', name: 'classgraph', version:'4.0.4'
 	
-	// geospacial	
-	//compile group: 'org.geotools', name: 'gt-shapefile', version: '15.2'
-	
-	//compile group: 'de.codecentric.centerdevice', name: 'centerdevice-nsmenufx', version: '2.1.6'
-	//compile 'de.jensd:fontawesomefx-emojione:3.1.1-9'
-	//compile 'de.jensd:fontawesomefx-commons:9.1.2'
-
 	// testing	
     testImplementation "org.jmockit:jmockit:1.+"    
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'
@@ -111,6 +107,6 @@ dependencies {
 }
 
 test {
-//    jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
+    jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
 }
 
