@@ -22,7 +22,7 @@ public class LibraryTest {
 					instance.shutdown();
 				}
 			} catch (NotInitialized e) {
-				LOGGER.info("Instance is null in BeforeEach().");
+				LOGGER.info("instance is null in BeforeEach()");
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
@@ -42,7 +42,8 @@ public class LibraryTest {
 			}
 		}
 		
-		@Test void returnsInstanceIfInitialized() {
+		@Test
+		public void returnsInstanceIfInitialized() {
 			Library instance = null;
 			
 			try {

@@ -7,11 +7,13 @@ import java.security.*;
 import java.security.spec.*;
 
 import io.netty.buffer.ByteBuf;
+import javafx.scene.layout.Pane;
+import zone.wim.client.ContainerPane;
 import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.SignersOnly;
 import zone.wim.token.*;
 
-public abstract class Signer extends Item {
+public abstract class Signer extends AbstractItem implements Group {
 	
 //	private KeyStore keystore;
 //	private PublicKey publicKey;
@@ -26,6 +28,7 @@ public abstract class Signer extends Item {
 	
 	public Signer(Address address) throws SignersOnly {
 		super(address);
+		generateKeypair();
 	}
 	
 	private void generateKeypair() {
@@ -87,5 +90,4 @@ public abstract class Signer extends Item {
 	private Address generateAddress(String name, ItemType type) throws Invalid {
 		return address.generate(this,  name, type);
 	}
-	
 }

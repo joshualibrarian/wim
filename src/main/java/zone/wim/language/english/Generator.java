@@ -3,11 +3,9 @@ package zone.wim.language.english;
 
 import java.io.BufferedReader;
 
-
 import java.io.FileReader;
 import java.io.IOException;
-import java.lang.reflect.Constructor;
-import java.lang.reflect.InvocationTargetException;
+import java.lang.reflect.*;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.*;
@@ -22,10 +20,10 @@ import zone.wim.language.*;
 import zone.wim.language.english.DictionaryException.NotFound;
 import zone.wim.library.*;
 import zone.wim.token.ClassItemType;
-import zone.wim.token.DomainedAddress;
+import zone.wim.token.AtAddress;
 import zone.wim.exception.*;
-import zone.wim.exception.AddressException.Invalid;
-import zone.wim.exception.LibraryException.NotInitialized;
+import zone.wim.exception.AddressException.*;
+import zone.wim.exception.LibraryException.*;
 
 public class Generator {
 	public static Logger LOGGER = Logger.getLogger(Generator.class.getCanonicalName());

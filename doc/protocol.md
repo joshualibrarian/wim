@@ -1,6 +1,6 @@
 # Networking Protocol
 
-The WMM networking protocol is a (unicode) text-based TCP/IP protocol.  
+The WIM networking protocol is a (unicode) text-based TCP/IP protocol.  
 
 ## Initialization
 
@@ -8,13 +8,13 @@ This protocol begins its initialization process exactly as the SMTP protocol doe
 
 When initially connecting to a new host, the client does not know if it will find another WMM peer or an actual SMTP server.  The server response line includes a marker, as any SMTP client would, signifying what kind of host they've found:
 
-	220 foo.net ESMTP WMM <version>; <timestamp>
+	220 foo.net ESMTP WIM <version>; <timestamp>
 
-If an actual SMTP client has connected to our server to deliver some mail from outside the system, it will think nothing amiss and proceed with its delivery.  If a WMM client connects to a host whose marker is ambiguous, it can probe the waters with an empty request (`\r`, see below), which fails cleanly with a `500` error if it has indeed found an actual SMTP server, it can then carry on as SMTP.
+If an actual SMTP client has connected to our server to deliver some mail from outside the system, it will think nothing amiss and proceed with its delivery.  If a WIM client connects to a host whose marker is ambiguous, it can probe the waters with an empty request (`\r`, see below), which fails cleanly with a `500` error if it has indeed found an actual SMTP server, it can then carry on as SMTP.
 
 
 
-If so, we will know for certain and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will recieve that delivery and import it as a simple item.
+If so, we will know for certain and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will receive that delivery and import it as a simple item.
 
 When we do know that we have connected with a WMM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that hostmainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
 

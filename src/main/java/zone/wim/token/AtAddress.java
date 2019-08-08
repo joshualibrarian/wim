@@ -5,14 +5,14 @@ import java.util.regex.*;
 import zone.wim.exception.AddressException.*;
 import zone.wim.item.*;
 
-public class DomainedAddress implements Address {
+public class AtAddress implements Address {
 
 	public static String SITE_CHAR = "@";
 	public static String THING_CHAR = "/";
 	
 	public static class Regex {
-		public static String SITE_CHAR  = DomainedAddress.SITE_CHAR;
-		public static String THING_CHAR = "\\" + DomainedAddress.THING_CHAR;
+		public static String SITE_CHAR  = AtAddress.SITE_CHAR;
+		public static String THING_CHAR = "\\" + AtAddress.THING_CHAR;
 		public static String NEGATED 	= "[^" + Address.Regex.RESERVED_CHARS 
 										+ SITE_CHAR + THING_CHAR + "]+";
 		public static String USERNAME 	= NEGATED;
@@ -24,9 +24,9 @@ public class DomainedAddress implements Address {
 		public static Pattern ADDRESS 	= Pattern.compile(COMPLETE, Pattern.UNICODE_CHARACTER_CLASS);
 	}
 	
-	public static DomainedAddress parse(String address) throws Throwable {
-		LOGGER.info("DomainedAddress.parse(" + address + ")");
-		return new DomainedAddress(address);
+	public static AtAddress parse(String address) throws Throwable {
+		LOGGER.info("AtAddress.parse(" + address + ")");
+		return new AtAddress(address);
 	}
 	
 	private String address;
@@ -34,7 +34,7 @@ public class DomainedAddress implements Address {
 	private String userPart;
 	private String thingPart;
 	
-	public DomainedAddress(String address) throws Invalid {
+	public AtAddress(String address) throws Invalid {
 		LOGGER.info("DomainedAddress(" + address + ")");
 		Matcher m = Regex.ADDRESS.matcher(address);
 		
@@ -49,7 +49,7 @@ public class DomainedAddress implements Address {
 	}
 
 	@Override
-	public DomainedAddress generate(Signer creator, String name, ItemType type) throws Invalid {
+	public AtAddress generate(Signer creator, String name, ItemType type) throws Invalid {
 		String a = null;
 		if (creator instanceof Host) {
 			if (type.getClazz().equals(Site.class)) {
@@ -70,7 +70,7 @@ public class DomainedAddress implements Address {
 			a = creator.getAddress().get() + THING_CHAR + name;
 		}
 		
-		return new DomainedAddress(a);
+		return new AtAddress(a);
 	}
 
 	@Override

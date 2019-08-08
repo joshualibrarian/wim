@@ -2,28 +2,47 @@ package zone.wim.library;
 
 import static picocli.CommandLine.Option;
 
+import java.awt.AWTException;
+import java.awt.Image;
+import java.awt.MenuItem;
+import java.awt.PopupMenu;
+import java.awt.SystemTray;
+import java.awt.Toolkit;
+import java.awt.TrayIcon;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.io.IOException;
 import java.net.*;
 import java.security.Security;
 import java.util.*;
+import java.util.concurrent.Callable;
 import java.util.logging.*;
+
+import javax.imageio.ImageIO;
+
 import org.apache.commons.daemon.*;
-import org.bouncycastle.jce.provider.BouncyCastleProvider;
+import org.bouncycastle.jce.provider.*;
 import javafx.application.Application;
+import javafx.application.Platform;
 import picocli.CommandLine;
+import picocli.CommandLine.Command;
 import zone.wim.client.DesktopClient;
 import zone.wim.exception.ItemException.*;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.exception.*;
 import zone.wim.item.*;
+import zone.wim.language.Fragment;
 import zone.wim.socket.*;
 import zone.wim.token.*;
 import zone.wim.library.Store.*;
 
+@Command(name="wim")
 public class Library implements Daemon, Runnable {
 	private static Logger LOGGER = Logger.getLogger(Library.class.getCanonicalName());
-	public static List<Integer> PORTS = Arrays.asList(25, 465, 587, 2525, 25025);
 	private static Library INSTANCE = null;
-	
+
+	public static List<Integer> PORTS = Arrays.asList(25, 465, 587, 2525, 25025);
+
 	public static synchronized Library instance() throws NotInitialized {
 		if (INSTANCE != null && INSTANCE.isInitialized) {
 			return INSTANCE;
@@ -31,8 +50,13 @@ public class Library implements Daemon, Runnable {
 	}
 	
 	public static void main(String[] args) {
+		LOGGER.info("main(): " + String.join(", ", args));
 		INSTANCE = new Library();
-		CommandLine.run(INSTANCE, args);
+		int exitCode = new CommandLine(INSTANCE).execute(args);
+		LOGGER.info("EXIT CODE: " + exitCode);
+		if (exitCode > 0) {
+			System.exit(exitCode);
+		}
 		try {
 			INSTANCE.start();
 		} catch (Exception e) {
@@ -50,7 +74,7 @@ public class Library implements Daemon, Runnable {
 	private boolean runServer = false;
 	
 	@Option(names = { "-g", "--graphical-client" }, description = "activate the graphical client")
-    private boolean graphicalClient = false;
+    private boolean graphicalClient = true;
 	
 	@Option(names = { "-t", "--terminal-client" }, description = "activate the terminal client")
 	private boolean terminalClient = false;
@@ -58,15 +82,19 @@ public class Library implements Daemon, Runnable {
 	@Option(names = { "-u", "--untrusted-host" }, description = "treat the local host as untrusted")
 	private boolean untrustedHost = false;
 	
+	@Option(names = { "-h", "--host" }, description = "initial host to connect query")
+	private String hostName = null;
+	
 	private boolean runningAsDaemon = false;
 	private boolean isInitialized = false;
 	
 	private Store store;
 	private SocketServer server;
 
-//	private InetAddress localhost;
 	private Host localhost;
 	
+	private TrayMenu trayMenu = null;
+
 	private Library() {
 		LOGGER.info("Library()");
 	}
@@ -78,16 +106,28 @@ public class Library implements Daemon, Runnable {
 	
 	@Override
 	public void init(DaemonContext context) throws DaemonInitException {
+		int exitCode = new CommandLine(this).execute(context.getArguments());
+		if (exitCode > 0) {
+			throw new DaemonInitException("init failed with code: " + exitCode);
+		}
+		
 		runningAsDaemon = true;
 		INSTANCE = this;
-		CommandLine.run(this,  context.getArguments());
 	}
 
+	
+	
+	private void doSomething() {
+		System.out.println("DO SOMETHING!");
+	}
+	
 	private void init() {
 		LOGGER.info("init()");
 //		System.setSecurityManager(new SecurityManager());		
-		Security.addProvider(new BouncyCastleProvider());
-
+//		Security.addProvider(new BouncyCastleProvider());
+		
+//		trayMenu = TrayMenu.init(this);
+		
 		store = Store.getStore(storeType);
 		server = new SocketServer();
 
@@ -98,7 +138,7 @@ public class Library implements Daemon, Runnable {
 			public void run() {
 				try {
 					Library.this.stop();
-					destroy();
+					Library.this.destroy();
 				} catch (ShutdownException e) {
 					e.printStackTrace();
 				} catch (Exception e) {
@@ -112,13 +152,24 @@ public class Library implements Daemon, Runnable {
 	}
 	
 	public Host getLocalhost() {
-		InetAddress host = InetAddress.getLoopbackAddress();
-		try {
-			String address = host.getHostAddress();
-			return (Host) store.get(address, Host.class);
-		} catch (NotFound e) {
-			return Host.create(host);
+		if (localhost instanceof Host) {
+			return localhost;
 		}
+		
+		InetAddress netAddress = InetAddress.getLoopbackAddress();
+		String address = netAddress.getHostAddress();
+		Host host = null;
+		try {
+			host = (Host)store.get(address, Host.class);
+		} catch (NotFound e) {
+			e.printStackTrace();
+		}
+		
+		if (host == null) {
+			host = Host.create(netAddress);
+		}
+		
+		return host;
 	}
 	
 	@Override
@@ -141,6 +192,7 @@ public class Library implements Daemon, Runnable {
 	}
 
 	public void shutdown() throws Exception {
+		LOGGER.info("shutdown()");
 		stop();
 		destroy();
 	}
@@ -148,6 +200,7 @@ public class Library implements Daemon, Runnable {
 	@Override
 	public void stop() throws Exception {
 		LOGGER.info("stop()");
+		
 		store.close();
 		if (runServer) {
 			server.stop();
@@ -159,6 +212,7 @@ public class Library implements Daemon, Runnable {
 		LOGGER.info("destroy()");
 		isInitialized = false;
 		INSTANCE = null;
+		trayMenu.destroy();
 	}
 	
 	public Item getItemByAddress(String address) {
@@ -170,6 +224,20 @@ public class Library implements Daemon, Runnable {
 	}
 	
 	public List<Item> getItemsByClass(Class<? extends Item> clazz) {
+		
 		return Collections.emptyList();
+	}
+	
+//	public List<Item> getItemsByTokenType(Token token) {
+		
+//	}
+	
+	public List<Item> getItemsByGroup(Group group) {
+		List<Item> items = group.getContents();
+		return items;		
+	}
+	
+	public void runQuery(Fragment fragment) {	// TODO: QueryOptions argument
+		
 	}
 }

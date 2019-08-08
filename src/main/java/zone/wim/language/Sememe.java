@@ -5,7 +5,9 @@ import zone.wim.item.*;
 import zone.wim.token.*;
 import java.util.*;
 
-public class Sememe extends Item {
+import javafx.scene.layout.Pane;
+
+public class Sememe extends AbstractItem {
 	
 	String synsetId;
 	Map<Language, String> gloss;
@@ -48,5 +50,10 @@ public class Sememe extends Item {
 	
 	public void setGloss(Language language, String gloss) {
 		this.gloss.put(language, gloss);
+	}
+
+	@Override
+	public Pane getPane() {
+		return null;
 	}
 }

@@ -27,11 +27,11 @@ public interface Token {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static List<Token> parse(String tokenText) throws Throwable {
+	public static List<Token> parse(String tokenText) throws Exception {
 		return parse(tokenText, Token.class);
 	}
 	
-	public static List<Token> parse(String tokenText, Class<? extends Token> type) throws Throwable {
+	public static List<Token> parse(String tokenText, Class<? extends Token> type) throws Exception {
 //		if (type == null) {
 //			type = Token.class;
 //		}
