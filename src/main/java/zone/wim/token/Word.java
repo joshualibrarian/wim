@@ -2,7 +2,7 @@ package zone.wim.token;
 
 import zone.wim.exception.TypeException;
 
-public class Word implements Token {
+public abstract class Word implements Token {
 	
 	public static Word parse(String className) throws Throwable {
 		// TODO stub
@@ -10,7 +10,7 @@ public class Word implements Token {
 	}
 
 	@Override
-	public String get() {
+	public String text() {
 		// TODO Auto-generated method stub
 		return null;
 	}

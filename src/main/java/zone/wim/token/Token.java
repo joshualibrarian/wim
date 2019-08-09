@@ -8,7 +8,9 @@ import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.EmbeddedOnly;
+import javax.jdo.annotations.Persistent;
 import javax.persistence.Embeddable;
+import javax.persistence.OneToOne;
 
 import zone.wim.exception.MustImplementStaticMethod;
 import zone.wim.exception.TokenException.*;
@@ -68,6 +70,10 @@ public interface Token {
 		return matchingTokens;
 	}
 	
-	public abstract String get();
+	@Persistent
+	@OneToOne
+	public String text = null;
+	
+	public abstract String text();
 	
 }

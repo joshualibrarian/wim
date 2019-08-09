@@ -2,20 +2,8 @@ package zone.wim.library;
 
 import static picocli.CommandLine.Option;
 
-import java.awt.AWTException;
-import java.awt.Image;
-import java.awt.MenuItem;
-import java.awt.PopupMenu;
-import java.awt.SystemTray;
-import java.awt.Toolkit;
-import java.awt.TrayIcon;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
-import java.io.IOException;
 import java.net.*;
-import java.security.Security;
 import java.util.*;
-import java.util.concurrent.Callable;
 import java.util.logging.*;
 
 import javax.imageio.ImageIO;
@@ -67,9 +55,6 @@ public class Library implements Daemon, Runnable {
 	@Option(names = { "-l", "--local-path" }, description = "specify the local filesystem path")
 	private String localPath = "data/";
 	
-	@Option(names = { "-p", "--persistence-type" }, description = "select type of persistence store")
-	private StoreType storeType = StoreType.JPA;
-	
 	@Option(names = { "-s", "--server" }, description = "run the local server and receive incoming connections")
 	private boolean runServer = false;
 	
@@ -114,12 +99,6 @@ public class Library implements Daemon, Runnable {
 		runningAsDaemon = true;
 		INSTANCE = this;
 	}
-
-	
-	
-	private void doSomething() {
-		System.out.println("DO SOMETHING!");
-	}
 	
 	private void init() {
 		LOGGER.info("init()");
@@ -128,7 +107,7 @@ public class Library implements Daemon, Runnable {
 		
 //		trayMenu = TrayMenu.init(this);
 		
-		store = Store.getStore(storeType);
+		store = new Store();
 		server = new SocketServer();
 
 		localhost = getLocalhost();

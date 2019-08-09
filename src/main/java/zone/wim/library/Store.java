@@ -3,50 +3,95 @@ package zone.wim.library;
 import java.nio.file.Path;
 
 import java.util.*;
+import javax.jdo.*;
+import javax.jdo.identity.*;
 
+import zone.wim.exception.*;
 import zone.wim.exception.ItemException.NotFound;
 import zone.wim.item.*;
 import zone.wim.token.Token;
 
-public interface Store {
-
-	public enum StoreType {
-		JDO, JPA
+public class Store {
+	
+	private Properties properties;
+	private PersistenceManagerFactory pmf;
+	private String path = null;
+	
+	public Store() {
+		configure();
 	}
 	
-	public static Store getStore(StoreType storeType) {
-		Store store = null;
-		
-		switch(storeType) {
-		case JDO:
-			store = new JdoStore();
-			break;
-		case JPA:
-			store = new JpaStore();
-			break;
+	public void open() {
+		pmf = JDOHelper.getPersistenceManagerFactory("data/jdo-library.odb");
+	}
+
+	public boolean contains(Item item) {
+		return false;	// TODO: stub
+	}
+	
+	public void put(Item item) {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		try {
+		    tx.begin();
+		    pm.makePersistent(item);
+		    tx.commit();
+		    
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		}
+	}
+
+	public Item get(String address) throws NotFound {
+		return get(address, Item.class);
+	}
+	
+	public Item get(String address, Class<? extends Item> clazz) throws NotFound {
+		PersistenceManager pm = pmf.getPersistenceManager();
+		Transaction tx = pm.currentTransaction();
+		Object result = null;
+		try {
+			StringIdentity id = new StringIdentity(clazz, address);
+		    result = pm.getObjectById(id);
+		    
+		} finally {
+		    if (tx.isActive()) {
+		        tx.rollback();
+		    }
+		    pm.close();
 		}
 		
-		return store;
+		if (clazz.isInstance(result)) {
+			return clazz.cast(result);
+		} else throw new ItemException.NotFound(address);
 	}
 
-	public void open();
-	
-	public boolean contains(Item item);
-	
-	public void put(Item item);
-	
-	public Item get(String address) throws NotFound;
+	public List<Item> find(String token) {
+		return null;
+	}
 
-	public Item get(String address, Class<? extends Item> clazz) throws NotFound;
-	
-	public List<Item> find(String token);
-	
-	public List<Item> find(String token, Class<? extends Token> type);
 
-	public List<Item> findByWord(String word, Locale locale);
+	public List<Item> findByWord(String word, Locale locale) {
+		return null;
+	}
 
-	public void scan(Path p);
+	public void scan(Path p) {
+		
+	}
+
+	public List<Item> find(String token, Class<? extends Token> type) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 	
-	public void close();
+	void configure() {
+		properties = new Properties();
+	}
 	
+	public void close() {
+		pmf.close();
+	}
+
 }

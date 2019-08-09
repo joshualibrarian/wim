@@ -19,7 +19,7 @@ public class Signature implements Token {
 	}
 	
 	@Override
-	public String get() {
+	public String text() {
 		return text;
 	}
 

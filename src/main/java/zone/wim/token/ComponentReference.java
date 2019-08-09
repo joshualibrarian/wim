@@ -10,7 +10,7 @@ public class ComponentReference implements Token {
 	}
 
 	@Override
-	public String get() {
+	public String text() {
 		// TODO Auto-generated method stub
 		return null;
 	}

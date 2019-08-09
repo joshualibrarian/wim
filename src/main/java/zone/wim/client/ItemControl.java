@@ -20,7 +20,7 @@ public class ItemControl extends Control {
 		getStyleClass().add("item-control");
 		setFocusTraversable(true);
 		
-		address = new SimpleStringProperty(item.getAddress().get());
+		address = new SimpleStringProperty(item.getAddress().text());
 			
 	}
 	

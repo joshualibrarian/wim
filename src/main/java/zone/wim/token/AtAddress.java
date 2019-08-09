@@ -19,8 +19,8 @@ public class AtAddress implements Address {
 		public static String DOMAIN 	= NEGATED;
 		public static String SITE		= "(?<site>" + SITE_CHAR + DOMAIN + ")";
 		public static String USER		= "(?<user>" + USERNAME + ")?";
-		public static String THING		= THING_CHAR + "(?<thing>" + NEGATED + ")?";
-		public static String COMPLETE 	= USER + SITE + THING;
+		public static String THING		= "(?:" + THING_CHAR + "(?<thing>" + NEGATED + "))?";
+		public static String COMPLETE 	= USER + SITE + THING + "\\b";
 		public static Pattern ADDRESS 	= Pattern.compile(COMPLETE, Pattern.UNICODE_CHARACTER_CLASS);
 	}
 	
@@ -62,19 +62,19 @@ public class AtAddress implements Address {
 			}
 		} else if (creator instanceof Site) {
 			if (type.getClazz().equals(User.class)) {
-				a = name + creator.getAddress().get();
+				a = name + creator.getAddress().text();
 			} 
 		}
 		
 		if (a == null) {
-			a = creator.getAddress().get() + THING_CHAR + name;
+			a = creator.getAddress().text() + THING_CHAR + name;
 		}
 		
 		return new AtAddress(a);
 	}
 
 	@Override
-	public String get() {
+	public String text() {
 		return address;
 	}
 

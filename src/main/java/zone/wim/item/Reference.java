@@ -22,8 +22,8 @@ public class Reference {
 	public static final String SUMMARY_CHAR = "^";
 	
 	transient private Item item = null;
-	private Address address = null;
 	
+	private Address address = null;
 	private String literal = null;			// STX ... ETX
 	private String asEntered = null;		//  (  ...  )
 	private Relation relation = null;		//  [  ...  ]
@@ -45,7 +45,7 @@ public class Reference {
 	public Item item() { 
 		if (item == null) {
 			try {
-				item = Library.instance().getItemByAddress(address.get());
+				item = Library.instance().getItemByAddress(address.text());
 			} catch (NotInitialized e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -57,7 +57,7 @@ public class Reference {
 	
 	@Override
 	public String toString() {
-		String s = address.get();
+		String s = address.text();
 		
 		if (literal != null) {
 			s += "(" + literal + ")";

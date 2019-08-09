@@ -11,10 +11,10 @@ import zone.wim.item.Signer;
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.EmbeddedOnly;
+import javax.jdo.annotations.Persistent;
 import javax.persistence.Embeddable;
 import javax.persistence.OneToOne;
 
-@Embeddable
 @EmbeddedOnly
 public class HostAddress implements Address {
 	public static Logger LOGGER = Logger.getLogger(Address.class.getCanonicalName());
@@ -25,7 +25,7 @@ public class HostAddress implements Address {
 		return new HostAddress(InetAddress.getByName(tokenText));
 	}
 
-	@OneToOne
+	@Persistent
 	private String text;
 	
 	public HostAddress(InetAddress host) {
@@ -33,8 +33,11 @@ public class HostAddress implements Address {
 	}
 	
 	@Override
-	public String get() {
+	public String text() {
 		return text;
+	}
+	@Override public void setText(String text) {
+		this.text = text;
 	}
 
 	@Override

@@ -16,7 +16,7 @@ public class MediaItemType implements ItemType {
 		this.text = typeText;
 	}
 	
-	public String get() {
+	public String text() {
 		return text;
 	}
 }

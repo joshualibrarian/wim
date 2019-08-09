@@ -5,29 +5,24 @@ import java.util.*;
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.*;
-import javax.persistence.*;
 
-import javafx.scene.layout.Pane;
 import zone.wim.client.*;
 import zone.wim.token.*;
-import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
 
-@PersistenceCapable
-@MappedSuperclass
 public abstract class AbstractItem implements Item {
 	private static Logger LOGGER = Logger.getLogger(AbstractItem.class.getName());
 
-	@PrimaryKey
-	@Id private String addressKey;
-	protected Address address;
+	private String addressKey;
+	
+	transient protected Address address;
 
 	protected List<Manifest> manifests;
 	protected List<Summary> summaries;
 	protected List<Relation> relations;
 	protected List<Content> contents;
 
-	@ManyToMany
+	@Persistent
 	protected List<Token> tokens;
 	
 	protected transient ItemControl control;
@@ -35,13 +30,13 @@ public abstract class AbstractItem implements Item {
 	protected transient int security = 0;
 
 	protected AbstractItem() {
-		LOGGER.info("Item()");
+		LOGGER.info("AbstractItem()");
 		initialize();
 	}
 	
 	protected AbstractItem(Address address) throws SignersOnly {
 		if (!(this instanceof Signer)) {
-			throw new SignersOnly(address.get());
+			throw new SignersOnly(address.text());
 		}
 		setAddress(address);
 		initialize();
@@ -64,16 +59,17 @@ public abstract class AbstractItem implements Item {
 		tokens = new ArrayList<Token>();
 	}
 
+	public String getAddressKey() {
+		return addressKey;
+	}
+
 	public Address getAddress() {
 		return address;
 	}
 	
-	public String getAddressKey() {
-		return addressKey;
-	}
 	public void setAddress(Address address) {
 		this.address = address;
-		this.addressKey = address.get();
+		this.addressKey = address.text();
 	}
 	
 	public List<Token> getTokens() {
@@ -93,9 +89,6 @@ public abstract class AbstractItem implements Item {
 		
 		return control;
 	}
-	
-	public abstract Pane getPane();
-	
 	
 	@Override
 	public boolean equals(Object obj) {

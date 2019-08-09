@@ -16,7 +16,7 @@ public class JdoStoreTest {
 	static Logger LOGGER = Logger.getLogger(JdoStoreTest.class.getCanonicalName());
 	static Path PATH;
 	static InetAddress HOST;
-	static JdoStore store;
+	static Store store;
 
 	@BeforeAll
 	static void setupPath() {
@@ -26,7 +26,7 @@ public class JdoStoreTest {
 		} catch (UnknownHostException e) {
 			e.printStackTrace();
 		}
-		store = new JdoStore();
+		store = new Store();
 	}
 
 	@Test
@@ -37,11 +37,10 @@ public class JdoStoreTest {
 	
 	void persistItemToStore() {
 
-		Host hostItem;
+		Item item = new TestItem("@test.item");
 		store.open();
 		
-		hostItem = Host.create(HOST);
-		store.put(hostItem);
+		store.put(item);
 		store.close();
 		
 	}
@@ -49,14 +48,15 @@ public class JdoStoreTest {
 	void retrieveItemFromStore() {
 		
 		store.open();
-		
-		Host hostItem = null;
+
+		Item item = null;
 		try {
-			hostItem = (Host) store.get(HOST.getHostAddress());
+			item = store.get("@test.item");
 		} catch (NotFound e) {
 			e.printStackTrace();
 		}
 		
-		assert (hostItem instanceof Host);
+		assert (item instanceof Item);
+		System.out.println("ITEM! " + item.toString());
 	}
 }

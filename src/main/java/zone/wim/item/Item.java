@@ -15,10 +15,13 @@ import zone.wim.token.*;
 import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
 
+@PersistenceCapable
 public abstract interface Item {
-
+	@PrimaryKey
 	public String getAddressKey();
+	
 	public Address getAddress();
+	public void setAddress(Address address);
 	
 	public List<Token> getTokens();
 

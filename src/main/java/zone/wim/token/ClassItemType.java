@@ -33,7 +33,7 @@ public class ClassItemType implements ItemType {
 	}
 
 	@Override
-	public String get() {
+	public String text() {
 		return clazz.getCanonicalName();
 	} 
 }

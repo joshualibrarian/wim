@@ -81,7 +81,7 @@ dependencies {
 	compile group: 'javax.jdo', name: 'jdo-api', version: '3.1'
 	
 	// persistence implementations
-	implementation group: 'com.objectdb', name: 'objectdb', version: '2.7.6'
+	implementation group: 'com.objectdb', name: 'objectdb', version: '2.8.0_04'
 	
 	// networking
     api group: 'io.netty', name: 'netty-all', version:'4.1.34.Final'
