@@ -2,12 +2,11 @@ package zone.wim.item;
 
 import java.util.Date;
 
+
 import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
-import javax.persistence.Embeddable;
 
-@Embeddable
 @EmbeddedOnly
 public abstract class ItemComponent {
 	

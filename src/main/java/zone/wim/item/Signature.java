@@ -19,8 +19,13 @@ public class Signature implements Token {
 	}
 	
 	@Override
-	public String text() {
+	public String getText() {
 		return text;
+	}
+
+	@Override
+	public void setText(String text) throws Exception {
+		this.text = text;		
 	}
 
 }

@@ -13,7 +13,7 @@ import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.SignersOnly;
 import zone.wim.token.*;
 
-public abstract class Signer extends AbstractItem implements Group {
+public abstract class Signer extends BaseItem implements Group {
 	
 //	private KeyStore keystore;
 //	private PublicKey publicKey;

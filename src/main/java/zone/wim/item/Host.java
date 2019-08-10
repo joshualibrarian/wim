@@ -5,7 +5,7 @@ import java.util.logging.*;
 
 import java.net.InetAddress;
 
-import javax.persistence.Entity;
+import javax.jdo.annotations.PersistenceCapable;
 
 import javafx.beans.property.ListProperty;
 import javafx.scene.layout.Pane;
@@ -20,7 +20,7 @@ import zone.wim.token.HostAddress;
 import zone.wim.token.ItemType;
 import zone.wim.token.Type;
 
-@Entity
+@PersistenceCapable
 public class Host extends Signer implements Group {
 	private static Logger LOGGER = Logger.getLogger(Host.class.getCanonicalName());
 	

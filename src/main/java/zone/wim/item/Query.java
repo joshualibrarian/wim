@@ -13,7 +13,7 @@ import zone.wim.exception.AddressException;
 import zone.wim.language.Fragment;
 import zone.wim.token.*;
 
-public class Query extends AbstractItem implements Group {
+public class Query extends BaseItem implements Group {
 private static String WORD = "query";
 	
 	private String name = null;

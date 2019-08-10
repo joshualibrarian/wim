@@ -15,7 +15,7 @@ import javafx.application.Platform;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import zone.wim.client.DesktopClient;
-import zone.wim.exception.ItemException.*;
+import zone.wim.exception.StoreException.*;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.exception.*;
 import zone.wim.item.*;
@@ -138,11 +138,11 @@ public class Library implements Daemon, Runnable {
 		InetAddress netAddress = InetAddress.getLoopbackAddress();
 		String address = netAddress.getHostAddress();
 		Host host = null;
-		try {
-			host = (Host)store.get(address, Host.class);
-		} catch (NotFound e) {
-			e.printStackTrace();
-		}
+//		try {
+//			host = (Host)store.get(address, Host.class);
+//		} catch (NotFound e) {
+//			e.printStackTrace();
+//		}
 		
 		if (host == null) {
 			host = Host.create(netAddress);

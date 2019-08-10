@@ -76,7 +76,7 @@ dependencies {
 	annotationProcessor 'info.picocli:picocli-codegen:4.0.0'
 	
 	// persistence API (JPA & JDO)
-	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+//	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 	implementation group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
 	compile group: 'javax.jdo', name: 'jdo-api', version: '3.1'
 	

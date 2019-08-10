@@ -10,8 +10,14 @@ public class ComponentReference implements Token {
 	}
 
 	@Override
-	public String text() {
+	public String getText() {
 		// TODO Auto-generated method stub
 		return null;
+	}
+
+	@Override
+	public void setText(String text) {
+		// TODO Auto-generated method stub
+		
 	}
 }

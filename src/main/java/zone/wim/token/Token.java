@@ -2,21 +2,18 @@ package zone.wim.token;
 
 import java.lang.reflect.InvocationTargetException;
 
+
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.EmbeddedOnly;
-import javax.jdo.annotations.Persistent;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
 
-import zone.wim.exception.MustImplementStaticMethod;
+import zone.wim.exception.*;
 import zone.wim.exception.TokenException.*;
 import io.github.classgraph.*;
 
-@Embeddable
 @EmbeddedOnly
 public interface Token {
 	public static Logger LOGGER = Logger.getLogger(Token.class.getCanonicalName());
@@ -70,10 +67,7 @@ public interface Token {
 		return matchingTokens;
 	}
 	
-	@Persistent
-	@OneToOne
-	public String text = null;
-	
-	public abstract String text();
+	public String getText();
+	public void setText(String text) throws Exception;
 	
 }

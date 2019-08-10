@@ -7,7 +7,7 @@ import java.util.*;
 
 import javafx.scene.layout.Pane;
 
-public class Sememe extends AbstractItem {
+public class Sememe extends BaseItem {
 	
 	String synsetId;
 	Map<Language, String> gloss;

@@ -3,6 +3,7 @@ package zone.wim.token;
 import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
+import javax.jdo.annotations.PersistenceCapable;
 import javax.jdo.annotations.Persistent;
 import javax.persistence.Embeddable;
 
@@ -39,11 +40,11 @@ public interface Address extends Token {
 	
 	public Address generate(Signer creator, String name, ItemType type) throws Invalid;
 	
-	public String text();
+	public String getText();
 	public void setText(String text);
 	
 	public String getSitePart();
-	
+
 	public default String getUserPart() {
 		return null;
 	}

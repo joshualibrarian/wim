@@ -1,11 +1,8 @@
 package zone.wim.item;
 
 import java.util.List;
-
-import javax.persistence.*;
 import javax.jdo.annotations.*;
 
-@Embeddable
 @EmbeddedOnly
 public class Relation extends ItemComponent {
 

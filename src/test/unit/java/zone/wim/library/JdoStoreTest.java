@@ -1,16 +1,18 @@
 package zone.wim.library;
 
 import java.net.InetAddress;
+
 import java.net.UnknownHostException;
 import java.nio.file.*;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
-import zone.wim.exception.ItemException.NotFound;
+import zone.wim.exception.StoreException.NotFound;
 import zone.wim.exception.ItemException.SignersOnly;
-import zone.wim.item.*;
+import zone.wim.test.*;
 import zone.wim.library.*;
+import zone.wim.test.TestItem;
 
 public class JdoStoreTest {
 	static Logger LOGGER = Logger.getLogger(JdoStoreTest.class.getCanonicalName());

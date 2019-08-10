@@ -33,7 +33,12 @@ public class ClassItemType implements ItemType {
 	}
 
 	@Override
-	public String text() {
+	public String getText() {
 		return clazz.getCanonicalName();
+	}
+
+	@Override
+	public void setText(String text) throws Exception {
+		clazz = (Class<? extends Item>) Class.forName(text);
 	} 
 }

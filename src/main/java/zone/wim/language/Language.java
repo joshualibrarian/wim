@@ -7,7 +7,7 @@ import zone.wim.item.*;
 import zone.wim.token.Address;
 import zone.wim.client.LanguagePane;
 
-public class Language extends AbstractItem {
+public class Language extends BaseItem {
 
 	Locale locale;	
 	

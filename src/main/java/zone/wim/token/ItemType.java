@@ -13,6 +13,7 @@ public interface ItemType extends Type {
 		} else if (results.size() > 1) {
 			throw new TypeException.Duplicate(type);
 		}
+		
 		return (ItemType)results.get(0);
 	}
 	

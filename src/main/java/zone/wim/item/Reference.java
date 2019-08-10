@@ -1,18 +1,12 @@
 package zone.wim.item;
 
-import java.io.Externalizable;
-import java.io.IOException;
-import java.io.ObjectInput;
-import java.io.ObjectInputStream;
-import java.io.ObjectOutput;
-import java.io.ObjectOutputStream;
-import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
-
+import javax.jdo.annotations.EmbeddedOnly;
 import zone.wim.exception.LibraryException.NotInitialized;
 import zone.wim.library.Library;
 import zone.wim.token.Address;
 
+@EmbeddedOnly
 public class Reference {
 	private static Logger LOGGER = Logger.getLogger(Reference.class.getCanonicalName());
 	
@@ -45,7 +39,7 @@ public class Reference {
 	public Item item() { 
 		if (item == null) {
 			try {
-				item = Library.instance().getItemByAddress(address.text());
+				item = Library.instance().getItemByAddress(address.getText());
 			} catch (NotInitialized e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -57,7 +51,7 @@ public class Reference {
 	
 	@Override
 	public String toString() {
-		String s = address.text();
+		String s = address.getText();
 		
 		if (literal != null) {
 			s += "(" + literal + ")";

@@ -2,13 +2,14 @@ package zone.wim.library;
 
 import java.nio.file.Path;
 
+
 import java.util.*;
 import javax.jdo.*;
 import javax.jdo.identity.*;
 
 import zone.wim.exception.*;
-import zone.wim.exception.ItemException.NotFound;
-import zone.wim.item.*;
+import zone.wim.exception.StoreException.NotFound;
+import zone.wim.test.*;
 import zone.wim.token.Token;
 
 public class Store {
@@ -42,11 +43,14 @@ public class Store {
 		        tx.rollback();
 		    }
 		}
+		pm.close();
 	}
 
 	public Item get(String address) throws NotFound {
 		return get(address, Item.class);
 	}
+	
+	
 	
 	public Item get(String address, Class<? extends Item> clazz) throws NotFound {
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -60,12 +64,13 @@ public class Store {
 		    if (tx.isActive()) {
 		        tx.rollback();
 		    }
-		    pm.close();
 		}
 		
+	    pm.close();
+
 		if (clazz.isInstance(result)) {
 			return clazz.cast(result);
-		} else throw new ItemException.NotFound(address);
+		} else throw new StoreException.NotFound(address);
 	}
 
 	public List<Item> find(String token) {

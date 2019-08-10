@@ -10,7 +10,7 @@ public abstract class Word implements Token {
 	}
 
 	@Override
-	public String text() {
+	public String getText() {
 		// TODO Auto-generated method stub
 		return null;
 	}

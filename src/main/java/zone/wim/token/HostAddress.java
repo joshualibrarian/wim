@@ -25,7 +25,6 @@ public class HostAddress implements Address {
 		return new HostAddress(InetAddress.getByName(tokenText));
 	}
 
-	@Persistent
 	private String text;
 	
 	public HostAddress(InetAddress host) {
@@ -33,10 +32,12 @@ public class HostAddress implements Address {
 	}
 	
 	@Override
-	public String text() {
+	public String getText() {
 		return text;
 	}
-	@Override public void setText(String text) {
+	
+	@Override
+	public void setText(String text) {
 		this.text = text;
 	}
 

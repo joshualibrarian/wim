@@ -1,18 +1,23 @@
-package zone.wim.item;
+package zone.wim.test;
 
-import javax.persistence.Entity;
+import javax.jdo.annotations.PersistenceCapable;
 
 import javafx.scene.layout.Pane;
 import zone.wim.token.Address;
 
-@Entity
-public class TestItem extends AbstractItem {
+@PersistenceCapable
+public class TestItem extends BaseItem {
 	public TestItem(String address) {
 		super();
+
+		setAddressKey(address);
+
 		try {
 			setAddress(Address.parse(address));
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
+	
+	
 }

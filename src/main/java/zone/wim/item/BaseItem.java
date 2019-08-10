@@ -2,6 +2,7 @@ package zone.wim.item;
 
 import java.util.*;
 
+
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.*;
@@ -10,8 +11,9 @@ import zone.wim.client.*;
 import zone.wim.token.*;
 import zone.wim.exception.ItemException.*;
 
-public abstract class AbstractItem implements Item {
-	private static Logger LOGGER = Logger.getLogger(AbstractItem.class.getName());
+@PersistenceCapable
+public abstract class BaseItem implements Item {
+	private static Logger LOGGER = Logger.getLogger(BaseItem.class.getName());
 
 	private String addressKey;
 	
@@ -22,27 +24,26 @@ public abstract class AbstractItem implements Item {
 	protected List<Relation> relations;
 	protected List<Content> contents;
 
-	@Persistent
 	protected List<Token> tokens;
 	
 	protected transient ItemControl control;
 	protected transient Reference creator;
 	protected transient int security = 0;
 
-	protected AbstractItem() {
+	protected BaseItem() {
 		LOGGER.info("AbstractItem()");
 		initialize();
 	}
 	
-	protected AbstractItem(Address address) throws SignersOnly {
+	protected BaseItem(Address address) throws SignersOnly {
 		if (!(this instanceof Signer)) {
-			throw new SignersOnly(address.text());
+			throw new SignersOnly(address.getText());
 		}
 		setAddress(address);
 		initialize();
 	}
 	
-	protected AbstractItem(Address address, Signer creator) {
+	protected BaseItem(Address address, Signer creator) {
 		setAddress(address);
 		if (creator != null) {
 			this.creator = new Reference(creator);
@@ -69,7 +70,7 @@ public abstract class AbstractItem implements Item {
 	
 	public void setAddress(Address address) {
 		this.address = address;
-		this.addressKey = address.text();
+		this.addressKey = address.getText();
 	}
 	
 	public List<Token> getTokens() {

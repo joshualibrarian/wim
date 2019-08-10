@@ -1,7 +1,6 @@
-package zone.wim.item;
+package zone.wim.test;
 
 import java.util.*;
-
 
 import java.util.logging.Logger;
 
@@ -20,29 +19,29 @@ public abstract interface Item {
 	
 	@PrimaryKey
 	public String getAddressKey();
+	public void setAddressKey(String key);
 	
 	public Address getAddress();
 	public void setAddress(Address address);
 	
-	public List<Token> getTokens();
-
-	public List<Token> getTokens(Class<? extends Token> tokenType);
-	
-	public ItemControl getControl();
-	
-	public List<Relation> getRelations();
-	
-	public default Pane getPane() {
-		return null;
-	}
-	public default Shape getShape() {
-		return null;
-	}
-//	public Color getColor();
-	
-	public default boolean isGroup() {
-		return (this instanceof Group);
-	}
+//	public List<Token> getTokens();
+//
+//	public List<Token> getTokens(Class<? extends Token> tokenType);
+//	
+//	public ItemControl getControl();
+//	
+//	public List<Relation> getRelations();
+//	
+//	public default Pane getPane() {
+//		return null;
+//	}
+//	public default Shape getShape() {
+//		return null;
+//	}
+//	
+//	public default boolean isGroup() {
+//		return (this instanceof Group);
+//	}
 	
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
 

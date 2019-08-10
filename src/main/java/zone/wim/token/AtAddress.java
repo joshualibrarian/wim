@@ -2,9 +2,12 @@ package zone.wim.token;
 
 import java.util.regex.*;
 
+import javax.jdo.annotations.EmbeddedOnly;
+
 import zone.wim.exception.AddressException.*;
 import zone.wim.item.*;
 
+@EmbeddedOnly
 public class AtAddress implements Address {
 
 	public static String SITE_CHAR = "@";
@@ -62,20 +65,25 @@ public class AtAddress implements Address {
 			}
 		} else if (creator instanceof Site) {
 			if (type.getClazz().equals(User.class)) {
-				a = name + creator.getAddress().text();
+				a = name + creator.getAddress().getText();
 			} 
 		}
 		
 		if (a == null) {
-			a = creator.getAddress().text() + THING_CHAR + name;
+			a = creator.getAddress().getText() + THING_CHAR + name;
 		}
 		
 		return new AtAddress(a);
 	}
 
 	@Override
-	public String text() {
+	public String getText() {
 		return address;
+	}
+	
+	@Override
+	public void setText(String text) {
+		this.address = text;
 	}
 
 	@Override
@@ -97,5 +105,7 @@ public class AtAddress implements Address {
 	public boolean validate(String addressToValidate) {
 		return false;
 	}
+
+	
 
 }

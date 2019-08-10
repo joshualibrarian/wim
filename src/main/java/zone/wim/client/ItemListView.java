@@ -35,7 +35,7 @@ public class ItemListView  extends ListView<Item> {
 	        	 setGraphic(null);
 	        	 
 	         } else {
-	        	 setText(item.getAddress().text());	//todo: maybe remove this
+	        	 setText(item.getAddress().getText());	//todo: maybe remove this
 		         setContentDisplay(ContentDisplay.GRAPHIC_ONLY);
 		         ItemControl control = item.getControl();
 		         control.prefWidthProperty().bind(ItemListView.this.widthProperty().subtract(2));
