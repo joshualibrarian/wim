@@ -12,7 +12,7 @@ import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
 import zone.wim.client.*;
 import zone.wim.token.*;
-import zone.wim.exception.AddressException.Invalid;
+import zone.wim.token.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
 
 @PersistenceCapable
@@ -20,6 +20,7 @@ public abstract interface Item {
 	
 	@PrimaryKey
 	public String getAddressKey();
+	public void setAddressKey(String key);
 	
 	public Address getAddress();
 	public void setAddress(Address address);
@@ -28,17 +29,9 @@ public abstract interface Item {
 
 	public List<Token> getTokens(Class<? extends Token> tokenType);
 	
-	public ItemControl getControl();
+//	public List<Relation> getRelations(); 
 	
-	public List<Relation> getRelations();
-	
-	public default Pane getPane() {
-		return null;
-	}
-	public default Shape getShape() {
-		return null;
-	}
-//	public Color getColor();
+	public ItemUserInterface getUserInterface();
 	
 	public default boolean isGroup() {
 		return (this instanceof Group);

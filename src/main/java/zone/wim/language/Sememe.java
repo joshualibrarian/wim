@@ -51,9 +51,4 @@ public class Sememe extends BaseItem {
 	public void setGloss(Language language, String gloss) {
 		this.gloss.put(language, gloss);
 	}
-
-	@Override
-	public Pane getPane() {
-		return null;
-	}
 }

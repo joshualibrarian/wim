@@ -9,9 +9,9 @@ import java.security.spec.*;
 import io.netty.buffer.ByteBuf;
 import javafx.scene.layout.Pane;
 import zone.wim.client.ContainerPane;
-import zone.wim.exception.AddressException.Invalid;
 import zone.wim.exception.ItemException.SignersOnly;
 import zone.wim.token.*;
+import zone.wim.token.AddressException.Invalid;
 
 public abstract class Signer extends BaseItem implements Group {
 	

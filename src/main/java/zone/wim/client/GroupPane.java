@@ -42,10 +42,10 @@ public class GroupPane extends VBox implements ListChangeListener<Item> {
 		
 		buildTreeView();
 		
-		rootItemControl = rootItem.getControl();
+		rootItemControl = rootItem.getUserInterface().getControl();
 		getChildren().add(rootItemControl);
 		
-		treeView = new ItemTreeView(rootItem.getControl());
+		treeView = new ItemTreeView(rootItem.getUserInterface().getControl());
 		treeView.setShowRoot(false);
 		getChildren().add(treeView);
 		

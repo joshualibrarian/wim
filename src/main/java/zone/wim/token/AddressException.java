@@ -1,4 +1,4 @@
-package zone.wim.exception;
+package zone.wim.token;
 
 @SuppressWarnings("serial")
 public class AddressException {

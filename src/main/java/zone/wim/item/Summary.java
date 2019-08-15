@@ -9,4 +9,8 @@ public class Summary extends ItemComponent {
 	
 	private Type rootContentType;
 	private Map<Reference, String> pairs;
+	
+	protected Summary(Reference enclosingItem, int security) {
+		super(enclosingItem, security);
+	}
 }

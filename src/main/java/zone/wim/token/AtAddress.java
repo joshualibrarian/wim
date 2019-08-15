@@ -4,8 +4,8 @@ import java.util.regex.*;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.exception.AddressException.*;
 import zone.wim.item.*;
+import zone.wim.token.AddressException.*;
 
 @EmbeddedOnly
 public class AtAddress implements Address {
@@ -105,7 +105,5 @@ public class AtAddress implements Address {
 	public boolean validate(String addressToValidate) {
 		return false;
 	}
-
-	
 
 }

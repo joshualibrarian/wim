@@ -5,21 +5,19 @@ import java.net.UnknownHostException;
 
 import org.apache.commons.validator.routines.InetAddressValidator;
 
-import zone.wim.exception.AddressException.Invalid;
 import zone.wim.item.Signer;
+import zone.wim.token.AddressException.Invalid;
 
 import java.util.logging.Logger;
 
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.Persistent;
-import javax.persistence.Embeddable;
-import javax.persistence.OneToOne;
 
 @EmbeddedOnly
 public class HostAddress implements Address {
 	public static Logger LOGGER = Logger.getLogger(Address.class.getCanonicalName());
 	
-	public static HostAddress parse(String tokenText) throws Throwable {
+	public static HostAddress parse(String tokenText) throws Exception {
 		// TODO add actual validation to be sure we have an IP
 		LOGGER.info("HostAddress(" + tokenText + ")");
 		return new HostAddress(InetAddress.getByName(tokenText));

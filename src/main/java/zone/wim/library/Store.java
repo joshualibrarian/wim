@@ -1,29 +1,32 @@
 package zone.wim.library;
 
+import java.io.FileInputStream;
+import java.io.IOException;
 import java.nio.file.Path;
-
-
 import java.util.*;
 import javax.jdo.*;
 import javax.jdo.identity.*;
-
 import zone.wim.exception.*;
 import zone.wim.exception.StoreException.NotFound;
-import zone.wim.test.*;
+import zone.wim.item.*;
 import zone.wim.token.Token;
 
 public class Store {
 	
-	private Properties properties;
+	private Properties options;
 	private PersistenceManagerFactory pmf;
-	private String path = null;
 	
-	public Store() {
+	public Store(String url) {
 		configure();
+		if (url != null && !url.isBlank()) {
+			options.setProperty("javax.jdo.option.ConnectionURL", url);
+		}
+		System.out.println("Options: " + options);
 	}
 	
 	public void open() {
-		pmf = JDOHelper.getPersistenceManagerFactory("data/jdo-library.odb");
+		pmf = JDOHelper.getPersistenceManagerFactory(options);
+
 	}
 
 	public boolean contains(Item item) {
@@ -40,6 +43,7 @@ public class Store {
 		    
 		} finally {
 		    if (tx.isActive()) {
+		    	System.out.println("ROLLING BACK!");
 		        tx.rollback();
 		    }
 		}
@@ -49,8 +53,6 @@ public class Store {
 	public Item get(String address) throws NotFound {
 		return get(address, Item.class);
 	}
-	
-	
 	
 	public Item get(String address, Class<? extends Item> clazz) throws NotFound {
 		PersistenceManager pm = pmf.getPersistenceManager();
@@ -92,7 +94,15 @@ public class Store {
 	}
 	
 	void configure() {
-		properties = new Properties();
+		options = new Properties();
+		try {
+			options.load(new FileInputStream("persistence.properties"));
+			
+			System.out.println("OPTIONS: " + options);
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
+		
 	}
 	
 	public void close() {

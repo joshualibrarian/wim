@@ -10,7 +10,8 @@ import javax.jdo.annotations.PersistenceCapable;
 import javafx.beans.property.ListProperty;
 import javafx.scene.layout.Pane;
 import zone.wim.client.HostPane;
-import zone.wim.exception.AddressException.*;
+import zone.wim.client.ItemUserInterface;
+import zone.wim.client.LanguagePane;
 import zone.wim.exception.ItemException.*;
 import zone.wim.exception.LibraryException;
 import zone.wim.exception.LibraryException.*;
@@ -19,6 +20,7 @@ import zone.wim.token.Address;
 import zone.wim.token.HostAddress;
 import zone.wim.token.ItemType;
 import zone.wim.token.Type;
+import zone.wim.token.AddressException.*;
 
 @PersistenceCapable
 public class Host extends Signer implements Group {
@@ -64,8 +66,11 @@ public class Host extends Signer implements Group {
 	}
 
 	@Override
-	public Pane getPane() {
-		return new HostPane(this);
+	public ItemUserInterface getUserInterface() {
+		super.getUserInterface().setPane(new HostPane(this));
+		return userInterface;
+
 	}
+	
 
 }

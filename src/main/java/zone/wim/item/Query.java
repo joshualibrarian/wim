@@ -9,7 +9,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.layout.Pane;
 import zone.wim.client.QueryPane;
-import zone.wim.exception.AddressException;
 import zone.wim.language.Fragment;
 import zone.wim.token.*;
 
@@ -62,11 +61,6 @@ private static String WORD = "query";
 	@Override
 	public ListProperty<Item> contentsProperty() {
 		return results;
-	}
-
-	@Override
-	public Pane getPane() {
-		return new QueryPane(this);
 	}
 
 	@Override

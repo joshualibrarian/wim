@@ -1,34 +1,20 @@
 package zone.wim.library;
 
-import java.net.InetAddress;
-
-import java.net.UnknownHostException;
-import java.nio.file.*;
 import java.util.logging.Logger;
 
 import org.junit.jupiter.api.*;
 
 import zone.wim.exception.StoreException.NotFound;
-import zone.wim.exception.ItemException.SignersOnly;
-import zone.wim.test.*;
-import zone.wim.library.*;
-import zone.wim.test.TestItem;
+import zone.wim.item.*;
 
 public class JdoStoreTest {
 	static Logger LOGGER = Logger.getLogger(JdoStoreTest.class.getCanonicalName());
-	static Path PATH;
-	static InetAddress HOST;
 	static Store store;
+	static String path = "data/test.odb";
 
 	@BeforeAll
 	static void setupPath() {
-		PATH = Paths.get(System.getProperty("user.dir"));
-		try {
-			HOST = InetAddress.getLocalHost();
-		} catch (UnknownHostException e) {
-			e.printStackTrace();
-		}
-		store = new Store();
+		store = new Store(path);
 	}
 
 	@Test
@@ -38,13 +24,12 @@ public class JdoStoreTest {
 	}
 	
 	void persistItemToStore() {
+		store.open();
 
 		Item item = new TestItem("@test.item");
-		store.open();
-		
+		System.out.println("ITEM: " + item.toString());
 		store.put(item);
 		store.close();
-		
 	}
 	
 	void retrieveItemFromStore() {

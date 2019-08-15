@@ -5,6 +5,7 @@ import java.util.Locale;
 import javafx.scene.layout.Pane;
 import zone.wim.item.*;
 import zone.wim.token.Address;
+import zone.wim.client.ItemUserInterface;
 import zone.wim.client.LanguagePane;
 
 public class Language extends BaseItem {
@@ -21,8 +22,8 @@ public class Language extends BaseItem {
 	}
 
 	@Override
-	public Pane getPane() {
-		return new LanguagePane(this);
+	public ItemUserInterface getUserInterface() {
+		super.getUserInterface().setPane(new LanguagePane(this));
+		return userInterface;
 	}
-	
 }

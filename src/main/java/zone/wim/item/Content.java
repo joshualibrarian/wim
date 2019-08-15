@@ -1,8 +1,6 @@
 package zone.wim.item;
 
 import java.util.List;
-
-
 import javax.jdo.annotations.EmbeddedOnly;
 import zone.wim.token.*;
 
@@ -13,4 +11,8 @@ public class Content extends ItemComponent {
 	String blurb;
 	long size = -1;
 	List<DataLocation> data;
+	
+	protected Content(Reference enclosingItem, int security) {
+		super(enclosingItem, security);
+	}
 }

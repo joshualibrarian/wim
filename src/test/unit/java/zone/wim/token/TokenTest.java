@@ -1,9 +1,11 @@
 package zone.wim.token;
 
 import java.util.*;
+
 import org.junit.jupiter.api.*;
 import zone.wim.item.*;
 import zone.wim.token.Token;
+import zone.wim.token.TokenException.*;
 import zone.wim.exception.*;
 
 public class TokenTest {
@@ -11,9 +13,9 @@ public class TokenTest {
 	@Test
 	void parseTestIsDomain() {
 		try {
-			List<Token> tokens = Token.parse("@test.net");
-			assert (!tokens.isEmpty());
-		} catch (Throwable e) {
+			Token token = Token.parse("@test.net");
+			assert (token instanceof AtAddress);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}
@@ -21,9 +23,9 @@ public class TokenTest {
 	@Test
 	void parseTestIsHost() {
 		try {
-			List<Token> tokens = Token.parse("192.168.0.1");
-			assert (!tokens.isEmpty());
-		} catch (Throwable e) {
+			Token token = Token.parse("192.168.0.1");
+			assert (token instanceof HostAddress);
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}	
@@ -32,8 +34,8 @@ public class TokenTest {
 	void parseTestIsUnknown() {
 		try {
 			Token.parse("INVALID TOKEN!");
-		} catch (Throwable e) {
-			assert (e instanceof TokenException);
+		} catch (Exception e) {
+			assert (e instanceof Unknown);
 		}
 	}
 

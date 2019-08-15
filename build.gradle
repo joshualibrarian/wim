@@ -29,6 +29,14 @@ jar {
     }
 }
 	
+task enhance(type: JavaExec) {
+  main = 'com.objectdb.Enhancer'
+  classpath = sourceSets.main.runtimeClasspath
+  args '-cp', 'src/main/java', 'app.model.*', 'app.model_dir_two.*'
+}
+
+compileJava.finalizedBy(enhance)
+
 test {
 	useJUnitPlatform()
 	testLogging {
@@ -76,7 +84,7 @@ dependencies {
 	annotationProcessor 'info.picocli:picocli-codegen:4.0.0'
 	
 	// persistence API (JPA & JDO)
-//	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
+	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 	implementation group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
 	compile group: 'javax.jdo', name: 'jdo-api', version: '3.1'
 	
@@ -110,4 +118,3 @@ dependencies {
 test {
     jvmArgs "-javaagent:${classpath.find { it.name.contains("jmockit") }.absolutePath}"
 }
-

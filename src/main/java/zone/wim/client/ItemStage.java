@@ -21,11 +21,11 @@ public class ItemStage extends Stage {
 		this.item = item;
 		rootPane = new BorderPane();
 		
-		Pane controlPane = new ControlPane(item.getControl());
+		Pane controlPane = new ControlPane(item.getUserInterface().getControl());
 		rootPane.setTop(controlPane);
 //		rootPane.getChildren().add(controlPane);
 
-		contentPane = item.getPane();
+		contentPane = item.getUserInterface().getPane();
 		
 		if (item.isGroup()) {
 			groupPane = new GroupPane((Group)item);

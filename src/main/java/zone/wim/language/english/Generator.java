@@ -20,9 +20,10 @@ import zone.wim.language.*;
 import zone.wim.language.english.DictionaryException.NotFound;
 import zone.wim.library.*;
 import zone.wim.token.ClassItemType;
+import zone.wim.token.AddressException.*;
+import zone.wim.token.AddressException;
 import zone.wim.token.AtAddress;
 import zone.wim.exception.*;
-import zone.wim.exception.AddressException.*;
 import zone.wim.exception.LibraryException.*;
 
 public class Generator {

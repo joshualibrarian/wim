@@ -14,14 +14,12 @@ public class ItemControl extends Control {
 	private StringProperty address;
 	private StringProperty title;
 	
-	
 	public ItemControl(Item item) {
 		this.item = item;
 		getStyleClass().add("item-control");
 		setFocusTraversable(true);
 		
 		address = new SimpleStringProperty(item.getAddress().getText());
-			
 	}
 	
 	public Item item() {
@@ -33,7 +31,8 @@ public class ItemControl extends Control {
 			address = new SimpleStringProperty(this, "address");
 		}
 		
-		return address; }
+		return address; 
+	}
 	
 	public String getAddress() {
 		return address.get();
@@ -55,10 +54,6 @@ public class ItemControl extends Control {
 		return address.get();
 	}
 	
-//	public boolean isGroup() { 
-//		return (item instanceof Group);
-//	}
-//	
 	public void setAddress(String address) {
 		this.address.set(address);
 	}

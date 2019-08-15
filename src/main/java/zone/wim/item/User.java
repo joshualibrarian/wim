@@ -16,13 +16,6 @@ public class User extends Signer {
 	
 	public User(Address address) throws SignersOnly {
 		super(address);
-		
-	}
-
-	@Override
-	public Pane getPane() {
-		// TODO Auto-generated method stub
-		return null;
 	}
 
 	@Override

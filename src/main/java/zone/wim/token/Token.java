@@ -1,19 +1,24 @@
 package zone.wim.token;
 
 import java.lang.reflect.InvocationTargetException;
-
-
 import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Logger;
-
 import javax.jdo.annotations.EmbeddedOnly;
-
 import zone.wim.exception.*;
-import zone.wim.exception.TokenException.*;
+import zone.wim.token.TokenException.*;
 import io.github.classgraph.*;
 
+/**
+ * 
+ * This is the root interface that acts as a local repository of text identification code.  
+ * It can be easily plugged into simply by extending some descendant of `Token` and making 
+ * sure the class is accessible to the running application.
+ * 
+ * @author joshua
+ *
+ */
 @EmbeddedOnly
 public interface Token {
 	public static Logger LOGGER = Logger.getLogger(Token.class.getCanonicalName());
@@ -26,18 +31,14 @@ public interface Token {
 	 * @return
 	 * @throws Throwable
 	 */
-	public static List<Token> parse(String tokenText) throws Exception {
+	public static Token parse(String tokenText) throws Exception {
 		return parse(tokenText, Token.class);
 	}
 	
-	public static List<Token> parse(String tokenText, Class<? extends Token> type) throws Exception {
-//		if (type == null) {
-//			type = Token.class;
-//		}
-
+	public static Token parse(String tokenText, Class<? extends Token> type) throws Exception {
 		// TODO we need to be caching these classes, and possibly pre-ordering the first several
-		ClassInfoList tokenTypes = new ClassGraph().enableClassInfo().scan()
-			.getClassesImplementing(type.getCanonicalName());
+		ClassInfoList tokenTypes = new ClassGraph().enableClassInfo()
+			.scan().getClassesImplementing(type.getCanonicalName());
 		
 		List<Token> matchingTokens = new ArrayList<>();
 		for (ClassInfo classInfo : tokenTypes) {
@@ -61,10 +62,14 @@ public interface Token {
 		}
 		
 		if (matchingTokens.isEmpty()) {
-			 throw new Unknown(tokenText);
+			throw new Unknown(tokenText);
+		} else if (matchingTokens.size() > 1) {
+			// TODO: here, the authors of the token class in question should be reported to, 
+			// TODO: so that their parsing code may be improved if necessary
+			throw new Ambiguous(tokenText, matchingTokens);
 		}
 		
-		return matchingTokens;
+		return matchingTokens.get(0);
 	}
 	
 	public String getText();

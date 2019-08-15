@@ -53,7 +53,7 @@ public class Library implements Daemon, Runnable {
 	}
 	
 	@Option(names = { "-l", "--local-path" }, description = "specify the local filesystem path")
-	private String localPath = "data/";
+	private String localPath = null;
 	
 	@Option(names = { "-s", "--server" }, description = "run the local server and receive incoming connections")
 	private boolean runServer = false;
@@ -107,11 +107,9 @@ public class Library implements Daemon, Runnable {
 		
 //		trayMenu = TrayMenu.init(this);
 		
-		store = new Store();
+		store = new Store(localPath);
 		server = new SocketServer();
 
-		localhost = getLocalhost();
-		
 		Runtime.getRuntime().addShutdownHook(new Thread("app-shutdown-hook") {
 			@Override
 			public void run() {
@@ -136,7 +134,6 @@ public class Library implements Daemon, Runnable {
 		}
 		
 		InetAddress netAddress = InetAddress.getLoopbackAddress();
-		String address = netAddress.getHostAddress();
 		Host host = null;
 //		try {
 //			host = (Host)store.get(address, Host.class);
@@ -155,7 +152,8 @@ public class Library implements Daemon, Runnable {
 	public void start() throws Exception {
 		LOGGER.info("start()");
 		store.open();
-		
+		localhost = getLocalhost();
+
 		if (runServer) {
 			server.start();
 		}

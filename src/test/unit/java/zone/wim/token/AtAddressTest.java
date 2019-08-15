@@ -7,8 +7,8 @@ import zone.wim.item.*;
 import zone.wim.token.AtAddress;
 import zone.wim.exception.*;
 
-public class DomainedAddressTest {
-	static Logger LOGGER = Logger.getLogger(DomainedAddressTest.class.getCanonicalName());
+public class AtAddressTest {
+	static Logger LOGGER = Logger.getLogger(AtAddressTest.class.getCanonicalName());
 	
 	@Test
 	void RegexTest() {

@@ -113,7 +113,7 @@ public class Fragment implements ChangeListener<String> {
 		
 		private void evaluate() {
 			try {
-				List<Token> possibleTypes = Token.parse(text);
+//				List<Token> possibleTypes = Token.parse(text);
 				
 				
 			} catch (Throwable e1) {

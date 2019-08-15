@@ -49,7 +49,7 @@ public class LibraryTest {
 			try {
 				Library.main(new String[0]);
 				instance = Library.instance();
-			} catch(NotInitialized e) {
+			} catch(LibraryException.NotInitialized e) {
 				e.printStackTrace();
 			}
 			

@@ -18,11 +18,12 @@ public abstract class BaseItem implements Item {
 	private String addressKey;
 	
 	transient protected Address address;
+	transient protected ItemUserInterface userInterface;
 
-	protected List<Manifest> manifests;
-	protected List<Summary> summaries;
-	protected List<Relation> relations;
-	protected List<Content> contents;
+//	protected List<Manifest> manifests;
+//	protected List<Summary> summaries;
+//	protected List<Relation> relations;
+//	protected List<Content> contents;
 
 	protected List<Token> tokens;
 	
@@ -36,7 +37,7 @@ public abstract class BaseItem implements Item {
 	}
 	
 	protected BaseItem(Address address) throws SignersOnly {
-		if (!(this instanceof Signer)) {
+		if (!(this instanceof Signer)) {	
 			throw new SignersOnly(address.getText());
 		}
 		setAddress(address);
@@ -54,16 +55,21 @@ public abstract class BaseItem implements Item {
 	private void initialize() {
 		security = 0;
 
-		manifests = new ArrayList<Manifest>();
-		relations = new ArrayList<Relation>();
-		contents = new ArrayList<Content>();
+//		manifests = new ArrayList<Manifest>();
+//		relations = new ArrayList<Relation>();
+//		contents = new ArrayList<Content>();
 		tokens = new ArrayList<Token>();
 	}
 
+	@PrimaryKey
 	public String getAddressKey() {
 		return addressKey;
 	}
 
+	public void setAddressKey(String key) {
+		this.addressKey = key;
+	}
+	
 	public Address getAddress() {
 		return address;
 	}
@@ -106,10 +112,17 @@ public abstract class BaseItem implements Item {
 	    return addressKey.hashCode();
 	}
 	
-	@Override
-	public List<Relation> getRelations() {
-		return relations;
-	}
+//	@Override
+//	public List<Relation> getRelations() {
+//		return relations;
+//	}
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
 
+	@Override
+	public ItemUserInterface getUserInterface() {
+		if (!(userInterface instanceof ItemUserInterface)) {
+			userInterface = new ItemUserInterface(this);
+		}
+		return userInterface;
+	}
 }

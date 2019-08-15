@@ -5,6 +5,5 @@ public class StoreException extends Exception {
 		public NotFound(String address) {
 			super(address);
 		}
-		
 	}
 }

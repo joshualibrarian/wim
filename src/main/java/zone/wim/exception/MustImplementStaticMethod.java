@@ -6,5 +6,4 @@ public class MustImplementStaticMethod extends Exception {
 	public MustImplementStaticMethod(Exception cause) {
 		super(cause);
 	}
-
 }

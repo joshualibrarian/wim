@@ -24,6 +24,16 @@ public class HostAddressTest {
 	}
 	
 	@Test
+	void parseDomainTest() {
+		HostAddress hostAddress = null;
+		try {
+			hostAddress = HostAddress.parse("localhost");
+		} catch(Exception e) {
+			
+		}
+
+	}
+	@Test
 	void parseTestFail() {
 		HostAddress hostAddress = null;
 		try {

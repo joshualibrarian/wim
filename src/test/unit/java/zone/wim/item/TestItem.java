@@ -1,8 +1,8 @@
-package zone.wim.test;
+package zone.wim.item;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import javafx.scene.layout.Pane;
+import zone.wim.item.BaseItem;
 import zone.wim.token.Address;
 
 @PersistenceCapable
