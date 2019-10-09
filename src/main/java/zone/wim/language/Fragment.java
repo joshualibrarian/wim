@@ -1,6 +1,7 @@
 package zone.wim.language;
 
 import java.util.ArrayList;
+
 import java.util.List;
 
 import javafx.beans.property.ListProperty;
@@ -11,7 +12,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import zone.wim.exception.LibraryException.NotInitialized;
 import zone.wim.item.*;
-import zone.wim.token.*;
 import zone.wim.library.*;
 
 public class Fragment implements ChangeListener<String> {

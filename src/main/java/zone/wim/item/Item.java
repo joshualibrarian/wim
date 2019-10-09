@@ -29,13 +29,16 @@ public abstract interface Item {
 
 	public List<Token> getTokens(Class<? extends Token> tokenType);
 	
-//	public List<Relation> getRelations(); 
+	public List<Relation> getRelations();
 	
 	public ItemUserInterface getUserInterface();
 	
 	public default boolean isGroup() {
 		return (this instanceof Group);
 	}
+	
+//	public List<Class<? extends Item>> getCanCreate();
+//	public List<Class<? extends Item>> getCanNotCreate();
 	
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
 

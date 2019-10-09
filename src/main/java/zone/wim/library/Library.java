@@ -32,7 +32,7 @@ public class Library implements Daemon, Runnable {
 	public static List<Integer> PORTS = Arrays.asList(25, 465, 587, 2525, 25025);
 
 	public static synchronized Library instance() throws NotInitialized {
-		if (INSTANCE != null && INSTANCE.isInitialized) {
+		if (INSTANCE instanceof Library && INSTANCE.isInitialized) {
 			return INSTANCE;
 		} else throw new NotInitialized();
 	}
@@ -76,7 +76,7 @@ public class Library implements Daemon, Runnable {
 	private Store store;
 	private SocketServer server;
 
-	private Host localhost;
+	private Host localHost;
 	
 	private TrayMenu trayMenu = null;
 
@@ -98,6 +98,7 @@ public class Library implements Daemon, Runnable {
 		
 		runningAsDaemon = true;
 		INSTANCE = this;
+		init();
 	}
 	
 	private void init() {
@@ -110,49 +111,29 @@ public class Library implements Daemon, Runnable {
 		store = new Store(localPath);
 		server = new SocketServer();
 
-		Runtime.getRuntime().addShutdownHook(new Thread("app-shutdown-hook") {
-			@Override
-			public void run() {
-				try {
-					Library.this.stop();
-					Library.this.destroy();
-				} catch (ShutdownException e) {
-					e.printStackTrace();
-				} catch (Exception e) {
-					e.printStackTrace();
-				}
-				System.out.println("Bye! 🙇‍♂️👋🖖");
-			}
-		});
+		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
 		
 		isInitialized = true;
 	}
 	
 	public Host getLocalhost() {
-		if (localhost instanceof Host) {
-			return localhost;
+		if (!(localHost instanceof Host)) {
+			InetAddress netAddress = InetAddress.getLoopbackAddress();
+			try {
+				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
+			} catch (NotFound e) {
+				localHost = Host.create(netAddress);
+				store.put(localHost);
+			}
 		}
-		
-		InetAddress netAddress = InetAddress.getLoopbackAddress();
-		Host host = null;
-//		try {
-//			host = (Host)store.get(address, Host.class);
-//		} catch (NotFound e) {
-//			e.printStackTrace();
-//		}
-		
-		if (host == null) {
-			host = Host.create(netAddress);
-		}
-		
-		return host;
+		return localHost;
 	}
 	
 	@Override
 	public void start() throws Exception {
 		LOGGER.info("start()");
 		store.open();
-		localhost = getLocalhost();
+		localHost = getLocalhost();
 
 		if (runServer) {
 			server.start();
@@ -189,7 +170,7 @@ public class Library implements Daemon, Runnable {
 		LOGGER.info("destroy()");
 		isInitialized = false;
 		INSTANCE = null;
-		trayMenu.destroy();
+//		trayMenu.destroy();
 	}
 	
 	public Item getItemByAddress(String address) {
@@ -216,5 +197,23 @@ public class Library implements Daemon, Runnable {
 	
 	public void runQuery(Fragment fragment) {	// TODO: QueryOptions argument
 		
+	}
+	
+	class ShutdownThread extends Thread {
+		ShutdownThread() {
+			super("app-shutdown-hook");
+		}
+		
+		@Override
+		public void run() {
+			try {
+				shutdown();
+			} catch (ShutdownException e) {
+				e.printStackTrace();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+			System.out.println("Bye! 🙇‍♂️👋🖖");
+		}
 	}
 }

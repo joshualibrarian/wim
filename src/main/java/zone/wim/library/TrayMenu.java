@@ -41,7 +41,7 @@ public class TrayMenu {
 	    	URL imageLoc;
 	    	Image image;
 	    	try {
-	    		imageLoc = new URL("http://icons.iconarchive.com/icons/scafer31000/bubble-circle-3/16/GameCenter-icon.png");
+	    		imageLoc = new URL("icon.png");
 	    		image = ImageIO.read(imageLoc);
 	    		
 		    	trayIcon = new TrayIcon(image);

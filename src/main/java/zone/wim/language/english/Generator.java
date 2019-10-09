@@ -1,29 +1,20 @@
 
 package zone.wim.language.english;
 
-import java.io.BufferedReader;
-
-import java.io.FileReader;
 import java.io.IOException;
 import java.lang.reflect.*;
-import java.net.MalformedURLException;
-import java.net.URL;
+import java.net.*;
 import java.util.*;
 import java.util.logging.*;
-
+import edu.mit.jwi.*;
 import edu.mit.jwi.Dictionary;
-import edu.mit.jwi.IDictionary;
 import edu.mit.jwi.item.*;
-import javafx.scene.layout.Pane;
 import zone.wim.item.*;
 import zone.wim.language.*;
-import zone.wim.language.english.DictionaryException.NotFound;
+import zone.wim.language.english.DictionaryException.*;
 import zone.wim.library.*;
-import zone.wim.token.ClassItemType;
 import zone.wim.token.AddressException.*;
-import zone.wim.token.AddressException;
-import zone.wim.token.AtAddress;
-import zone.wim.exception.*;
+import zone.wim.token.*;
 import zone.wim.exception.LibraryException.*;
 
 public class Generator {
@@ -49,6 +40,10 @@ public class Generator {
 		} catch (Invalid e) {
 			e.printStackTrace();
 		}
+	}
+	
+	public void generate() {
+//		createSynsets();
 	}
 	
 	protected void initWordnet() throws NotFound {

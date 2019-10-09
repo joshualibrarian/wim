@@ -18,6 +18,10 @@ public class Site extends Signer implements Group {
 		super(address);
 	}
 
+//	public User createUser(String name) {
+		
+//	}
+	
 	@Override
 	public ListProperty<Item> contentsProperty() {
 		// TODO Auto-generated method stub

@@ -1,8 +1,6 @@
 package zone.wim.language;
 
 import java.util.Locale;
-
-import javafx.scene.layout.Pane;
 import zone.wim.item.*;
 import zone.wim.token.Address;
 import zone.wim.client.ItemUserInterface;

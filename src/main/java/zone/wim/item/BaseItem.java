@@ -9,6 +9,7 @@ import javax.jdo.annotations.*;
 
 import zone.wim.client.*;
 import zone.wim.token.*;
+import zone.wim.token.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
 
 @PersistenceCapable
@@ -20,10 +21,10 @@ public abstract class BaseItem implements Item {
 	transient protected Address address;
 	transient protected ItemUserInterface userInterface;
 
-//	protected List<Manifest> manifests;
-//	protected List<Summary> summaries;
-//	protected List<Relation> relations;
-//	protected List<Content> contents;
+	protected List<Manifest> manifests;
+	protected List<Summary> summaries;
+	protected List<Relation> relations;
+	protected List<Content> contents;
 
 	protected List<Token> tokens;
 	
@@ -55,9 +56,9 @@ public abstract class BaseItem implements Item {
 	private void initialize() {
 		security = 0;
 
-//		manifests = new ArrayList<Manifest>();
-//		relations = new ArrayList<Relation>();
-//		contents = new ArrayList<Content>();
+		manifests = new ArrayList<Manifest>();
+		relations = new ArrayList<Relation>();
+		contents = new ArrayList<Content>();
 		tokens = new ArrayList<Token>();
 	}
 
@@ -113,11 +114,10 @@ public abstract class BaseItem implements Item {
 	}
 	
 //	@Override
-//	public List<Relation> getRelations() {
-//		return relations;
-//	}
-//	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
-
+	public List<Relation> getRelations() {
+		return relations;
+	}
+	
 	@Override
 	public ItemUserInterface getUserInterface() {
 		if (!(userInterface instanceof ItemUserInterface)) {

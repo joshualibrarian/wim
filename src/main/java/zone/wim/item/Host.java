@@ -1,6 +1,7 @@
 package zone.wim.item;
 
 import java.util.*;
+
 import java.util.logging.*;
 
 import java.net.InetAddress;
@@ -16,11 +17,9 @@ import zone.wim.exception.ItemException.*;
 import zone.wim.exception.LibraryException;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.library.Library;
-import zone.wim.token.Address;
-import zone.wim.token.HostAddress;
-import zone.wim.token.ItemType;
-import zone.wim.token.Type;
+import zone.wim.token.*;
 import zone.wim.token.AddressException.*;
+import zone.wim.item.*;
 
 @PersistenceCapable
 public class Host extends Signer implements Group {
@@ -71,6 +70,10 @@ public class Host extends Signer implements Group {
 		return userInterface;
 
 	}
-	
+
+//	@Override
+//	public List<Class<? extends Item>> getCanCreate() {
+//		return Arrays.asList(Site.class);
+//	}
 
 }

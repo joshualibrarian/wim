@@ -1,6 +1,7 @@
 package zone.wim.item;
 
 import java.lang.reflect.Constructor;
+
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.security.*;
@@ -8,16 +9,15 @@ import java.security.spec.*;
 
 import io.netty.buffer.ByteBuf;
 import javafx.scene.layout.Pane;
-import zone.wim.client.ContainerPane;
 import zone.wim.exception.ItemException.SignersOnly;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.Invalid;
 
 public abstract class Signer extends BaseItem implements Group {
 	
-//	private KeyStore keystore;
-//	private PublicKey publicKey;
-//	private PrivateKey privateKey;
+	private KeyStore keystore;
+	private PublicKey publicKey;
+	private PrivateKey privateKey;
 	
 	transient private boolean isAuthenticated = false;
 	
@@ -42,8 +42,8 @@ public abstract class Signer extends BaseItem implements Group {
 			keyGen.initialize(ecsp);
 			
 			KeyPair kp = keyGen.genKeyPair();
-//			privateKey = kp.getPrivate();
-//			publicKey = kp.getPublic();
+			privateKey = kp.getPrivate();
+			publicKey = kp.getPublic();
 			
 		} catch (Exception exception) {
 			System.out.println("CAUGHT EXCEPTION!" + exception);
@@ -65,8 +65,8 @@ public abstract class Signer extends BaseItem implements Group {
 	}
 	
 	public Item createItem(Address address, ItemType type) {
-		
 		Item item = null;
+		
 		try {
 			Class<? extends Item> clazz = type.getClazz();
 			Constructor<? extends Item> constructor = clazz.getConstructor(new Class[]{Address.class});
@@ -87,7 +87,8 @@ public abstract class Signer extends BaseItem implements Group {
 		return item;
 	}
 	
-	private Address generateAddress(String name, ItemType type) throws Invalid {
+	public Address generateAddress(String name, ItemType type) throws Invalid {
 		return address.generate(this,  name, type);
 	}
+
 }

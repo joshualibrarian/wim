@@ -1,17 +1,14 @@
 package zone.wim.token;
 
 import java.net.InetAddress;
+
 import java.net.UnknownHostException;
-
-import org.apache.commons.validator.routines.InetAddressValidator;
-
-import zone.wim.item.Signer;
-import zone.wim.token.AddressException.Invalid;
-
 import java.util.logging.Logger;
-
 import javax.jdo.annotations.EmbeddedOnly;
 import javax.jdo.annotations.Persistent;
+import org.apache.commons.validator.routines.InetAddressValidator;
+import zone.wim.item.Signer;
+import zone.wim.token.AddressException.Invalid;
 
 @EmbeddedOnly
 public class HostAddress implements Address {
@@ -52,8 +49,8 @@ public class HostAddress implements Address {
 
 	@Override
 	public Address generate(Signer creator, String name, ItemType type) throws Invalid {
-		
 		InetAddress a;
+		
 		try {
 			a = InetAddress.getByName(name);
 			return new HostAddress(a);

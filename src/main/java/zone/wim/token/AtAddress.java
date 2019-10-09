@@ -27,7 +27,7 @@ public class AtAddress implements Address {
 		public static Pattern ADDRESS 	= Pattern.compile(COMPLETE, Pattern.UNICODE_CHARACTER_CLASS);
 	}
 	
-	public static AtAddress parse(String address) throws Throwable {
+	public static AtAddress parse(String address) throws Exception {
 		LOGGER.info("AtAddress.parse(" + address + ")");
 		return new AtAddress(address);
 	}

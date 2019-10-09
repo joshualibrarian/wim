@@ -15,18 +15,18 @@ public class Store {
 	
 	private Properties options;
 	private PersistenceManagerFactory pmf;
+	private PersistenceManager pm;
 	
 	public Store(String url) {
 		configure();
 		if (url != null && !url.isBlank()) {
 			options.setProperty("javax.jdo.option.ConnectionURL", url);
 		}
-		System.out.println("Options: " + options);
 	}
 	
 	public void open() {
 		pmf = JDOHelper.getPersistenceManagerFactory(options);
-
+		pm = pmf.getPersistenceManager();
 	}
 
 	public boolean contains(Item item) {
@@ -34,7 +34,6 @@ public class Store {
 	}
 	
 	public void put(Item item) {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
 		try {
 		    tx.begin();
@@ -47,7 +46,6 @@ public class Store {
 		        tx.rollback();
 		    }
 		}
-		pm.close();
 	}
 
 	public Item get(String address) throws NotFound {
@@ -55,24 +53,23 @@ public class Store {
 	}
 	
 	public Item get(String address, Class<? extends Item> clazz) throws NotFound {
-		PersistenceManager pm = pmf.getPersistenceManager();
 		Transaction tx = pm.currentTransaction();
 		Object result = null;
 		try {
 			StringIdentity id = new StringIdentity(clazz, address);
 		    result = pm.getObjectById(id);
 		    
+		} catch(JDOObjectNotFoundException e) {
+			throw new NotFound(address, e);
+			
 		} finally {
 		    if (tx.isActive()) {
+		    	System.out.println("ROLLING BACK!");
 		        tx.rollback();
 		    }
 		}
 		
-	    pm.close();
-
-		if (clazz.isInstance(result)) {
-			return clazz.cast(result);
-		} else throw new StoreException.NotFound(address);
+		return clazz.cast(result);
 	}
 
 	public List<Item> find(String token) {
@@ -97,8 +94,6 @@ public class Store {
 		options = new Properties();
 		try {
 			options.load(new FileInputStream("persistence.properties"));
-			
-			System.out.println("OPTIONS: " + options);
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
@@ -106,7 +101,7 @@ public class Store {
 	}
 	
 	public void close() {
+		pm.close();
 		pmf.close();
 	}
-
 }
