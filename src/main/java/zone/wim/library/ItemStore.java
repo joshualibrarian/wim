@@ -11,13 +11,13 @@ import zone.wim.exception.StoreException.NotFound;
 import zone.wim.item.*;
 import zone.wim.token.Token;
 
-public class Store {
+public class ItemStore {
 	
 	private Properties options;
 	private PersistenceManagerFactory pmf;
 	private PersistenceManager pm;
 	
-	public Store(String url) {
+	public ItemStore(String url) {
 		configure();
 		if (url != null && !url.isBlank()) {
 			options.setProperty("javax.jdo.option.ConnectionURL", url);

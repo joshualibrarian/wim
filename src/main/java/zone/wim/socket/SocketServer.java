@@ -2,7 +2,9 @@ package zone.wim.socket;
 
 import java.security.cert.CertificateException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collection;
+import java.util.List;
 import java.util.logging.Logger;
 
 import javax.net.ssl.SSLException;
@@ -24,6 +26,11 @@ public class SocketServer {
 	
 	EventLoopGroup bossGroup;
     EventLoopGroup workerGroup;
+    int[] ports;
+    
+    public SocketServer(int[] ports) {
+    	this.ports = ports;
+    }
 	
 	public void start() {
         bossGroup = new NioEventLoopGroup();
@@ -34,14 +41,14 @@ public class SocketServer {
 			SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
 			
             ServerBootstrap b = new ServerBootstrap()
-             .group(bossGroup, workerGroup)
-             .channel(NioServerSocketChannel.class)
-             .childHandler(new ServerInitializer(sslCtx))
-             .option(ChannelOption.SO_BACKLOG, 128)
-             .childOption(ChannelOption.SO_KEEPALIVE, true);
+            	.group(bossGroup, workerGroup)
+            	.channel(NioServerSocketChannel.class)
+            	.childHandler(new ServerInitializer(sslCtx))
+            	.option(ChannelOption.SO_BACKLOG, 128)
+            	.childOption(ChannelOption.SO_KEEPALIVE, true);
     
-            Collection<Channel> channels = new ArrayList<>(Library.PORTS.size());
-            for (int port : Library.PORTS) {
+            Collection<Channel> channels = new ArrayList<>(ports.length);
+            for (int port : ports) {
             	try {
             		Channel serverChannel = b.bind(port).sync().channel();
             		LOGGER.info("bound to port " + port);

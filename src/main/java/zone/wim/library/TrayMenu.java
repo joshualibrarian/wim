@@ -7,11 +7,15 @@ import java.awt.PopupMenu;
 import java.awt.SystemTray;
 import java.awt.Toolkit;
 import java.awt.TrayIcon;
+import java.awt.image.BufferedImage;
 import java.io.IOException;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import javax.imageio.ImageIO;
+import javax.swing.ImageIcon;
 
 import javafx.application.Platform;
 
@@ -38,13 +42,11 @@ public class TrayMenu {
 
 	    	 // set up a system tray icon.
 	    	tray = SystemTray.getSystemTray();
-	    	URL imageLoc;
-	    	Image image;
 	    	try {
-	    		imageLoc = new URL("icon.png");
-	    		image = ImageIO.read(imageLoc);
-	    		
-		    	trayIcon = new TrayIcon(image);
+	    		URL url = TrayMenu.class.getResource("icon.png");
+	    		System.out.println(url.toString());
+	    		ImageIcon icon = new ImageIcon(url, "WIM");
+		    	trayIcon = new TrayIcon(icon.getImage(), "WIM");
 //		    	trayIcon.addActionListener(event -> Platform.runLater(this::doSomething));
 	            tray.add(trayIcon);
 
@@ -52,26 +54,14 @@ public class TrayMenu {
 //	            openItem.addActionListener(event -> Platform.runLater(this::doSomething));
 
 	            MenuItem exitItem = new MenuItem("Exit");
-	            exitItem.addActionListener(event -> {
-//	                notificationTimer.cancel();
-	                try {
-						library.shutdown();
-					} catch (Exception e) {
-						e.printStackTrace();
-					}
-	                tray.remove(trayIcon);
-	            });
+	            exitItem.addActionListener(event -> System.exit(0));
 	            
 	            final PopupMenu popup = new PopupMenu();
 	            popup.add(openItem);
 	            popup.addSeparator();
 	            popup.add(exitItem);
 	            trayIcon.setPopupMenu(popup);
-	    	} catch (MalformedURLException e) {
-	    		e.printStackTrace();
-	    	} catch (IOException e) {
-	    		e.printStackTrace();
-			} catch (AWTException e) {
+	    	} catch (AWTException e) {
 				e.printStackTrace();
 			}
 	    }

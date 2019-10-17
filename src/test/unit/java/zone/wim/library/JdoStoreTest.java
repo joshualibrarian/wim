@@ -2,6 +2,7 @@ package zone.wim.library;
 
 import java.util.logging.Logger;
 
+
 import org.junit.jupiter.api.*;
 
 import zone.wim.exception.StoreException.NotFound;
@@ -9,12 +10,12 @@ import zone.wim.item.*;
 
 public class JdoStoreTest {
 	static Logger LOGGER = Logger.getLogger(JdoStoreTest.class.getCanonicalName());
-	static Store store;
+	static ItemStore store;
 	static String path = "data/test.odb";
 
 	@BeforeAll
 	static void setupPath() {
-		store = new Store(path);
+		store = new ItemStore(path);
 	}
 
 	@Test

@@ -17,19 +17,14 @@ import picocli.CommandLine.Command;
 import zone.wim.client.DesktopClient;
 import zone.wim.exception.StoreException.*;
 import zone.wim.exception.LibraryException.*;
-import zone.wim.exception.*;
 import zone.wim.item.*;
 import zone.wim.language.Fragment;
 import zone.wim.socket.*;
-import zone.wim.token.*;
-import zone.wim.library.Store.*;
 
 @Command(name="wim")
 public class Library implements Daemon, Runnable {
 	private static Logger LOGGER = Logger.getLogger(Library.class.getCanonicalName());
 	private static Library INSTANCE = null;
-
-	public static List<Integer> PORTS = Arrays.asList(25, 465, 587, 2525, 25025);
 
 	public static synchronized Library instance() throws NotInitialized {
 		if (INSTANCE instanceof Library && INSTANCE.isInitialized) {
@@ -45,6 +40,7 @@ public class Library implements Daemon, Runnable {
 		if (exitCode > 0) {
 			System.exit(exitCode);
 		}
+		
 		try {
 			INSTANCE.start();
 		} catch (Exception e) {
@@ -55,11 +51,14 @@ public class Library implements Daemon, Runnable {
 	@Option(names = { "-l", "--local-path" }, description = "specify the local filesystem path")
 	private String localPath = null;
 	
+	@Option(names = { "-p", "--ports" }, description = "use the specified ports")
+	private int[] ports = { 25, 465, 587, 2525, 25025 };
+	
 	@Option(names = { "-s", "--server" }, description = "run the local server and receive incoming connections")
 	private boolean runServer = false;
 	
 	@Option(names = { "-g", "--graphical-client" }, description = "activate the graphical client")
-    private boolean graphicalClient = true;
+    private boolean graphicalClient = false;
 	
 	@Option(names = { "-t", "--terminal-client" }, description = "activate the terminal client")
 	private boolean terminalClient = false;
@@ -73,65 +72,45 @@ public class Library implements Daemon, Runnable {
 	private boolean runningAsDaemon = false;
 	private boolean isInitialized = false;
 	
-	private Store store;
+	private ItemStore store;
 	private SocketServer server;
 
 	private Host localHost;
 	
 	private TrayMenu trayMenu = null;
 
-	private Library() {
-		LOGGER.info("Library()");
-	}
-
-	@Override
-	public void run() {
-		init();
-	}
+	private Library() { }
 	
 	@Override
 	public void init(DaemonContext context) throws DaemonInitException {
-		int exitCode = new CommandLine(this).execute(context.getArguments());
+		runningAsDaemon = true;
+		INSTANCE = this;
+
+		int exitCode = new CommandLine(INSTANCE).execute(context.getArguments());
 		if (exitCode > 0) {
 			throw new DaemonInitException("init failed with code: " + exitCode);
 		}
-		
-		runningAsDaemon = true;
-		INSTANCE = this;
-		init();
 	}
 	
-	private void init() {
-		LOGGER.info("init()");
+	@Override
+	public void run() {
+		LOGGER.info("run()");
+		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+
 //		System.setSecurityManager(new SecurityManager());		
 //		Security.addProvider(new BouncyCastleProvider());
-		
 //		trayMenu = TrayMenu.init(this);
 		
-		store = new Store(localPath);
-		server = new SocketServer();
-
-		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+		store = new ItemStore(localPath);
+		server = new SocketServer(ports);
 		
 		isInitialized = true;
-	}
-	
-	public Host getLocalhost() {
-		if (!(localHost instanceof Host)) {
-			InetAddress netAddress = InetAddress.getLoopbackAddress();
-			try {
-				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
-			} catch (NotFound e) {
-				localHost = Host.create(netAddress);
-				store.put(localHost);
-			}
-		}
-		return localHost;
 	}
 	
 	@Override
 	public void start() throws Exception {
 		LOGGER.info("start()");
+		
 		store.open();
 		localHost = getLocalhost();
 
@@ -151,6 +130,7 @@ public class Library implements Daemon, Runnable {
 
 	public void shutdown() throws Exception {
 		LOGGER.info("shutdown()");
+		System.out.println("shutdown()");
 		stop();
 		destroy();
 	}
@@ -158,8 +138,10 @@ public class Library implements Daemon, Runnable {
 	@Override
 	public void stop() throws Exception {
 		LOGGER.info("stop()");
+		System.out.println("stop()");
 		
 		store.close();
+		
 		if (runServer) {
 			server.stop();
 		}
@@ -168,6 +150,7 @@ public class Library implements Daemon, Runnable {
 	@Override
 	public void destroy() {
 		LOGGER.info("destroy()");
+		System.out.println("destroy()");
 		isInitialized = false;
 		INSTANCE = null;
 //		trayMenu.destroy();
@@ -199,6 +182,19 @@ public class Library implements Daemon, Runnable {
 		
 	}
 	
+	public Host getLocalhost() {
+		if (!(localHost instanceof Host)) {
+			InetAddress netAddress = InetAddress.getLoopbackAddress();
+			try {
+				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
+			} catch (NotFound e) {
+				localHost = Host.create(netAddress);
+				store.put(localHost);
+			}
+		}
+		return localHost;
+	}
+	
 	class ShutdownThread extends Thread {
 		ShutdownThread() {
 			super("app-shutdown-hook");
@@ -208,8 +204,6 @@ public class Library implements Daemon, Runnable {
 		public void run() {
 			try {
 				shutdown();
-			} catch (ShutdownException e) {
-				e.printStackTrace();
 			} catch (Exception e) {
 				e.printStackTrace();
 			}
