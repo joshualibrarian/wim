@@ -7,6 +7,8 @@ import java.util.logging.Logger;
 
 import javax.jdo.annotations.*;
 
+import org.apache.commons.collections4.MultiValuedMap;
+
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Shape;
@@ -25,11 +27,13 @@ public abstract interface Item {
 	public Address getAddress();
 	public void setAddress(Address address);
 	
-	public List<Token> getTokens();
+	public MultiValuedMap<Reference, String> getWords();
 
-	public List<Token> getTokens(Class<? extends Token> tokenType);
+	public List<String> getWords(Reference reference);
 	
 	public List<Relation> getRelations();
+	
+	public List<Relation> getRelations(Relation... relations);
 	
 	public ItemUserInterface getUserInterface();
 	

@@ -55,6 +55,7 @@ public class SocketServer {
             		channels.add(serverChannel);
             	} catch (Exception se) {
             		LOGGER.info("failed to bind port " + port);
+            		se.printStackTrace();
             	}
             }
             for (Channel ch : channels) {

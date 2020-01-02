@@ -7,6 +7,9 @@ import java.util.logging.Logger;
 
 import javax.jdo.annotations.*;
 
+import org.apache.commons.collections4.MultiValuedMap;
+import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
+
 import zone.wim.client.*;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.Invalid;
@@ -26,7 +29,7 @@ public abstract class BaseItem implements Item {
 	protected List<Relation> relations;
 	protected List<Content> contents;
 
-	protected List<Token> tokens;
+	protected MultiValuedMap<Reference, String> words;
 	
 	protected transient ItemControl control;
 	protected transient Reference creator;
@@ -38,7 +41,7 @@ public abstract class BaseItem implements Item {
 	}
 	
 	protected BaseItem(Address address) throws SignersOnly {
-		if (!(this instanceof Signer)) {	
+		if (!(this instanceof Signer)) {
 			throw new SignersOnly(address.getText());
 		}
 		setAddress(address);
@@ -59,7 +62,7 @@ public abstract class BaseItem implements Item {
 		manifests = new ArrayList<Manifest>();
 		relations = new ArrayList<Relation>();
 		contents = new ArrayList<Content>();
-		tokens = new ArrayList<Token>();
+		words = new ArrayListValuedHashMap<Reference, String>();
 	}
 
 	@PrimaryKey
@@ -80,14 +83,12 @@ public abstract class BaseItem implements Item {
 		this.addressKey = address.getText();
 	}
 	
-	public List<Token> getTokens() {
-		return this.getTokens(Token.class);
+	public MultiValuedMap<Reference, String> getWords() {
+		return words;
 	}
-
-	public List<Token> getTokens(Class<? extends Token> tokenType) {
-		List<Token> tokens = new ArrayList<>();
-		// TODO: process the relations for only very reasonable tokens to return
-		return tokens;
+	
+	public List<String> getWords(Reference reference) {
+		return (List<String>)words.get(reference);
 	}
 	
 	public ItemControl getControl() {
@@ -116,6 +117,13 @@ public abstract class BaseItem implements Item {
 //	@Override
 	public List<Relation> getRelations() {
 		return relations;
+	}
+	
+	@Override
+	public List<Relation> getRelations(Relation... relations) {
+		
+		// TODO
+		return null;
 	}
 	
 	@Override

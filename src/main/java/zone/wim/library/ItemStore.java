@@ -55,6 +55,7 @@ public class ItemStore {
 	public Item get(String address, Class<? extends Item> clazz) throws NotFound {
 		Transaction tx = pm.currentTransaction();
 		Object result = null;
+		
 		try {
 			StringIdentity id = new StringIdentity(clazz, address);
 		    result = pm.getObjectById(id);

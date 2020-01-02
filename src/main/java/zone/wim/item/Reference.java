@@ -59,7 +59,6 @@ public class Reference {
 		//TODO: etc.
 		
 		return s;
-		
 	}
 	
 	@Override

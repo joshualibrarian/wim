@@ -5,6 +5,8 @@ import zone.wim.item.*;
 import zone.wim.token.*;
 import java.util.*;
 
+import org.apache.commons.collections4.MultiValuedMap;
+
 import javafx.scene.layout.Pane;
 
 public class Sememe extends BaseItem {
@@ -50,5 +52,14 @@ public class Sememe extends BaseItem {
 	
 	public void setGloss(Language language, String gloss) {
 		this.gloss.put(language, gloss);
+	}
+	
+	@Override
+	public MultiValuedMap<Reference, String> getWords() {
+		MultiValuedMap<Reference, String> words = super.getWords();
+
+		
+		
+		return words;
 	}
 }

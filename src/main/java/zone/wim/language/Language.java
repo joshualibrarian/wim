@@ -21,7 +21,7 @@ public class Language extends BaseItem {
 
 	@Override
 	public ItemUserInterface getUserInterface() {
-		super.getUserInterface().setPane(new LanguagePane(this));
+		getUserInterface().setPane(new LanguagePane(this));
 		return userInterface;
 	}
 }

@@ -11,8 +11,8 @@ import zone.wim.token.Address;
 public class User extends Signer {
 
 	Site homeSite;
-	List<Site> friendlySites;
-	List<Host> friendlyHosts;
+	List<Site> knownSites;
+	List<Host> knownHosts;
 	
 	public User(Address address) throws SignersOnly {
 		super(address);
