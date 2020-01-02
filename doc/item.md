@@ -7,7 +7,7 @@ Through this document, a consistent syntax will be used.  Each token is separate
 - Angle brackets (`<>`) denote required tokens.
 - Square brackets (`[]`) denote optional tokens.
 - A plus sign (`+`) following a token denotes that multiple iterations of it are allowed.
-
+
 Items may be encoded in any unicode encoding which allows for the entire range (UTF-8, UTF-16 or UTF-32).  We say mostly text, because binary data can be contained in this file by making use of a simple pattern:
 
 	<BASE_10_SIZE><SO><BINARY_DATA><SI>
