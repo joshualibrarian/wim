@@ -16,4 +16,8 @@ public class Relation extends ItemComponent {
 	protected Relation(Reference enclosingItem, int security) {
 		super(enclosingItem, security);
 	}
+	
+	public String referenceCharacter() {
+		return "\u0014";	// DC4
+	}
 }

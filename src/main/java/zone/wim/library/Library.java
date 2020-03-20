@@ -97,7 +97,7 @@ public class Library implements Daemon, Runnable {
 	public void run() {
 		LOGGER.info("run()");
 		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
-
+		
 //		System.setSecurityManager(new SecurityManager());		
 //		Security.addProvider(new BouncyCastleProvider());
 //		trayMenu = TrayMenu.init(this);

@@ -1,5 +1,5 @@
 package zone.wim.library;
 
-public class Delivery {
+public class Delivery implements SelfParsing {
 
 }

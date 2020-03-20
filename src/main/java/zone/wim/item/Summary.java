@@ -13,4 +13,9 @@ public class Summary extends ItemComponent {
 	protected Summary(Reference enclosingItem, int security) {
 		super(enclosingItem, security);
 	}
+	
+	@Override
+	public String referenceCharacter() {
+		return "\u0012";	// DC2
+	}
 }

@@ -1,6 +1,6 @@
-### Addressing
+## Addressing
 
-The uddb system is flexible enough to allow for almost *any* address space, and can be extended as such.  The only characters now allowed in an address are white spaces and control chacters.  Low order control characters (below U+0020) are used heavily in the item format and the protocol to avoid having reserved printable characters, since these codepoints are just lying around anyway and can be represented in a single byte (in the default of UTF-8).
+The uddb system is flexible enough to allow for almost *any* address space, and can be extended as such.  The only characters not allowed in an address are white spaces and control characters.  Low order control characters (below U+0020) are used heavily in the item format and the protocol to avoid having reserved printable characters, since these codepoints are just lying around anyway and can be represented in a single byte (in the default of UTF-8).
 
 The primary namespace of the uddb is based on the traditional email namespace, which is in turn based on the domain name system.  We are using that system as it is, taking over the role of email for messages sent as such, but adding a path to the end of that email, allowing each user to create arbitrary items inside their own personal namespace, in which everything is addressable by a unique address which is is prefixed by the address of its publisher, that user having control over their own namespace.  The user addressing system in uddb is intended to take over that of the current email address space.  The uddb operates on the *same ports* as an SMTP/MTA server, detecting actual such servers and automatically importing and exporting emails into simple message objects.  Every domain addressable address that is not a user is to some other kind of item (a document OR a program) and contains a *path*.  Paths can be completely arbitrary, can be generated automatically based on its type and content, or chosen by the user upon creation of an item.  Note that addresses, for the most part can contain any valid unicode character, excepting the specific use of `@` , `/` , and `.` with all other codepoints being valid.
 
@@ -13,9 +13,19 @@ The primary namespace of the uddb is based on the traditional email namespace, w
 
 However, the system can support other namespaces and does so to manage *hosts*.  Each physical computer, with an IP address (including localhost) that the system communicates with gets an item generated to represent it.  These *host items* use the IP address namespace directly and are used to store key information, connection history, domain data, and anything else.
 
-#### Users
+### Restricted Characters
 
-The address itself will indicate some things about what kind of item this is, if it has a username before the `@` then it is of class `Account`, and if it begins with the `@` then it is a `Server`, and so if no path follows, then we have an item representing that user themself, and is the basis for communicating with them.
+In an effort to allow for easily human-readable references to extend into the various components of an item consistently across different address-spaces, there must be some characters that are used to signify the end of an address and the beginning of a reference to a part of the item.  Since there are exactly four types of component for an item, there are just so many characters that are restricted from addresses at large:
+
+* `~` - 
+* `;`
+* `*`
+* `^`
+ 
+
+### Users
+
+The address itself will indicate some things about what kind of item this is, if it has a username before the `@` then it is of class `Account`, and if it begins with the `@` then it is a `Server`, and so if no path follows, then we have an item representing that user themselves, and is the basis for communicating with them.
 
 	joe@acme.com
 	@github.net

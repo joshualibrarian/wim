@@ -12,8 +12,8 @@ public class Reference {
 	
 	public static final String MANIFEST_CHAR = "~";
 	public static final String RELATION_CHAR = ";";
-	public static final String CONTENT_CHAR = "*";
-	public static final String SUMMARY_CHAR = "^";
+	public static final String CONTENT_CHAR = "^";
+	public static final String SUMMARY_CHAR = "`";
 	
 	transient private Item item = null;
 	

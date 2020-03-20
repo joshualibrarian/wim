@@ -4,27 +4,27 @@ The WIM networking protocol is a (unicode) text-based TCP/IP protocol.
 
 ## Initialization
 
-This protocol begins its initialization process exactly as the SMTP protocol does.  Optionally (but active by default) with TLS, an (initially ASCII) text-based TCP/IP connection is made and from a client to a server.  Since "servers" routinely make outgoing connections to other hosts and clients can receive connections if they are network accessible, in the context of this document, *client* refers always to the host initiating the connection, and *server*, to the host on the receiving end of that connection.
+This protocol begins its initialization process exactly as the SMTP protocol does.  Optionally (but active by default) with TLS, a UTF-8 text-based TCP/IP connection is made and from a client to a server.  Since "servers" routinely make outgoing connections to other hosts and clients can receive connections if they are network accessible, in the context of this document, *client* refers always to the host initiating the connection, and *server*, to the host on the receiving end of that connection.
 
-When initially connecting to a new host, the client does not know if it will find another WMM peer or an actual SMTP server.  The server response line includes a marker, as any SMTP client would, signifying what kind of host they've found:
+When initially connecting to a new host, the client does not know if it will find another WIM peer or an actual SMTP server.  The server response line includes a marker, as any SMTP client would, signifying what kind of host they've found:
 
 	220 foo.net ESMTP WIM <version>; <timestamp>
 
-If an actual SMTP client has connected to our server to deliver some mail from outside the system, it will think nothing amiss and proceed with its delivery.  If a WIM client connects to a host whose marker is ambiguous, it can probe the waters with an empty request (`\r`, see below), which fails cleanly with a `500` error if it has indeed found an actual SMTP server, it can then carry on as SMTP.
+If an actual SMTP client has connected to our server to deliver some mail from outside the system, it will think nothing amiss and proceed with its delivery.  If a WIM client connects to a host whose marker is ambiguous, it can probe the waters with an empty request (`<DLE>r`, see below), which fails cleanly with a `500` error if it has indeed found an actual SMTP server, it can then carry on as SMTP.
 
 
 
 If so, we will know for certain and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will receive that delivery and import it as a simple item.
 
-When we do know that we have connected with a WMM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that hostmainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
+When we do know that we have connected with a WMM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that host, mainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
 
 Each host keeps track of all other hosts it has communicated with, and uses the item library mechanism to store data on each host, using the IP address namespace.  
 
 ## COMMANDS
 
-As you'll see in the following breakdown of the protocol, it is simple and consistent, with the real power in the items themselves, and the protocol just authenticating, requesting items and delivering items.  Throughout the protocol, the format is (with square brackets denoting optional elements):
+As you'll see in the following breakdown of the protocol, it is simple and consistent, with the real power in the items themselves, and the protocol just authenticating, requesting items and delivering items.  There is one single character that is used throughout the protocol to signify the presence of a command, and that is the `DATA_LINK_ESCAPE` (`DLE`, ) control character, with a single character following the `DLE` for a command, and a single character before the `DLE` signifying a parameter to the proceeding command.  Throughout the protocol, the format is (with square brackets denoting optional elements):
 
-	\COMMAND [TO t\] [FROM f\] PAYLOAD [\[e] SIGNATURE] [w\] 
+	<DLE>COMMAND [TO t<DLE>] [FROM f<DLE>] PAYLOAD [<DLE>[e] SIGNATURE] [w<DLE>] 
 
 Other parameters to the command can be specified with additional `?\` sub-commands if required, such as a `s\` for security setting.
 

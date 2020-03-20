@@ -15,4 +15,8 @@ public class Content extends ItemComponent {
 	protected Content(Reference enclosingItem, int security) {
 		super(enclosingItem, security);
 	}
+	
+	public String referenceCharacter() {
+		return "\u0013";	// DC3
+	}
 }

@@ -19,7 +19,7 @@ public interface Address extends Token {
 		};
 		public static String[] RESERVED = {
 			"\\s",
-//			"\\p{Cntrl}",
+			"\\p{Cntrl}",
 //			"\\[", "\\]",
 //			"\\(", "\\)"
 		};

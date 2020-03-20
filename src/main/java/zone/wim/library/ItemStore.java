@@ -1,6 +1,10 @@
 package zone.wim.library;
 
 import java.io.FileInputStream;
+import java.nio.Buffer;
+import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
+import com.ibm.icu.lang.UCharacter;
 import java.io.IOException;
 import java.nio.file.Path;
 import java.util.*;
@@ -104,5 +108,9 @@ public class ItemStore {
 	public void close() {
 		pm.close();
 		pmf.close();
+	}
+	
+	private Item read() {
+		
 	}
 }

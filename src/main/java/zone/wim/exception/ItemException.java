@@ -21,5 +21,11 @@ public class ItemException extends Exception {
 		}
 		
 	}
+	
+	public static class EndOfItemReached extends Exception {
+		public EndOfItemReached() {
+			super();
+		}
+	}
 
 }

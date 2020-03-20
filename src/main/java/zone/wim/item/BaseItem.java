@@ -100,6 +100,30 @@ public abstract class BaseItem implements Item {
 	}
 	
 	@Override
+	public String generateIndex(ItemComponent component) {
+		List<? extends ItemComponent> components = getComponentListByComponent(component);
+		
+		return null;
+		
+	}
+	
+	private List<? extends ItemComponent>getComponentListByComponent(ItemComponent component) {
+		List<? extends ItemComponent>components = null;
+		
+		if (component instanceof Manifest) {
+			components = this.manifests;
+		} else if (component instanceof Summary) {
+			components = this.summaries;
+		} else if (component instanceof Content) {
+			components = this.contents;
+		} else if (component instanceof Relation) {
+			components = this.relations;
+		}
+
+		return components;
+	}
+	
+	@Override
 	public boolean equals(Object obj) {
 		if (obj instanceof Item) {
 			Item other = (Item)obj;
@@ -114,23 +138,56 @@ public abstract class BaseItem implements Item {
 	    return addressKey.hashCode();
 	}
 	
-//	@Override
-	public List<Relation> getRelations() {
-		return relations;
-	}
-	
-	@Override
-	public List<Relation> getRelations(Relation... relations) {
-		
-		// TODO
-		return null;
-	}
-	
 	@Override
 	public ItemUserInterface getUserInterface() {
 		if (!(userInterface instanceof ItemUserInterface)) {
 			userInterface = new ItemUserInterface(this);
 		}
 		return userInterface;
+	}
+
+	@Override
+	public List<Manifest> getManifests(Signer requestor) {
+		return manifests;
+	}
+
+	@Override
+	public List<Summary> getSummaries(Signer requestor) {
+		return summaries;
+	}
+
+	@Override
+	public List<Content> getContents(Signer requestor) {
+		return contents;
+	}
+
+	@Override
+	public List<Relation> getRelations(Signer requestor) {
+		return relations;
+	}
+
+	@Override
+	public List<Relation> relationsRelatedBy(Item... items) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Relation> relationsRelatedTo(Item... items) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public List<Relation> relationsCreatedBy(Signer creator) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+	
+	public byte[] serialize() {
+		
+		manifests.forEach((manifest) -> {
+			
+		});
 	}
 }

@@ -101,7 +101,9 @@ dependencies {
     implementation group: 'net.sf.jwordnet', name: 'jwnl', version:'1.4_rc3'
     implementation group: 'edu.mit', name: 'jwi', version:'2.2.3'
 	
-	implementation group: 'com.ibm.icu', name: 'icu4j', version: '63.1'
+	implementation group: 'com.ibm.icu', name: 'icu4j', version: '+'
+	implementation group: 'com.ibm.icu', name: 'icu4j-charset', version: '+'
+	implementation group: 'com.ibm.icu', name: 'icu4j-localespi', version: '+'
 	
     implementation group: 'com.googlecode.blacken', name: 'blacken-core', version:'1.1.1'
     implementation group: 'org.apache.tika', name: 'tika-parsers', version:'1.18'
