@@ -38,7 +38,7 @@ If an encoding sensitive to byte order is specified, but not specified fully eno
 
 ## Encoding
 
-In certain parts of WIM items, such as signatures on item components, binary data may be embedded.  This can be done in either of several ways, all of which use the `BEL` (0x0007) control character.  If binary data is to be encoded as text, such as with `Base64`, `Base65536`, or `Ecoji`, this is specified *before* the `BEL`, with the content proceeding after the `BEL`, and then followed immediately by whitespace.
+In certain parts of WIM items, such as signatures on item components, binary data may be embedded.  This can be done in either of several ways, all of which use the `BEL` (U+0007) control character.  If binary data is to be encoded as text, such as with `Base64`, `Base65536`, or `Ecoji`, this is specified *before* the `BEL`, with the content proceeding after the `BEL`, and then followed immediately by whitespace.
 
 	Base64<BEL>YWJjMTIzIT8kKiYoKSctPUB+
 	Base65536<BEL>𤇃𢊻𤄻嶜𤄋𤇁𡊻𤄛𤆬𠲻𤆻𠆜𢮻𤆻ꊌ𢪻𤆻邌𤆻𤊻𤅋
@@ -51,7 +51,7 @@ Supported encodings, particularly those appropriate ones with long names (like "
 
 ## Referencing
 
-In the above cases, we are embedding encoded binary data into unicode and displaying it in the current encoding scheme, marked only with the `BEL` character.  With a slightly different syntax, the `BEL` control character can also be used to signify data elsewhere being linked to, such as in the content of an item, a large data file may be externalized and referred to in the content using the following syntax.  Note the `␣` characters is used only for emphasis that this token must be surrounded by whitespace to be valid.  To allow absolutely any characters to appear in that string (such as spaces in a filename), the `START_OF_TEXT` (`STX`) and `END_OF_TEXT` (`ETX`) characters can be used as quotes, surrounding the entire path:
+In the above cases, we are embedding encoded binary data into unicode and displaying it in the current encoding scheme, marked only with the `BEL` character.  With a slightly different syntax, the `BEL` control character can also be used to signify data elsewhere being linked to, such as in the content of an item, a large data file may be externalized and referred to in the content using the following syntax.  Note the `␣` characters is used only for emphasis that this token must be surrounded by whitespace to be valid.  To allow absolutely any characters to appear in that string (such as spaces in a filename), the `START_OF_TEXT` (`STX`, U+0002) and `END_OF_TEXT` (`ETX`, U+0003) characters can be used as quotes, surrounding the entire path:
 
 	some/relative/file/path<BEL>
 	/some/absolute/file/path<BEL>
