@@ -1,21 +1,22 @@
 package zone.wim.item;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Date;
 import java.util.List;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import zone.wim.library.SelfParsing;
-import zone.wim.library.UnicodeReader;
+import zone.wim.library.EncodingAdapter;
 
 @EmbeddedOnly
 public abstract class ItemComponent implements SelfParsing {
 	
-	public static String INDEX_CHAR = "\u001C";			// FS
-	public static String TIMESTAMP_CHAR = "\u001D";		// GS
-	public static String SECURITY_CHAR = "\u001E";		// RS
-	public static String SIGNATURE_CHAR = "\u001F";		// US
-	
+	public static char INDEX_CHAR = '\u001C';			// FS
+	public static char TIMESTAMP_CHAR = '\u001D';		// GS
+	public static char SECURITY_CHAR = '\u001E';		// RS
+	public static char SIGNATURE_CHAR = '\u001F';		// US
+		
 //	public static ItemComponent parse(UnicodeReader<ItemComponent> parser) {
 //		ItemComponent result = null;
 //		String currentChar = null;
@@ -26,13 +27,13 @@ public abstract class ItemComponent implements SelfParsing {
 //		return result;
 //	}
 	
-	private Item enclosingItem;		// Reference ?
-	private String address;
+	protected Item enclosingItem;		// Reference ?
+	protected String address;
 	
-	private String index;
-	private Date timestamp;
-	private int security = 0;
-	private List<Signature> signatures;
+	protected String index;
+	protected Date timestamp;
+	protected int security = 0;
+	protected List<Signature> signatures;
 	
 	protected ItemComponent(Item enclosingItem, Signer creator, int security) {
 		this.enclosingItem = enclosingItem;
@@ -78,5 +79,7 @@ public abstract class ItemComponent implements SelfParsing {
 		this.signatures = signatures;
 	}
 	
-	public abstract String referenceCharacter();
+	public abstract char referenceCharacter();
+	
+	public abstract ByteBuffer serialize(boolean relative);
 }

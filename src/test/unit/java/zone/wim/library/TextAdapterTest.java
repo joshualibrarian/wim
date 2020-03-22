@@ -4,6 +4,7 @@ import java.nio.ByteBuffer;
 import java.nio.ByteOrder;
 import java.nio.charset.Charset;
 import java.nio.charset.CharsetDecoder;
+import com.ibm.icu.charset.*;
 import com.ibm.icu.
 import java.nio.charset.StandardCharsets;
 import java.util.Arrays;
@@ -12,7 +13,7 @@ import org.junit.jupiter.api.*;
 
 import com.ibm.icu.lang.UCharacter;
 
-public class UnicodeReaderTest {
+public class TextAdapterTest {
 	
 	@Nested
 	class UCharacterTests {

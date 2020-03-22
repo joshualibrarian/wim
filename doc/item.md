@@ -32,7 +32,7 @@ Signatures throughout the item format are denoted with the `RECORD_SEPARATOR` (`
 
 ## Manifest
 
-	<ADDRESS><DC1>[CREATOR] [<FS>TIMESTAMP] [<GS>SECURITY] <SPACE SEPARATED LIST> [[SIGNER]<RS>[SIGNATURE]]+<CR>
+	<ADDRESS><DC1>[CREATOR] [<FS>INDEX] [<GS>SECURITY] [<RS>TIMESTAMP] <SPACE SEPARATED LIST> [[SIGNER]<RS>[SIGNATURE]]+<CR>
 	
 These tokens are each recognized by their place in the manifest, how they are formatted, and the use of three marker symbols (`!`, `#`, and `~`).  The required `<SPACE SEPARATED LIST>` can contain the identifier of any part of this item other than a manifest, denoted each by the format of its (relative, omitting the address part) reference, each with a unique character.  The signature validates a secure hash of the manifest itself, with each item part reference replaced with the actual content of that part.
 

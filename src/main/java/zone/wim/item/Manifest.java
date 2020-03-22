@@ -7,7 +7,7 @@ import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.library.UnicodeReader;
+import zone.wim.library.EncodingAdapter;
 import zone.wim.token.ComponentReference;
 
 @EmbeddedOnly
@@ -22,13 +22,21 @@ public class Manifest extends ItemComponent {
 	}
 	
 	@Override
-	public void parse(UnicodeReader reader) {
+	public void parse(EncodingAdapter reader) {
 		String token = reader.nextToken();
 	}
 	
-	public String referenceCharacter() {
-		return "\u0011";	// DC1
+	public char referenceCharacter() {
+		return Item.MANIFEST_CHAR;	// DC1
 	}
 
-
+	public ByteBuffer serialize(boolean relative) {
+		StringBuilder sb = new StringBuilder();
+		if (!relative) {
+			sb.append(this.address);
+		}
+		sb.append(Item.MANIFEST_CHAR);
+		sb.append(Item.SPACE_CHAR);
+		sb.append(Item)
+	}
 }

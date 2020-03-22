@@ -8,5 +8,5 @@ public interface SelfParsing {
 
 	// abstract static SelfParsing parse(WimParser parser);
 
-	void parse(UnicodeReader parser);
+	void parse(EncodingAdapter parser);
 }
