@@ -1,4 +1,4 @@
-#Text Encodings
+# Text Encodings
 
 Throughout the WIM, in the components of items themselves and in the network protocol, all complete unicode encodings are supported, and the same patterns are used to specify encodings, and even escape the encoding or shift into another.  Supported encodings are:
 
@@ -43,7 +43,7 @@ In certain parts of WIM items, such as signatures on item components, binary dat
 	Base64<BEL>YWJjMTIzIT8kKiYoKSctPUB+
 	Base65536<BEL>𤇃𢊻𤄻嶜𤄋𤇁𡊻𤄛𤆬𠲻𤆻𠆜𢮻𤆻ꊌ𢪻𤆻邌𤆻𤊻𤅋
 
-Supported encodings, particularly those appropriate ones with long names (like "Base65536") will have abbreviated names.  All "Base" encodings will be able to be represendted by their respective unicode codepoint (converting decimal to hex).  So, `Base65536` can be shortened to the single `𐀀` (U+10000) and `Base64` becomes simply `@` (U+0040):
+Supported encodings, particularly those appropriate ones with long names (like "Base65536") will have abbreviated names.  All "Base" encodings will be able to be represented by their respective unicode codepoint (converting decimal to hex).  So, `Base65536` can be shortened to the single `𐀀` (U+10000) and `Base64` becomes simply `@` (U+0040):
 
 	@<BEL>YWJjMTIzIT8kKiYoKSctPUB+
 	𐀀<BEL>𤇃𢊻𤄻嶜𤄋𤇁𡊻𤄛𤆬𠲻𤆻𠆜𢮻𤆻ꊌ𢪻𤆻邌𤆻𤊻𤅋
