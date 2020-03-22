@@ -1,20 +1,20 @@
 # Text Encodings
 
-Throughout the WIM, in the components of items themselves and in the network protocol, all complete unicode encodings are supported, and the same patterns are used to specify encodings, and even escape the encoding or shift into another.  Supported encodings are:
+Throughout the WIM, in the components of items themselves and in the network protocol, it's all mostly text, and all unicode encodings are supported, with the same patterns being used to specify encodings, and even escape the encoding or shift into another.  Supported encodings are:
 
 * UTF-8 (default)
-* UTF-16le
-* UTF-16be
-* UTF-32le
-* UTF-32be
+* UTF-16LE
+* UTF-16BE
+* UTF-32LE
+* UTF-32BE
 * UTF-7
 
-At the beginning of each file containing items or post-initiation communication of the protocol, a default of  UTF-8 encoding will be assumed  *unless* a `BYTE_ORDER_MARK` (`U+FEFF`) in any supported encoding is found at the beginning of the stream.  If the encoding that follows is a valid UTF encoding, then the `BOM` will indicate what encoding that is in only between two and four bytes of data and then that encoding will be used.  If the initial encoding is UTF-8, the `BOM` is not required, but it is allowed.  Any other encoding must be specified by beginning the stream with that character.
+At the beginning of each file containing items or post-initiation communication of the protocol, a default of  UTF-8 encoding will be assumed  *unless* a `BYTE_ORDER_MARK` (`BOM`, U+FEFF) in any supported encoding is found at the beginning of the stream.  If the encoding that follows is a valid UTF encoding, then the `BOM` will indicate what encoding that is in only between two and four bytes of data and then that encoding will be used.  If the initial encoding is UTF-8, the `BOM` is not required, but it is allowed.  Any other encoding must be specified by beginning the stream with that character.
 
 	this is UTF-8 text, because no BOM was specified
 	<BOM>this text begins with a BOM, which signifies it's encoding between any UTF
 	
-If any other encodings are to be used throughout the WIM, they can be transitioned into by using the `SHIFT_OUT` character.  This character signifies that we are "shifting out" of the current encoding and into a different one.  If no other information is provided, then another `BOM` is expected immediately following the `SO` to indicate which other UTF encoding we are shifting into.  Of course, after proceeding in the new encoding for however long, a following `SHIFT_IN` character will shift us back into the previous encoding, whatever that had been.
+If any other encodings are to be used throughout the WIM, they can be transitioned into by using the `SHIFT_OUT` (`SO`, U+000E) character.  This character signifies that we are "shifting out" of the current encoding and into a different one.  If no other information is provided, then another `BOM` is expected immediately following the `SO` to indicate which other UTF encoding we are shifting into.  Of course, after proceeding in the new encoding for however long, a following `SHIFT_IN` (`SI, U+000F) character will shift us back into the previous encoding, whatever that had been.
 
 	this stream is defaulted to UTF-8 because it started with no BOM but we can shift out<SO><BOM>into another encoding<SI> and then back to UTF-8
 	<BOM>this utf16be text needed to be identified with the preceding BOM but <SI>here no BOM because UTF-8 and then<SI>we are returned to UTF-16BE for the duration
@@ -26,9 +26,9 @@ You cannot shift out to the same encoding you are already using, and unspecified
 
 Alternatively to specifying a text encoding with the `BYTE_ORDER_MARK` character, it can be explicitly specified *preceding* the `SHIFT_OUT` in plain text (of the current encoding, not that being shifted into) and that, being clearly preceded by a whitespace or other word break character.  For example:
 
-	some preceding text in default encoding␣utf16le<SO>no byte order mark is needed, this text can begin immediately in the specified encoding<SI>
+	some preceding text in default encoding utf16le<SO>no byte order mark is needed, this text can begin immediately in the specified encoding<SI>
 	  
-If an encoding sensitive to byte order is specified, but not specified fully enough to indicate the byte order, then the `BOM` is still required, to indicate byte order:
+If an encoding sensitive to byte order is specified, but not specified fully enough to indicate the byte order, then the `BOM` is still required, to indicate byte order, which makes it a rather silly thing to do:
 
 	initial blah utf32<SO><BOM>that character is still required, since we still don't know big-endian or little-endian<SI>
 	UTF-16<SO><BOM>again, still required to indicate byte order<SI>
