@@ -69,6 +69,6 @@ In the incredibly odd case that you have a file location that just HAS to have t
 Binary data can also be embedded directly into an item, without being encoded into a form compatable with unicode as above.  In such cases like the content of items, binary data can be stored directly in-line in the item.  This is done using a combination of the `BEL` and the `SHIFT_OUT` / `SHIFT_IN` characters by specifying the exact size of the data as follows:
 
 	<BEL>9383<SO>pretend I am exactly 9383 bytes of binary data, decimal by default<SI>
-	<BEL>0x9fc3<SO>hexadecimal numbers can be spcified using the "0x" prefix, again imagine exactly 0x9fc3 bytes of binary data<SI>
+	<BEL>0x9fc3<SO>hexadecimal numbers can be specified using the "0x" prefix, again imagine exactly 0x9fc3 bytes of binary data<SI>
 
-Potentially, other number bases could be represented by other `0x` type codes, such as `0z` or `0q`, giving a much more efficient representation that is compatible with unicode.
+Potentially, other higher number bases could be represented by other `0x` type codes, such as `0z` or `0q`, perhaps base 60 or 120, or more, giving a much more efficient representation that is compatible with unicode.
