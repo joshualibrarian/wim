@@ -1,42 +1,45 @@
 package zone.wim.item;
 
 import java.io.InputStream;
+import java.nio.ByteBuffer;
 import java.util.Date;
 
 import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.library.EncodingAdapter;
+import zone.wim.library.DecodeAdapter;
+import zone.wim.library.EncodeAdapter;
+import zone.wim.token.Address;
 import zone.wim.token.ComponentReference;
 
 @EmbeddedOnly
 public class Manifest extends ItemComponent {
 	
-	int index;
-	private List<ComponentReference> references;
+	protected List<Address> addresses;
+	protected List<ComponentReference> references;
 	
-	public Manifest(Reference enclosingItem, int security, List<ComponentReference> references) {
-		super(enclosingItem, security);
-		this.references = references;
+	public Manifest(Item enclosingItem, Signer creator, Security security) {
+		super(enclosingItem, creator, security);
 	}
 	
-	@Override
-	public void parse(EncodingAdapter reader) {
-		String token = reader.nextToken();
-	}
-	
-	public char referenceCharacter() {
-		return Item.MANIFEST_CHAR;	// DC1
+	public ByteBuffer write() {
+		StringBuilder sb = new StringBuilder();
+		sb.append(this.address);
+		sb.append(Item.MANIFEST_CHAR);
+		
+		sb.append(Item.SPACE_CHAR);
+		
+		if (index > 0 ) {
+			sb.append(Integer.toString(index));
+		}
+		
+		sb.append(Integer.toString(security));
 	}
 
-	public ByteBuffer serialize(boolean relative) {
-		StringBuilder sb = new StringBuilder();
-		if (!relative) {
-			sb.append(this.address);
-		}
-		sb.append(Item.MANIFEST_CHAR);
-		sb.append(Item.SPACE_CHAR);
-		sb.append(Item)
+	@Override
+	public void read(ByteBuffer bytes) {
+		// TODO Auto-generated method stub
+		
 	}
 }

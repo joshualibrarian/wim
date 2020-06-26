@@ -50,6 +50,22 @@ public abstract class Signer extends BaseItem implements Group {
 		}
 	}
 	
+	private void keyStore(KeyStore keyStore) {
+		Content keyStoreContent = new Content(this, creator.item(), )
+	}
+	
+	public KeyStore keyStore() {
+		
+	}
+	
+	private void publicKey(PublicKey publicKey) {
+		Content c = new Content(this, )
+	}
+	
+	private void privateKey(PrivateKey privateKey) {
+		
+	}
+	
 	public Item createItem(String name, Class<? extends Item> clazz) throws Invalid {
 		ItemType type = new ClassItemType(clazz);
 		Address a = generateAddress(name, type);

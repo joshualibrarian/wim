@@ -5,6 +5,7 @@ import java.util.*;
 import java.util.logging.*;
 
 import java.net.InetAddress;
+import java.nio.ByteBuffer;
 
 import javax.jdo.annotations.PersistenceCapable;
 
@@ -70,10 +71,5 @@ public class Host extends Signer implements Group {
 		return userInterface;
 
 	}
-
-//	@Override
-//	public List<Class<? extends Item>> getCanCreate() {
-//		return Arrays.asList(Site.class);
-//	}
 
 }

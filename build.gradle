@@ -90,11 +90,11 @@ dependencies {
 	implementation group: 'com.objectdb', name: 'objectdb', version: '2.8.1'
 	
 	// networking
-    api group: 'io.netty', name: 'netty-all', version:'4.1.42.Final'
+    api group: 'io.netty', name: 'netty-all', version:'4.1.50.Final'
 
 	// encryption
-    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.59'
-	implementation group: 'org.bouncycastle', name: 'bcpg-jdk15on', version: '1.59'
+    implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.65'
+	implementation group: 'org.bouncycastle', name: 'bcpg-jdk15on', version: '1.65'
 	implementation group: 'name.neuhalfen.projects.crypto.bouncycastle.openpgp', name: 'bouncy-gpg', version: '2.+'
 	//implementation group: 'org.bouncycastle', name: 'org.bouncycastle.openpgp.wot' , version: '1.56.1'
 	

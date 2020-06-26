@@ -7,16 +7,10 @@ import java.util.List;
 import javax.jdo.annotations.EmbeddedOnly;
 
 import zone.wim.library.SelfParsing;
-import zone.wim.library.EncodingAdapter;
+import zone.wim.library.DecodeAdapter;
 
 @EmbeddedOnly
-public abstract class ItemComponent implements SelfParsing {
-	
-	public static char INDEX_CHAR = '\u001C';			// FS
-	public static char TIMESTAMP_CHAR = '\u001D';		// GS
-	public static char SECURITY_CHAR = '\u001E';		// RS
-	public static char SIGNATURE_CHAR = '\u001F';		// US
-		
+public abstract class ItemComponent {
 //	public static ItemComponent parse(UnicodeReader<ItemComponent> parser) {
 //		ItemComponent result = null;
 //		String currentChar = null;
@@ -27,16 +21,18 @@ public abstract class ItemComponent implements SelfParsing {
 //		return result;
 //	}
 	
-	protected Item enclosingItem;		// Reference ?
+	protected Item enclosingItem = null;		// Reference ?
+	protected Signer creator = null;
 	protected String address;
 	
 	protected String index;
 	protected Date timestamp;
-	protected int security = 0;
+	protected Security security = Security.PRIVATE;
 	protected List<Signature> signatures;
 	
-	protected ItemComponent(Item enclosingItem, Signer creator, int security) {
+	protected ItemComponent(Item enclosingItem, Signer creator, Security security) {
 		this.enclosingItem = enclosingItem;
+		this.creator = creator;
 		this.security = security;
 		this.timestamp = new Date();
 		
@@ -47,39 +43,39 @@ public abstract class ItemComponent implements SelfParsing {
 		this.address = address;
 	}
 	
-	public Item getEnclosingItem() {
+	public Item enclosingItem() {
 		return enclosingItem;
 	}
 	
-	public void setEnclosingItem(Item enclosingItem) {
+	public void enclosingItem(Item enclosingItem) {
 		this.enclosingItem = enclosingItem;
 	}
 
-	public Date getTimestamp() {
+	public Date timestamp() {
 		return timestamp;
 	}
 	
-	public void setTimestamp(Date timestamp) {
+	public void timestamp(Date timestamp) {
 		this.timestamp = timestamp;
 	}
 
-	public int getSecurity() {
+	public Security security() {
 		return security;
 	}
 	
-	public void setSecurity(int security) {
+	public void security(Security security) {
 		this.security = security;
 	}
 	
-	public List<Signature> getSignatures() {
+	public List<Signature> signatures() {
 		return signatures;
 	}
 	
-	public void setSignatures(List<Signature> signatures) {
+	public void signatures(List<Signature> signatures) {
 		this.signatures = signatures;
 	}
 	
-	public abstract char referenceCharacter();
+	public abstract ByteBuffer write(boolean relative);
 	
-	public abstract ByteBuffer serialize(boolean relative);
+	public abstract void read(ByteBuffer bytes);
 }

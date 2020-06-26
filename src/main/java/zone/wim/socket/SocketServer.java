@@ -1,12 +1,15 @@
 package zone.wim.socket;
 
 import java.security.cert.CertificateException;
+
+
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collection;
 import java.util.List;
 import java.util.logging.Logger;
 
+import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLException;
 
 import io.netty.bootstrap.ServerBootstrap;
@@ -15,6 +18,8 @@ import io.netty.channel.ChannelOption;
 import io.netty.channel.EventLoopGroup;
 import io.netty.channel.nio.NioEventLoopGroup;
 import io.netty.channel.socket.nio.NioServerSocketChannel;
+import io.netty.handler.logging.*;
+import io.netty.handler.ssl.OpenSslEngine;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.SelfSignedCertificate;
@@ -38,11 +43,13 @@ public class SocketServer {
 
         try {
 			SelfSignedCertificate ssc = new SelfSignedCertificate();
-			SslContext sslCtx = SslContextBuilder.forServer(ssc.certificate(), ssc.privateKey()).build();
+			SslContext sslCtx = SslContextBuilder.forServer(
+					ssc.certificate(), ssc.privateKey()).build();
 			
             ServerBootstrap b = new ServerBootstrap()
             	.group(bossGroup, workerGroup)
             	.channel(NioServerSocketChannel.class)
+            	.childHandler(new LoggingHandler(LogLevel.INFO))
             	.childHandler(new ServerInitializer(sslCtx))
             	.option(ChannelOption.SO_BACKLOG, 128)
             	.childOption(ChannelOption.SO_KEEPALIVE, true);
@@ -78,7 +85,17 @@ public class SocketServer {
 	
 	public void stop() {
 		LOGGER.info("shutting down SocketServer()");
-        workerGroup.shutdownGracefully();
-        bossGroup.shutdownGracefully();
+        try {
+			workerGroup.shutdownGracefully().sync();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+        try {
+			bossGroup.shutdownGracefully().sync();
+		} catch (InterruptedException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
     }
 }

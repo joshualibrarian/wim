@@ -5,6 +5,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 
+import javax.net.ssl.SSLEngine;
 import javax.net.ssl.SSLException;
 
 import io.netty.bootstrap.Bootstrap;
@@ -21,6 +22,7 @@ public class SocketClient implements Runnable {
 	String host;
 	int port;
 	SslContext sslCtx;
+	SSLEngine ssl;
 	
 	public SocketClient(Signer user, String host, int port) {
 		this.user = user;

@@ -16,31 +16,31 @@ If an actual SMTP client has connected to our server to deliver some mail from o
 
 If so, we will know for certain and behave accordingly, making it's deliveries packaged up as standard emails, with attachments as needed, and not making any requests.  If our server is connected to by an SMTP server with a delivery, it will receive that delivery and import it as a simple item.
 
-When we do know that we have connected with a WMM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that host, mainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
+When we do know that we have connected with a WIM host, we can use that *hello* command to exchange information about the hosts directly, which consists of an *item* that represents that host, whose name is the IP address of that host, mainly of the host's public key, and a set of signatures of it's trusted peers, to vouch for it.
 
 Each host keeps track of all other hosts it has communicated with, and uses the item library mechanism to store data on each host, using the IP address namespace.  
 
 ## COMMANDS
 
-As you'll see in the following breakdown of the protocol, it is simple and consistent, with the real power in the items themselves, and the protocol just authenticating, requesting items and delivering items.  There is one single character that is used throughout the protocol to signify the presence of a command, and that is the `DATA_LINK_ESCAPE` (`DLE`, ) control character, with a single character following the `DLE` for a command, and a single character before the `DLE` signifying a parameter to the proceeding command.  Throughout the protocol, the format is (with square brackets denoting optional elements):
+As you'll see in the following breakdown of the protocol, it is simple and consistent, with the real power in the items themselves, and the protocol just authenticating, requesting items and delivering items or parts of items.  There is one single character that is used throughout the protocol to signify the presence of a command, and that is the `DATA_LINK_ESCAPE` (`DLE`, ) control character, with a single character following the `DLE` for a command, and a single character before the `DLE` signifying a parameter to the proceeding command.  Throughout the protocol, the format is (with square brackets denoting optional elements):
 
 	<DLE>COMMAND [TO t<DLE>] [FROM f<DLE>] PAYLOAD [<DLE>[e] SIGNATURE] [w<DLE>] 
 
 Other parameters to the command can be specified with additional `?\` sub-commands if required, such as a `s\` for security setting.
 
 
-All commands in this protocol are short and designed to minimize wasted bytes, with clear defaults for omitted tokens.  The networking protocol in the WMM is a very simple one.  Once it's initialized, it contains only two commands: *DELIVERY* and *REQUEST*, marked by a `\` (backslash) *proceeding* the command code which is followed by the content of the command.
+All commands in this protocol are short and designed to minimize wasted bytes, with clear defaults for omitted tokens.  The networking protocol of the WIM is a very simple one.  Once it's initialized, it contains only two commands: *DELIVERY* and *REQUEST*, marked by a `\` (backslash) *proceeding* the command code which is followed by the content of the command.
 
 
 ### DELIVERY
 
 The payload of a delivery consists of one or more *items*, either whole, or just some part.  Proceeding the payload it may have a `FROM` and a `TO` field, and an optional signature, which authenticates its initiator.  The payload of an item may be encrypted, and when decrypted may contain another nested delivery for some other recipient.  If a host recieves a delivery that is not addressed to it, either directly or wrapped in another delivery, it should forward that delivery to the listed recipient unchanged.
 
-	\d [TO t\] [FROM f\] PAYLOAD \ [[SIGNER]~SIGNATURE]+
+	<DLE>d [TO t<DLE>] [FROM f<DLE>] PAYLOAD <DLE> [[SIGNER]~SIGNATURE]+
 
 #### encrypted payload
 
-The empty `\` signifies the end of the payload and may only be followed by the optional signature.  If the payload is encrypted, then the payload marker is not the naked backslash, but the encrypted (`e\`) subcommand:
+The empty `<DLE>` signifies the end of the payload and may only be followed by the optional signature.  If the payload is encrypted, then the payload marker is not the naked `DLE`, but is then preceeded by a text representation of  (`e\`) subcommand:
 
 	\d [TO t\] [FROM f\] PAYLOAD e\ [~SIGNATURE]
 
@@ -56,7 +56,7 @@ If the payload is encrypted
 
 An empty request results in a delivery containing 
 
-	\r <SPACE_SEPARATED_LIST>
+	<DLE>r <SPACE_SEPARATED_LIST>
 	
 A request consists primarily of a space-separated list of tokens, which the recipient of the request will attempt to resolve, including 
 

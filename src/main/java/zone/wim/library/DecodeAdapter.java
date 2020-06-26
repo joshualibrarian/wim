@@ -1,10 +1,10 @@
 package zone.wim.library;
 
 import java.io.UnsupportedEncodingException;
-
 import java.lang.reflect.InvocationTargetException;
 import java.nio.*;
 import java.text.ParseException;
+import java.text.BreakIterator;
 import java.util.*;
 import java.nio.charset.*;
 import org.apache.commons.lang.StringUtils;
@@ -12,7 +12,7 @@ import com.ibm.icu.lang.UCharacter;
 
 import com.ibm.icu.charset.*;
 
-public class EncodingAdapter {
+public class DecodeAdapter {
 	
 	public static String SHIFT_OUT = "\u000E";
 	public static String SHIFT_IN = "\u000F";
@@ -27,14 +27,14 @@ public class EncodingAdapter {
 	private CharSequence currentToken;
 	private CharSequence currentChar;
 	
-	public EncodingAdapter(ByteBuffer buffer) {
+	public DecodeAdapter(ByteBuffer buffer) {
 		this.bytes = buffer;
 		CharsetDecoder decoder = detectEncoding();
 		
 		charsetDecoders.add(decoder);
 		
 	}
-	
+
 	public void decode() {
 		
 	}
@@ -45,33 +45,32 @@ public class EncodingAdapter {
 		
 	}
 
-	public CharSequence nextCodepointAsChars() {
-		char c = chars.get();
-		StringBuilder sb = new StringBuilder(c);
-		if (UCharacter.isLowSurrogate(c)) {
-			sb.append(chars.get());
-		}
-		
-		return sb;
-	}
-	
-	public CharSequence nextGraphemeCluster() {
-		CharSequence c = nextCodepointAsChars();
-		
-	}
-	
-	public String nextToken() {
-		StringBuilder token = new String();
-		CharSequence character = null;
-		do {
-			character = nextCharacter();
-			token += character;
-			
-		} while (!character.matches("\\s"));
-
-		return token;
-	}
-	
+//	public CharSequence nextCodepointAsChars() {
+//		char c = chars.get();
+//		StringBuilder sb = new StringBuilder(c);
+//		if (UCharacter.isLowSurrogate(c)) {
+//			sb.append(chars.get());
+//		}
+//		return sb;
+//	}
+//	
+//	public CharSequence nextGraphemeCluster() {
+//		CharSequence c = nextCodepointAsChars();
+//		
+//	}
+//	
+//	public String nextToken() {
+//		StringBuilder token = new String();
+//		CharSequence character = null;
+//		do {
+//			character = nextCharacter();
+//			token += character;
+//			
+//		} while (!character.matches("\\s"));
+//
+//		return token;
+//	}
+//	
 	/** 
 	 * This method examines the current location in the buffer for a Byte Order Mark (BOM) 
 	 * in any supported encoding.  If one is found, then the correct decoder is returned.
@@ -130,6 +129,7 @@ public class EncodingAdapter {
 				}
 			}
 		}
+		StandardCharsets a;
 		if (charset == null) {	// there is no BOM here
 			charset = CharsetICU.forNameICU("UTF-8");	// the default
 			bytes.reset();

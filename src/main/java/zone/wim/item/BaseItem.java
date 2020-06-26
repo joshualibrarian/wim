@@ -1,5 +1,6 @@
 package zone.wim.item;
 
+import java.nio.ByteBuffer;
 import java.util.*;
 
 
@@ -36,7 +37,7 @@ public abstract class BaseItem implements Item {
 	protected transient int security = 0;
 
 	protected BaseItem() {
-		LOGGER.info("AbstractItem()");
+		LOGGER.info("BaseItem()");
 		initialize();
 	}
 	
@@ -44,6 +45,7 @@ public abstract class BaseItem implements Item {
 		if (!(this instanceof Signer)) {
 			throw new SignersOnly(address.getText());
 		}
+		creator = new Reference(this);
 		setAddress(address);
 		initialize();
 	}
@@ -63,6 +65,8 @@ public abstract class BaseItem implements Item {
 		relations = new ArrayList<Relation>();
 		contents = new ArrayList<Content>();
 		words = new ArrayListValuedHashMap<Reference, String>();
+		
+		manifests.add(new Manifest(this, (Signer)creator.item(), Security.PRIVATE));
 	}
 
 	@PrimaryKey
@@ -83,11 +87,11 @@ public abstract class BaseItem implements Item {
 		this.addressKey = address.getText();
 	}
 	
-	public MultiValuedMap<Reference, String> getWords() {
+	public MultiValuedMap<Reference, String> words() {
 		return words;
 	}
 	
-	public List<String> getWords(Reference reference) {
+	public List<String> words(Reference reference) {
 		return (List<String>)words.get(reference);
 	}
 	
@@ -147,47 +151,71 @@ public abstract class BaseItem implements Item {
 	}
 
 	@Override
-	public List<Manifest> getManifests(Signer requestor) {
+	public List<Manifest> manifests(Signer requestor) {
 		return manifests;
 	}
 
 	@Override
-	public List<Summary> getSummaries(Signer requestor) {
+	public List<Summary> summaries(Signer requestor) {
 		return summaries;
 	}
 
 	@Override
-	public List<Content> getContents(Signer requestor) {
+	public List<Content> contents(Signer requestor) {
 		return contents;
 	}
 
 	@Override
-	public List<Relation> getRelations(Signer requestor) {
+	public List<Relation> relations(Signer requestor) {
 		return relations;
 	}
-
+	
 	@Override
-	public List<Relation> relationsRelatedBy(Item... items) {
+	public List<Relation> relationsRelatedBy(Signer requestor, Item... items) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Relation> relationsRelatedTo(Item... items) {
+	public List<Relation> relationsRelatedTo(Signer requestor, Item... items) {
 		// TODO Auto-generated method stub
 		return null;
 	}
 
 	@Override
-	public List<Relation> relationsCreatedBy(Signer creator) {
+	public List<Relation> relationsCreatedBy(Signer requestor, Signer creator) {
 		// TODO Auto-generated method stub
+		return null;
+	}
+
+	@Override
+	public void write(ByteBuffer destination) {
+		// TODO Auto-generated method stub
+		
+	}
+
+	/**
+	 * This callback can be used by any subclasses to clean up their state
+	 * and be sure all the item components are ready to be written.
+	 */
+	public void prepareToWrite() {
+		
+	}
+	
+	public ByteBuffer write() {
+		
+		manifests.forEach((manifest) -> {
+			manifest.write(false);
+		});
+		
+		relations.forEach((relations) -> {
+			relations.write(false);
+		});
+		
 		return null;
 	}
 	
-	public byte[] serialize() {
+	public void read(ByteBuffer bytes) {
 		
-		manifests.forEach((manifest) -> {
-			
-		});
 	}
 }

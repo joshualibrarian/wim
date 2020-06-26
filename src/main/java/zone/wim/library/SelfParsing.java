@@ -8,5 +8,6 @@ public interface SelfParsing {
 
 	// abstract static SelfParsing parse(WimParser parser);
 
-	void parse(EncodingAdapter parser);
+	void populate(DecodeAdapter adapter);
+	void serialize(EncodeAdapter adapter);
 }

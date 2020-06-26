@@ -44,3 +44,11 @@ The WIM uses a relatively simple [network protocol](doc/protocol.md), which allo
 ### Addressing
 
 Items are each uniquely addressable across the system.  Though backwards-compatible to the email namespace, the WIM is flexible to allow for almost any namespace.  The [addressing scheme](doc/addressing.md) is very robust and allows for referencing not just items, but parts of items.
+
+## Documentation
+
+Through these documents, a consistent syntax will be used.  Each token may separated in brackets for readability, but those brackets *are not* intended to be included in the actual item.  White space *is* included as shown.
+
+- Angle brackets (`<>`) denote required tokens.
+- Square brackets (`[]`) denote optional tokens.
+- A plus sign (`+`) following a token denotes that multiple iterations of it are allowed.

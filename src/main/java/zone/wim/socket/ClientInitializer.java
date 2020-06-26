@@ -54,4 +54,6 @@ public class ClientInitializer extends ChannelInitializer<SocketChannel> {
         // and then business logic.
         pipeline.addLast(new ClientHandshakeHandler());
     }
+    
+    
 }

@@ -1,6 +1,7 @@
 package zone.wim.library;
 
 import static picocli.CommandLine.Option;
+import java.security.Security;
 
 import java.net.*;
 import java.util.*;
@@ -28,7 +29,7 @@ public class Library implements Daemon, Runnable {
 	private static Library INSTANCE = null;
 
 	public static synchronized Library instance() throws NotInitialized {
-		if (INSTANCE instanceof Library && INSTANCE.isInitialized) {
+		if (INSTANCE != null && INSTANCE.isInitialized) {
 			return INSTANCE;
 		} else throw new NotInitialized();
 	}
@@ -70,6 +71,9 @@ public class Library implements Daemon, Runnable {
 	@Option(names = { "-h", "--host" }, description = "initial host to connect query")
 	private String hostName = null;
 	
+	@Option(names = { "-c", "--charset" }, description = "set preferred text encoding")
+	private Charsets textEncoding = Charsets.UTF_8;
+	
 	private boolean runningAsDaemon = false;
 	private boolean isInitialized = false;
 	
@@ -96,16 +100,17 @@ public class Library implements Daemon, Runnable {
 	@Override
 	public void run() {
 		LOGGER.info("run()");
-		Runtime.getRuntime().addShutdownHook(new ShutdownThread());
+		Runtime.getRuntime().addShutdownHook(new ShutdownThread()); 
 		
 //		System.setSecurityManager(new SecurityManager());		
-//		Security.addProvider(new BouncyCastleProvider());
+		Security.addProvider(new BouncyCastleProvider());
+
 //		trayMenu = TrayMenu.init(this);
 		
 		store = new ItemStore(localPath);
 		server = new SocketServer(ports);
 		
-		isInitialized = true;
+		isInitialized = true; 
 	}
 	
 	@Override

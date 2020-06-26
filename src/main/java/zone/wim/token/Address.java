@@ -18,7 +18,7 @@ public interface Address extends Token {
 			"\\" + Reference.SUMMARY_CHAR 
 		};
 		public static String[] RESERVED = {
-			"\\s",
+			"\\p{Space}",
 			"\\p{Cntrl}",
 //			"\\[", "\\]",
 //			"\\(", "\\)"
