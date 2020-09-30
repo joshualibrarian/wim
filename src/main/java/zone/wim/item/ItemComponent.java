@@ -2,15 +2,22 @@ package zone.wim.item;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.Date;
 import java.util.List;
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.library.SelfParsing;
+import zone.wim.library.SelfCoding;
 import zone.wim.library.DecodeAdapter;
+import zone.wim.library.EncodeAdapter;
 
 @EmbeddedOnly
-public abstract class ItemComponent {
+public abstract class ItemComponent implements SelfCoding {
+
+	public static ItemComponent decode(DecodeAdapter adapter) {
+		return null;
+	}
+	
 //	public static ItemComponent parse(UnicodeReader<ItemComponent> parser) {
 //		ItemComponent result = null;
 //		String currentChar = null;
@@ -42,6 +49,20 @@ public abstract class ItemComponent {
 	protected ItemComponent(String address) {
 		this.address = address;
 	}
+
+	protected void encodeTimestamp(EncodeAdapter adapter) {
+		adapter.write(Item.TIMESTAMP_CHAR);
+		adapter.write(timestamp);
+	}
+	
+	protected void encodeSecurity(EncodeAdapter adapter) {
+		adapter.write(Item.SECURITY_CHAR);
+		adapter.write(security);
+	}
+	
+	protected void encodeSignatures(EncodeAdapter adapter) {
+		
+	}
 	
 	public Item enclosingItem() {
 		return enclosingItem;
@@ -55,10 +76,6 @@ public abstract class ItemComponent {
 		return timestamp;
 	}
 	
-	public void timestamp(Date timestamp) {
-		this.timestamp = timestamp;
-	}
-
 	public Security security() {
 		return security;
 	}
@@ -74,8 +91,4 @@ public abstract class ItemComponent {
 	public void signatures(List<Signature> signatures) {
 		this.signatures = signatures;
 	}
-	
-	public abstract ByteBuffer write(boolean relative);
-	
-	public abstract void read(ByteBuffer bytes);
 }

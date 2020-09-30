@@ -5,6 +5,8 @@ import java.security.KeyPair;
 import java.security.PublicKey;
 import java.util.List;
 import javax.jdo.annotations.EmbeddedOnly;
+
+import zone.wim.library.EncodeAdapter;
 import zone.wim.token.*;
 
 @EmbeddedOnly
@@ -16,7 +18,7 @@ public class Content extends ItemComponent {
 	List<DataLocation> data;
 	
 	protected Content(Reference enclosingItem, Signer creator, Security security) {
-		super(enclosingItem, creator, security);
+		super(enclosingItem.item(), creator, security);
 	}
 	
 	protected Content(Item enclosingItem, Signer creator) {
@@ -32,8 +34,10 @@ public class Content extends ItemComponent {
 	protected Content(PublicKey publicKey) {
 		
 	}
-	
-	public String referenceCharacter() {
-		return "\u0013";	// DC3
+
+	@Override
+	public void encode(EncodeAdapter adapter) {
+		// TODO Auto-generated method stub
+		
 	}
 }

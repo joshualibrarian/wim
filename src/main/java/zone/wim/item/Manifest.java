@@ -2,6 +2,7 @@ package zone.wim.item;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
+import java.nio.CharBuffer;
 import java.util.Date;
 
 import java.util.List;
@@ -16,6 +17,11 @@ import zone.wim.token.ComponentReference;
 @EmbeddedOnly
 public class Manifest extends ItemComponent {
 	
+	public static Manifest parse(DecodeAdapter adapter) {
+		return null;
+		
+	}
+	
 	protected List<Address> addresses;
 	protected List<ComponentReference> references;
 	
@@ -23,23 +29,39 @@ public class Manifest extends ItemComponent {
 		super(enclosingItem, creator, security);
 	}
 	
-	public ByteBuffer write() {
-		StringBuilder sb = new StringBuilder();
-		sb.append(this.address);
-		sb.append(Item.MANIFEST_CHAR);
+	public void encode(EncodeAdapter adapter) {
+		CharBuffer buffer = CharBuffer.allocate(2048);
 		
-		sb.append(Item.SPACE_CHAR);
-		
-		if (index > 0 ) {
-			sb.append(Integer.toString(index));
+		// write addresses
+		int addressCount = addresses.size() - 1;
+		for (int x = 0; x < addressCount; x++) {
+//			buffer.put(addresses.get(x).getText());
+			adapter.write(addresses.get(x).getText());
+			if (x < addressCount) {
+//				buffer.put(Item.SPACE_CHAR);
+				adapter.write(Item.SPACE_CHAR);
+			}
 		}
 		
-		sb.append(Integer.toString(security));
-	}
-
-	@Override
-	public void read(ByteBuffer bytes) {
-		// TODO Auto-generated method stub
+		buffer.put(Item.MANIFEST_CHAR);
+		
+		if (creator != null) {
+			creator.address.getText();
+		}
+		
+		buffer.put(Item.SPACE_CHAR);
+		
+		
+		encodeTimestamp(adapter);		
+		
+		encodeSecurity(adapter);
+		
+		int referenceCount = references.size() -1;
+		for (int x = 0; x < referenceCount; x++) {
+			adapter.write(references.get(x).getText());
+			adapter.write(Item.SPACE_CHAR);
+		}
+		
 		
 	}
 }

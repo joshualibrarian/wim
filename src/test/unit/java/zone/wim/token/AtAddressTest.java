@@ -4,7 +4,7 @@ import org.junit.jupiter.api.*;
 
 import java.util.logging.Logger;
 import zone.wim.item.*;
-import zone.wim.token.AtAddress;
+import zone.wim.token.AtDomainAddress;
 import zone.wim.exception.*;
 
 public class AtAddressTest {
@@ -13,9 +13,9 @@ public class AtAddressTest {
 	@Test
 	void RegexTest() {
 		try {
-			LOGGER.info(AtAddress.Regex.COMPLETE);
-			AtAddress address = AtAddress.parse("@test.net");
-			assert (address instanceof AtAddress);
+			LOGGER.info(AtDomainAddress.Regex.COMPLETE);
+			AtDomainAddress address = AtDomainAddress.parse("@test.net");
+			assert (address instanceof AtDomainAddress);
 		} catch (Throwable e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

@@ -55,10 +55,10 @@ public class Sememe extends BaseItem {
 	}
 	
 	@Override
-	public MultiValuedMap<Reference, String> getWords() {
-		MultiValuedMap<Reference, String> words = super.getWords();
+	public MultiValuedMap<Reference, String> words() {
+		MultiValuedMap<Reference, String> words = super.words();
 
-		
+		// TODO: process lexemes and add to words map
 		
 		return words;
 	}

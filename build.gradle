@@ -77,6 +77,7 @@ dependencies {
     implementation group: 'commons-daemon', name: 'commons-daemon', version: '1.1.0'
     implementation group: 'org.apache.tika', name: 'tika-core', version: '1.22'
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
+	implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.20'
 	
 	implementation group: 'info.picocli', name: 'picocli', version: '4.0.4'
 	annotationProcessor group: 'info.picocli', name: 'picocli-codegen', version: '4.0.0'
@@ -108,6 +109,10 @@ dependencies {
     implementation group: 'com.googlecode.blacken', name: 'blacken-core', version:'1.1.1'
     implementation group: 'org.apache.tika', name: 'tika-parsers', version:'1.18'
     implementation group: 'io.github.classgraph', name: 'classgraph', version:'4.0.4'
+    
+    implementation group:'com.kstruct', name:'gethostname4j', version:'0.0.3'
+    
+    implementation group: 'net.harawata', name: 'appdirs', version: '1.1.0'
 	
 	// testing	
     testImplementation "org.jmockit:jmockit:1.+"    

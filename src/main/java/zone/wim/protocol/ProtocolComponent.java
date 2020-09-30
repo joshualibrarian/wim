@@ -1,5 +1,12 @@
 package zone.wim.protocol;
 
-public class ProtocolComponent {
+import zone.wim.library.DecodeAdapter;
+import zone.wim.library.SelfCoding;
+
+public abstract class ProtocolComponent implements SelfCoding {
+	
+	public static ProtocolComponent parse(DecodeAdapter adapter) {
+		return null;
+	}
 
 }

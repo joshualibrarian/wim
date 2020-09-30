@@ -9,11 +9,13 @@ import javax.jdo.annotations.*;
 import org.apache.commons.collections4.MultiValuedMap;
 
 import zone.wim.client.*;
+import zone.wim.library.Codec;
 import zone.wim.library.DecodeAdapter;
+import zone.wim.library.SelfCoding;
 import zone.wim.token.*;
 
 @PersistenceCapable
-public interface Item {
+public interface Item extends SelfCoding {
 	
 	public static char SPACE_CHAR = '\u0020';
 	
@@ -77,11 +79,9 @@ public interface Item {
 		return (this instanceof Group);
 	}
 	
-	public void write(ByteBuffer destination);
-	public void read(ByteBuffer source);
-	
-//	public List<Class<? extends Item>> getCanCreate();
-//	public List<Class<? extends Item>> getCanNotCreate();
+	public default Codec preferredEncoding() {
+		return Codec.UTF_8;
+	}
 	
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
 }

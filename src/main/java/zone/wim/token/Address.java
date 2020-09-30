@@ -20,8 +20,7 @@ public interface Address extends Token {
 		public static String[] RESERVED = {
 			"\\p{Space}",
 			"\\p{Cntrl}",
-//			"\\[", "\\]",
-//			"\\(", "\\)"
+			"\\"
 		};
 		public static String ENDING_CHARS = String.join("", ENDINGS);
 		public static String RESERVED_CHARS = String.join("", RESERVED);

@@ -1,6 +1,7 @@
 package zone.wim.library;
 
 import static picocli.CommandLine.Option;
+
 import java.security.Security;
 
 import java.net.*;
@@ -12,6 +13,10 @@ import javax.imageio.ImageIO;
 
 import org.apache.commons.daemon.*;
 import org.bouncycastle.jce.provider.*;
+
+import com.kstruct.gethostname4j.Hostname;
+
+import io.netty.util.concurrent.Future;
 import javafx.application.Application;
 import javafx.application.Platform;
 import picocli.CommandLine;
@@ -21,6 +26,7 @@ import zone.wim.exception.StoreException.*;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.item.*;
 import zone.wim.language.Fragment;
+import zone.wim.protocol.Request;
 import zone.wim.socket.*;
 
 @Command(name="wim")
@@ -50,29 +56,44 @@ public class Library implements Daemon, Runnable {
 		}
 	}
 	
-	@Option(names = { "-l", "--local-path" }, description = "specify the local filesystem path")
+	@Option(names = { "-u", "--system-user" }, 
+			description = "")
+	private String systemUser = System.getProperty("user.name");
+	
+	@Option(names = { "-l", "--local-path" }, 
+			description = "specify the local system filesystem path to store library data")
 	private String localPath = null;
 	
-	@Option(names = { "-p", "--ports" }, description = "use the specified ports")
+	@Option(names = { "-p", "--ports" }, 
+			description = "use the specified ports")
 	private int[] ports = { 25, 465, 587, 2525, 25025 };
 	
-	@Option(names = { "-s", "--server" }, description = "run the local server and receive incoming connections")
+	@Option(names = { "-s", "--server" }, 
+			description = "run the local server and receive incoming connections")
 	private boolean runServer = false;
 	
-	@Option(names = { "-g", "--graphical-client" }, description = "activate the graphical client")
+	@Option(names = { "-g", "--graphical-client" }, 
+			description = "activate the graphical client")
     private boolean graphicalClient = false;
 	
-	@Option(names = { "-t", "--terminal-client" }, description = "activate the terminal client")
+	@Option(names = { "-t", "--terminal-client" }, 
+			description = "activate the terminal client")
 	private boolean terminalClient = false;
 	
-	@Option(names = { "-u", "--untrusted-host" }, description = "treat the local host as untrusted")
+	@Option(names = { "-u", "--untrusted-host" }, 
+			description = "treat the local host device as untrusted")
 	private boolean untrustedHost = false;
 	
-	@Option(names = { "-h", "--host" }, description = "initial host to connect query")
+	@Option(names = { "-h", "--host" }, 
+			description = "initial host to connect query")
 	private String hostName = null;
 	
-	@Option(names = { "-c", "--charset" }, description = "set preferred text encoding")
-	private Charsets textEncoding = Charsets.UTF_8;
+	@Option(names = { "-c", "--charset" }, 
+			description = "set preferred text encoding")
+	private Codec textEncoding = Codec.UTF_8;
+	public Codec textEncoding() {
+		return textEncoding;
+	}
 	
 	private boolean runningAsDaemon = false;
 	private boolean isInitialized = false;
@@ -97,6 +118,9 @@ public class Library implements Daemon, Runnable {
 		}
 	}
 	
+	/**
+	 * This is where the actual initialize code for the library is run from.
+	 */
 	@Override
 	public void run() {
 		LOGGER.info("run()");
@@ -162,6 +186,19 @@ public class Library implements Daemon, Runnable {
 //		trayMenu.destroy();
 	}
 	
+	public Future request(InetAddress host, Request request) {
+		return null;
+		
+	}
+	
+	private void configure() {
+		
+	}
+	
+	private boolean isExistingLocalServerRunning() {
+		
+	}
+	
 	public Item getItemByAddress(String address) {
 		return null;
 	}
@@ -190,6 +227,7 @@ public class Library implements Daemon, Runnable {
 	
 	public Host getLocalhost() {
 		if (!(localHost instanceof Host)) {
+			String hostname = Hostname.getHostname();
 			InetAddress netAddress = InetAddress.getLoopbackAddress();
 			try {
 				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);

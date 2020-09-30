@@ -14,7 +14,7 @@ public class TokenTest {
 	void parseTestIsDomain() {
 		try {
 			Token token = Token.parse("@test.net");
-			assert (token instanceof AtAddress);
+			assert (token instanceof AtDomainAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
 		}

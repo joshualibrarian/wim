@@ -1,5 +1,8 @@
 package zone.wim.client;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javafx.scene.Node;
 import javafx.scene.image.Image;
 import javafx.scene.layout.Pane;
@@ -18,9 +21,11 @@ public class ItemUserInterface {
 	Node icon = null;
 	Shape3D shape = null;
 	Pane pane = null;
+	Map<DeviceType, Pane> panes;
 	
 	public ItemUserInterface(Item item) {
 		this.item = item;
+		panes = new HashMap<>();
 	}
 
 	public Color getColor() {
@@ -35,8 +40,11 @@ public class ItemUserInterface {
 		return new ItemControl(item);
 	}
 	
-	public Pane getPane() {
+	public Pane getPane(DeviceType deviceType) {
+		Pane pane = panes.get(deviceType);
+		
 		return pane;
+		
 	}
 	
 	public void setPane(Pane pane) {

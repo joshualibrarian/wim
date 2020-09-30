@@ -4,7 +4,7 @@ import java.nio.charset.Charset;
 
 import com.ibm.icu.charset.CharsetICU;
 
-public enum Charsets {
+public enum Codec {
 	UTF_8("UTF-8"),
 	UTF_16("UTF-16"),
 	UTF_16BE("UTF-16BE"),
@@ -14,13 +14,13 @@ public enum Charsets {
 	UTF_32LE("UTF-32LE"),
 	UTF_7("UTF-7");
 	
-//	static Charset byName(String name) {
-		
-//	}
+	public static String BOM = "\uFEFF";
 	
+	public static String DATE_TIME_FORMAT = "yyyymmddHHmmssZ";
+
 	String name;
 	
-	Charsets(String name) {
+	Codec(String name) {
 		this.name = name;
 	}
 	

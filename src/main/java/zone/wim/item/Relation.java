@@ -3,6 +3,8 @@ package zone.wim.item;
 import java.util.List;
 import javax.jdo.annotations.*;
 
+import zone.wim.library.EncodeAdapter;
+
 @EmbeddedOnly
 public class Relation extends ItemComponent {
 
@@ -13,11 +15,13 @@ public class Relation extends ItemComponent {
 	private List<Reference> linking;
 	private Reference object;
 	
-	protected Relation(Reference enclosingItem, int security) {
-		super(enclosingItem, security);
+	protected Relation(Reference enclosingItem, Signer creator, Security security) {
+		super(enclosingItem.item(), creator, security);
 	}
-	
-	public String referenceCharacter() {
-		return "\u0014";	// DC4
+
+	@Override
+	public void encode(EncodeAdapter adapter) {
+		// TODO Auto-generated method stub
+		
 	}
 }

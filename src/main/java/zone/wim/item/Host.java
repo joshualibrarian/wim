@@ -17,6 +17,7 @@ import zone.wim.client.LanguagePane;
 import zone.wim.exception.ItemException.*;
 import zone.wim.exception.LibraryException;
 import zone.wim.exception.LibraryException.*;
+import zone.wim.library.EncodeAdapter;
 import zone.wim.library.Library;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.*;
@@ -72,4 +73,5 @@ public class Host extends Signer implements Group {
 
 	}
 
+	
 }

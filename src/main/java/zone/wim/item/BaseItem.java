@@ -15,6 +15,7 @@ import zone.wim.client.*;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
+import zone.wim.library.EncodeAdapter;
 
 @PersistenceCapable
 public abstract class BaseItem implements Item {
@@ -188,12 +189,6 @@ public abstract class BaseItem implements Item {
 		return null;
 	}
 
-	@Override
-	public void write(ByteBuffer destination) {
-		// TODO Auto-generated method stub
-		
-	}
-
 	/**
 	 * This callback can be used by any subclasses to clean up their state
 	 * and be sure all the item components are ready to be written.
@@ -202,20 +197,21 @@ public abstract class BaseItem implements Item {
 		
 	}
 	
-	public ByteBuffer write() {
-		
-		manifests.forEach((manifest) -> {
-			manifest.write(false);
+	@Override
+	public void encode(EncodeAdapter adapter) {
+		manifests.forEach(manifest -> {
+			manifest.encode(adapter);
 		});
-		
-		relations.forEach((relations) -> {
-			relations.write(false);
+		summaries.forEach(summary -> {
+			summary.encode(adapter);
 		});
-		
-		return null;
+		contents.forEach(content -> {
+			content.encode(adapter);
+		});
+		relations.forEach(relation -> {
+			relation.encode(adapter);
+		});
 	}
+
 	
-	public void read(ByteBuffer bytes) {
-		
-	}
 }

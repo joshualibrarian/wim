@@ -110,7 +110,4 @@ public class ItemStore {
 		pmf.close();
 	}
 	
-	private Item read() {
-		
-	}
 }

@@ -8,14 +8,14 @@ import zone.wim.item.*;
 import zone.wim.token.AddressException.*;
 
 @EmbeddedOnly
-public class AtAddress implements Address {
+public class AtDomainAddress implements Address {
 
 	public static String SITE_CHAR = "@";
 	public static String THING_CHAR = "/";
 	
 	public static class Regex {
-		public static String SITE_CHAR  = AtAddress.SITE_CHAR;
-		public static String THING_CHAR = "\\" + AtAddress.THING_CHAR;
+		public static String SITE_CHAR  = AtDomainAddress.SITE_CHAR;
+		public static String THING_CHAR = "\\" + AtDomainAddress.THING_CHAR;
 		public static String NEGATED 	= "[^" + Address.Regex.RESERVED_CHARS 
 										+ SITE_CHAR + THING_CHAR + "]+";
 		public static String USERNAME 	= NEGATED;
@@ -27,9 +27,9 @@ public class AtAddress implements Address {
 		public static Pattern ADDRESS 	= Pattern.compile(COMPLETE, Pattern.UNICODE_CHARACTER_CLASS);
 	}
 	
-	public static AtAddress parse(String address) throws Exception {
+	public static AtDomainAddress parse(String address) throws Exception {
 		LOGGER.info("AtAddress.parse(" + address + ")");
-		return new AtAddress(address);
+		return new AtDomainAddress(address);
 	}
 	
 	private String address;
@@ -37,7 +37,7 @@ public class AtAddress implements Address {
 	private String userPart;
 	private String thingPart;
 	
-	public AtAddress(String address) throws Invalid {
+	public AtDomainAddress(String address) throws Invalid {
 		LOGGER.info("DomainedAddress(" + address + ")");
 		Matcher m = Regex.ADDRESS.matcher(address);
 		
@@ -52,7 +52,7 @@ public class AtAddress implements Address {
 	}
 
 	@Override
-	public AtAddress generate(Signer creator, String name, ItemType type) throws Invalid {
+	public AtDomainAddress generate(Signer creator, String name, ItemType type) throws Invalid {
 		String a = null;
 		if (creator instanceof Host) {
 			if (type.getClazz().equals(Site.class)) {
@@ -73,7 +73,7 @@ public class AtAddress implements Address {
 			a = creator.getAddress().getText() + THING_CHAR + name;
 		}
 		
-		return new AtAddress(a);
+		return new AtDomainAddress(a);
 	}
 
 	@Override

@@ -1,25 +1,58 @@
-# WIM
-# World Information Map
+# World Information Map (WIM)
 
 *(or come up with a better name, I dare ya, please!)*
-
 
 **IMPORTANT NOTES**:
 * This is very much a work in progress, there are still many details to be fleshed out conceptually and even more details that I've worked out but haven't written up yet.
 * Anyone who is inspired by this vision is invited to dive right in.
 
+## The Problem
 
-The current world wide web of (largely dynamically generated) hyperlinked HTML files traveling over HTTP(S) is dominated by big companies serving bits of data to mostly passive clients.  We fetch the same data from the same servers over and over, with the entire experience dominated by the server and without that server, the client is useless.  We have no coherent base level method of saving data with its relations to other data intact.
+The current world wide web of (largely dynamically generated) hyperlinked HTML files traveling over HTTP(S) is dominated by enormous corporate server farms serving (often redundant) data to mostly passive clients.  We fetch the same data from the same servers over and over, with the entire experience with increasingly powerful clients doing little more than a little visual JS and sending requests for more data back to the server.
 
-In the WIM, everything is addressable, and those addresses are text and familiar and can be human-readable.  All items are findable by their relationships to other items, all indexed by other items representing meanings themselves (semantic units, or *sememes*), starting out with the entire English language imported from wordnet with all of its syntactic and lexical data.  You can attach any item to another item *through language* itself in a way that leads directly to natural language queries.  This mechanism is used to attach any kind of attributes (including literals or relations to other items) on any item in the system, regardless of its nature.  These sememes and the lexemes they contain act as a kind of shared vocabulary, with every connection between items taking place through one of these, they function as shared indexes of other items.
+## Items
 
-The WIM also provides a heightened level of accountability and of security.  Here, we resurrect the highly functional but never-effectively-implemented OpenPGP (GnuPG) system with public/private keypairs, and a distributed web of trust and build our system around it making it seamless and nearly invisible to the user (except to decide their preferred security levels).
+The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an *item*.  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done so in a way that is indexed by natural language.  These items are then passed around the network, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates.
 
-When a copy of these items is updated, other users who are connected, or whose connections are connected to those items can be notified (depending on their settings).  The items synchronize across peers, while updating each other usually with lightweight summaries or added relationships, and then sending whole items when requested.  All users have strong keypairs and all items and relations are signed by their creators.  The same item, in the possession of multiple users, communicates with itself, thereby creating a connection between users.  When an item is executed on a user's client system, of course it will run inside of a sandbox using a custom SecurityManager, keeping it isolated from the filesystem, networking, etc of the host system, but can access other items through the WIM API.
+Items in the WIM use a kind of content-addressing, though one with human-readable addresses which can be chosen by users.  Each address always referring to a particular item, no matter what host we find on.  While any address space may be added and used (.onion, IPFS hashes, local device names, etc), the default address space is human-readable and backwards-compatible with our current email and DNS system, which is herein called *"at domain"* addressing.
 
-The structure of these "relations" for each item is a table of simple "sentences" made up of references (actual address of each item) to a series of specific types of items, creating a syntactic and lexical relationship between those items.  Each relationship is signed by it's creator and can connect the "subject" item in question to either a series of adjectives (giving the syntactic meaning "I say this item [sucks, is awesome, is hilarious, etc]." or you can connect a verb with an option series of adverbs connecting an "object" item of any kind.  It could be another document, a person, or just about anything else at all.  In either case, an additional literal string can be stored with the relationship, which is meant for simple comments about the relationship.  You can connect any item to any item, but you must do it through a verb!  When these relation tables are stored in the items themselves, they are duplicated once for each item that is involved in the relation, so at a minimum two items may be involved in a simple relation, so that relation would be stored in the tables of both of those items.  If there were three or four items involved, then that is how many times the relation would be duplicated, always with the same unique id identifying it.
+The familiar structure of "sites" are used to mirror the domain space and act in the WIM like a sort of organizational account which creates regular user accounts, just like in today's email structure.  Items to represent each host device, including the local one, are self-created and generate strong key pairs.  These *host* items then can create sites they want to host, with their own strong key pairs, which can be signed by the host.  Sites are then used to create users with their key pairs, all of which can generate various kinds of certificates to indicate types and levels of trust for each item.  Any of these *signer* type items may create regular (non-signer) items.
 
-Through the entire system, only unicode encodings are supported.  ASCII will be interpreted as UTF-8 and all other regional encodings are not permitted.  The default is UTF-8. 
+Every node (device) in the WIM stores a local library of core items that it needs or its users want, which may vary greatly for different types of systems.  For a user's personal system, it may be mostly their media library, documents, games, with the sememes needed to describe them and their relations.  For a tiny IOT sensor it could be nothing more than a host that it off-loads data to, its data log, and a few sememes to describe it.  A big store might have items for all its customers, employees, products, warehouses, etc.
+
+All signer items (including users, sites, hosts, and others yet to be imagined) maintain a key-ring with keys and certificates for all other signers it has had contact with.  For each of these, trust metrics are calculated, based on the various endorsements through certificate signing as well as direct user choice.  These metrics take the form of both "validity", meaning how certain we are the key itself belongs to that specific user, which is mostly related to how the key was obtained, and "trust", which is about users' relationships to each other directly.  This can be calculated based on the interactions between their items and the kinds of sememes used to connect them, or set by users directly.
+
+Absolutely anything and everything that is addressable in the WIM is represented by an item, including:
+
+* hosts
+* sites
+* users
+* documents (of all types)
+* queries
+* arbitrary logical groupings of other items (social group, project, etc)
+* applications (sand-boxed)
+
+All items consist of four different types of components.  When an item is published, it contains a fixed set of core item components, signed by the creator and immutable.  However, any user can add components to any item, and determine how public or private they want that component to be, as well as how far, and to whom, they want those components to propagate.
+
+## Item Components
+
+Each of the four types of items serves a specific purpose:
+
+### Manifest
+
+A [manifest](item.md#manifest) is generated when you create an item and contains references to the other components of that item which are its required for it to be complete, with a signature that validates the actual content of all those components and of itself.
+
+### Content
+
+An item may have any number of [content](item.md#content) blocks.  These blocks describe and then contain the actual content that this item is wrapping.  This could be text data, video data, application data, JSON, XML, a GIT repository, or any other type of data.
+
+### Relation
+
+The real power of the WIM is in the items' [relation](item.md#relation) components.  The WIM comes equipped with a core "vocabulary" of items, including a fairly large initial set of small items called *sememes*.  There is a single shared sememe item for each *meaning* in any given language.  The initial set for English is imported from the [WordNet](https://wordnet.princeton.edu/), with all semantic and lexical relationships intact.  These sememe items are used as indexes, giving *meaning* to the relations between items, and other items and even parts of items.  Sememe items are mostly used for their relations, but also contain all lexical data in content blocks, one for each language that is supported.  This *lexeme* is a collection containing all the "words" that describe this sememe in a given language.
+
+### Summary
+
+Items are often passed around from host to host, sometimes because they have been requested specifically, or sometimes because they have been found in a query.  If the host sending the item is not certain that the querying host really wants an item, or even how much of an item it may want, it may send only a [summary](item.md#summary), which is the fourth type of item component.  These components are routinely created and re-created by hosts which store these files as they grow (mostly due to relations being added).  Using the summary to decide, a host can request the entire item, or certain requested parts from the hosts that have it.
 
 ## Why Java?
 
@@ -29,21 +62,9 @@ Since the WIM aims to ditch the web browser in the entirety, and would rather no
 
 And frankly, it just has everything we need, from encrypted, portable persistence, networking, a dynamic class-loading architecture, to a well defined security consciousness, with everything we need to build our sandbox already in place.  Java just makes the most sense for this project, at least initially.
 
-## Major Components
-
-What is the web?  At its heart it is a file format (HTML), or these days a whole set of file formats, a relational scheme (hyperlinking), and a protocol (HTTP) with its addressing scheme.  The *World Information Map* is a complete replacement for the World Wide Web, and it, too, has these components at its core:
-
-### Item 
-
-The fundamental unit of organization, of addressability, is called an item.  Any kind of data can be encapsulated in an item, from document to program or anything else.  These items can be related *through* any item(s), *to* any item.  It is a coherent unit that can be shared and stays selectively synchronized with other copies of itself.  It has a unique identifier across the system and forms the base addressable unit.  Almost everything you'll encounter as a user on this system is an item of one kind or another, and everything else is contained in one.  See the [specification](doc/item.md) for details.
-
-### Networking
+## Networking
 
 The WIM uses a relatively simple [network protocol](doc/protocol.md), which allows items or parts of items to be transferred, allows queries to be made and facilities anonymity with Tor-style onion routing.  Though a completely custom protocol, it uses the same ports as SMTP, and the system recognizes such services and interacts with them according, allowing the WIM to take over the email namespace slowly over time.
-
-### Addressing
-
-Items are each uniquely addressable across the system.  Though backwards-compatible to the email namespace, the WIM is flexible to allow for almost any namespace.  The [addressing scheme](doc/addressing.md) is very robust and allows for referencing not just items, but parts of items.
 
 ## Documentation
 

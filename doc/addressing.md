@@ -2,24 +2,26 @@
 
 The WIM is designed to be completely address-space agnostic.  It will come equipped to use several common address-spaces and new ones can be easily created, which can include almost any printable unicode character.
 
-There are two basic categories of *item* (the base addressable unit) in the WIM: those that are *signers* and those that are not.  Only signers can create other items (both signers and non-singers).  They use their place in the item address-space to create each their own unique namespace, allowing any signer items to create and address as many items as they want.  How exactly that is addressed may vary across different addresses schemes, but can take the very familiar form of a "site" with various documents it contains:
+There are two basic categories of *item* (the base addressable unit) in the WIM: those that are *signers* (with keypairs who can sign things) and those that are not.  Only signers can create other items (both signers and non-singers).  They use their place in the item address-space to create each their own unique namespace, allowing any signer items to create and address as many items as they want.  How exactly that is addressed may vary across different addresses schemes, but can take the somewhat familiar form of a "site" with various documents it contains:
 
-	some.domain.com/some/particular/document
+	@some.domain.com/some/particular/document
 	
 A site is a signer, represented by the domain portion of this address.  The document it references is (in this case) not a signer, but a thing that is signed and referenced entirely within the namespace of of `some.domain.com`.  Keep in mind that in the WIM, the second part (the "path" portion) means nothing without the first (the "site" or signer portion).  The entire string (in the above example) is required to fully represent the address of that item.
 
-# Domained Addresses
+# At-Domain Addresses
 
-The WIM will maintain backwards-compatibility with the Domain Name System (DNS) and the email address-space derived from it, giving us some important organizational concepts that are familiar:  *sites* and *users*.  Not unlike in the real web of today, a site does not represent a particular server, but a collection of data that can be accessed at some various location(s).  Sites can in turn create users, giving a piece of the namespace that they hold to their user:
+The WIM will maintain backwards-compatibility with the Domain Name System (DNS) and the *email* address-space derived from it, giving us some important organizational concepts that are familiar:  *sites* and *users*.  Not unlike in the real web of today, a site does not represent a particular server, but a collection of data that can be accessed at some various location(s).  Sites can in turn create users, giving a piece of the namespace that they hold to their user:
 
-	site.co.uk
-	facebook.com
+	@site.co.uk
+	@facebook.com
 	user@site.tld
 	some.user@some.acme.net
 	
-The various variants of this standard address-space will be accessible through the WIM if background services are available for such, including: `.onion` addresses, `i2p` addresses, alternate DNS roots, etc.  An item may have multiple addresses, and therefore be accessible on separate namespaces.  These are all collectively referred to as "domained" addresses, that are compatible (even marginally) with the official DNS system.
+As shown above, though we are maintaining backwards-compatability with email addresses, we are not doing so with the URL scheme, so in the WIM "At-Domain" space, sites (as well as users) also contain the `@` symbol. So all addresses in this space include this marker, whether site, user or thing.
 
-Since it is only the "site" and "user" portions of the existing domained address space that we are maintaining backwards compatibility with, we are not bound by any of the other limits of the standard `URL` scheme, and sites, users, and other types of signers are free to create addresses in their "path" space including any characters supported:
+The various variants of this standard address-space will be accessible through the WIM if background services are available for such, including: `.onion` addresses, `.i2p` addresses, alternate DNS roots, etc.  These are all collectively referred to as "domained" addresses, that are compatible (even marginally) with the official DNS system.  An item may have multiple addresses, and therefore be accessible on separate namespaces.
+
+Since it is only the "site" and "user" portions of the existing email address space that we are maintaining backwards compatibility with, we are not bound by any of the other limits of the standard `URL` scheme, and sites, users, and other types of signers are free to create addresses in their "path" space including any characters supported:
 
 	some.domain.com/菈菉菊菋垴垵垶.whatever#3_funky
 	users.can.to@blahmail.net/⫱⫲⫳blah_blah_⫴⫵⫶⫷.🖖
@@ -39,7 +41,7 @@ Any of the four component types may be referenced in this way so that one certai
 
 What follows the the pair of characters (which itself immediately follow an address) is the identifier of the item component in question.
 
-	somedomain.com/some/item.or/another\~
+	@somedomain.com/some/item.or/another\~
 
 
 
