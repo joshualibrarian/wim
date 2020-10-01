@@ -12,7 +12,7 @@ The current world wide web of (largely dynamically generated) hyperlinked HTML f
 
 ## Items
 
-The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an *item*.  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done so in a way that is indexed by natural language.  These items are then passed around the network, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates.
+The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an [*item*](doc/item.md).  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done so in a way that is indexed by natural language.  These items are then passed around the network, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates.
 
 Items in the WIM use a kind of content-addressing, though one with human-readable addresses which can be chosen by users.  Each address always referring to a particular item, no matter what host we find on.  While any address space may be added and used (.onion, IPFS hashes, local device names, etc), the default address space is human-readable and backwards-compatible with our current email and DNS system, which is herein called *"at domain"* addressing.
 
@@ -40,19 +40,19 @@ Each of the four types of items serves a specific purpose:
 
 ### Manifest
 
-A [manifest](item.md#manifest) is generated when you create an item and contains references to the other components of that item which are its required for it to be complete, with a signature that validates the actual content of all those components and of itself.
+A [manifest](doc/item.md#manifest) is generated when you create an item and contains references to the other components of that item which are its required for it to be complete, with a signature that validates the actual content of all those components and of itself.
 
 ### Content
 
-An item may have any number of [content](item.md#content) blocks.  These blocks describe and then contain the actual content that this item is wrapping.  This could be text data, video data, application data, JSON, XML, a GIT repository, or any other type of data.
+An item may have any number of [content](doc/item.md#content) blocks.  These blocks describe and then contain the actual content that this item is wrapping.  This could be text data, video data, application data, JSON, XML, a GIT repository, or any other type of data.
 
 ### Relation
 
-The real power of the WIM is in the items' [relation](item.md#relation) components.  The WIM comes equipped with a core "vocabulary" of items, including a fairly large initial set of small items called *sememes*.  There is a single shared sememe item for each *meaning* in any given language.  The initial set for English is imported from the [WordNet](https://wordnet.princeton.edu/), with all semantic and lexical relationships intact.  These sememe items are used as indexes, giving *meaning* to the relations between items, and other items and even parts of items.  Sememe items are mostly used for their relations, but also contain all lexical data in content blocks, one for each language that is supported.  This *lexeme* is a collection containing all the "words" that describe this sememe in a given language.
+The real power of the WIM is in the items' [relation](doc/item.md#relation) components.  The WIM comes equipped with a core "vocabulary" of items, including a fairly large initial set of small items called *sememes*.  There is a single shared sememe item for each *meaning* in any given language.  The initial set for English is imported from the [WordNet](https://wordnet.princeton.edu/), with all semantic and lexical relationships intact.  These sememe items are used as indexes, giving *meaning* to the relations between items, and other items and even parts of items.  Sememe items are mostly used for their relations, but also contain all lexical data in content blocks, one for each language that is supported.  This *lexeme* is a collection containing all the "words" that describe this sememe in a given language.
 
 ### Summary
 
-Items are often passed around from host to host, sometimes because they have been requested specifically, or sometimes because they have been found in a query.  If the host sending the item is not certain that the querying host really wants an item, or even how much of an item it may want, it may send only a [summary](item.md#summary), which is the fourth type of item component.  These components are routinely created and re-created by hosts which store these files as they grow (mostly due to relations being added).  Using the summary to decide, a host can request the entire item, or certain requested parts from the hosts that have it.
+Items are often passed around from host to host, sometimes because they have been requested specifically, or sometimes because they have been found in a query.  If the host sending the item is not certain that the querying host really wants an item, or even how mucƒh of an item it may want, it may send only a [summary](doc/item.md#summary), which is the fourth type of item component.  These components are routinely created and re-created by hosts which store these files as they grow (mostly due to relations being added).  Using the summary to decide, a host can request the entire item, or certain requested parts from the hosts that have it.
 
 ## Why Java?
 
