@@ -8,7 +8,7 @@ This protocol begins its initialization process exactly as the SMTP protocol doe
 
 When initially connecting to a new host, the client does not know if it will find another WIM peer or an actual SMTP server.  The server response line includes a marker, as any SMTP client would, signifying what kind of host they've found:
 
-	220 foo.net ESMTP WIM <version>; <timestamp>
+	220 foo.net ESMTP WIM <version>; <timestamp><CR>
 
 If an actual SMTP client has connected to our server to deliver some mail from outside the system, it will think nothing amiss and proceed with its delivery.  If a WIM client connects to a host whose marker is ambiguous, it can probe the waters with an empty request (`<DLE>r`, see below), which fails cleanly with a `500` error if it has indeed found an actual SMTP server, it can then carry on as SMTP.
 
@@ -29,7 +29,7 @@ As you'll see in the following breakdown of the protocol, it is simple and consi
 Other parameters to the command can be specified with additional `?\` sub-commands if required, such as a `s\` for security setting.
 
 
-All commands in this protocol are short and designed to minimize wasted bytes, with clear defaults for omitted tokens.  The networking protocol of the WIM is a very simple one.  Once it's initialized, it contains only two commands: *DELIVERY* and *REQUEST*, marked by a `\` (backslash) *proceeding* the command code which is followed by the content of the command.
+All commands in this protocol are short and designed to minimize wasted bytes, with clear defaults for omitted tokens.  The networking protocol of the WIM is a very simple one.  Once it's initialized, it contains only two commands: *DELIVERY* and *REQUEST*, marked by a `DLE` (`DATA_LINK_ESCAPE`) *preceding* the command code which is followed by the content of the command.
 
 
 ### DELIVERY

@@ -2,6 +2,7 @@ package zone.wim.library;
 
 import static picocli.CommandLine.Option;
 
+
 import java.security.Security;
 
 import java.net.*;
@@ -22,10 +23,14 @@ import javafx.application.Platform;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import zone.wim.client.DesktopClient;
+import zone.wim.codec.Codec;
+import zone.wim.codec.text.Charset;
 import zone.wim.exception.StoreException.*;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.item.*;
+import zone.wim.item.components.ItemComponent;
 import zone.wim.language.Fragment;
+import zone.wim.library.store.*;
 import zone.wim.protocol.Request;
 import zone.wim.socket.*;
 
@@ -90,8 +95,8 @@ public class Library implements Daemon, Runnable {
 	
 	@Option(names = { "-c", "--charset" }, 
 			description = "set preferred text encoding")
-	private Codec textEncoding = Codec.UTF_8;
-	public Codec textEncoding() {
+	private Charset textEncoding = Charset.UTF_8;
+	public Charset textEncoding() {
 		return textEncoding;
 	}
 	
@@ -170,6 +175,7 @@ public class Library implements Daemon, Runnable {
 		LOGGER.info("stop()");
 		System.out.println("stop()");
 		
+		index.close();
 		store.close();
 		
 		if (runServer) {
@@ -195,9 +201,25 @@ public class Library implements Daemon, Runnable {
 		
 	}
 	
-	private boolean isExistingLocalServerRunning() {
+	/**
+	 * Am `ItemComponent` is the smallest unit that can be received independently, 
+	 * and so when newly received components arrive from a peer or even from a 
+	 * previously unknown disk, this is the function which processes them and integrates
+	 * them into the local library.
+	 *  
+	 * @param component
+	 */
+	public void integrate(ItemComponent component) {
+//		ItemEntry entry =
+	}
+	
+	public void integrate(Item item) {
 		
 	}
+	
+//	private boolean isExistingLocalServerRunning() {
+		
+//	}
 	
 	public Item getItemByAddress(String address) {
 		return null;
@@ -218,7 +240,7 @@ public class Library implements Daemon, Runnable {
 	
 	public List<Item> getItemsByGroup(Group group) {
 		List<Item> items = group.getContents();
-		return items;		
+		return items;
 	}
 	
 	public void runQuery(Fragment fragment) {	// TODO: QueryOptions argument
@@ -233,7 +255,7 @@ public class Library implements Daemon, Runnable {
 				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
 			} catch (NotFound e) {
 				localHost = Host.create(netAddress);
-				store.put(localHost);
+				integrate(localHost);
 			}
 		}
 		return localHost;

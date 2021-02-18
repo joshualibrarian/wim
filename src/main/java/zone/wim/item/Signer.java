@@ -10,6 +10,7 @@ import java.security.spec.*;
 import io.netty.buffer.ByteBuf;
 import javafx.scene.layout.Pane;
 import zone.wim.exception.ItemException.SignersOnly;
+import zone.wim.item.components.Content;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.Invalid;
 

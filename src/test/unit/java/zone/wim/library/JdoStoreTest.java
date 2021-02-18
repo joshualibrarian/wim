@@ -7,6 +7,7 @@ import org.junit.jupiter.api.*;
 
 import zone.wim.exception.StoreException.NotFound;
 import zone.wim.item.*;
+import zone.wim.library.store.ItemStore;
 
 public class JdoStoreTest {
 	static Logger LOGGER = Logger.getLogger(JdoStoreTest.class.getCanonicalName());

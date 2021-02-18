@@ -2,3 +2,11 @@ Every host in the WIM, whether in some geek's basement or in a giant data center
 
 Each of these hosts maintains it's own list of known hosts, and to do this it employs the WIM's own item system, creating an "item" for each host, using the IP namespace directly.
 
+
+Things needed about any given item:
+
+* hosts on which it might be located
+
+for hosts:
+
+* addresses WHERE it might be located

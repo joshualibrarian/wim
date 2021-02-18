@@ -9,9 +9,15 @@ import javax.jdo.annotations.*;
 import org.apache.commons.collections4.MultiValuedMap;
 
 import zone.wim.client.*;
-import zone.wim.library.Codec;
-import zone.wim.library.DecodeAdapter;
-import zone.wim.library.SelfCoding;
+import zone.wim.codec.Codec;
+import zone.wim.codec.DecodeAdapter;
+import zone.wim.codec.SelfCoding;
+import zone.wim.codec.text.Charset;
+import zone.wim.item.components.Content;
+import zone.wim.item.components.ItemComponent;
+import zone.wim.item.components.Manifest;
+import zone.wim.item.components.Relation;
+import zone.wim.item.components.Summary;
 import zone.wim.token.*;
 
 @PersistenceCapable
@@ -79,8 +85,8 @@ public interface Item extends SelfCoding {
 		return (this instanceof Group);
 	}
 	
-	public default Codec preferredEncoding() {
-		return Codec.UTF_8;
+	public default Charset preferredEncoding() {
+		return Charset.UTF_8;
 	}
 	
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;

@@ -1,4 +1,4 @@
-package zone.wim.item;
+package zone.wim.item.components;
 
 import java.io.InputStream;
 import java.nio.ByteBuffer;
@@ -9,8 +9,11 @@ import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.library.DecodeAdapter;
-import zone.wim.library.EncodeAdapter;
+import zone.wim.codec.DecodeAdapter;
+import zone.wim.codec.EncodeAdapter;
+import zone.wim.item.Item;
+import zone.wim.item.Signer;
+import zone.wim.item.tokens.Security;
 import zone.wim.token.Address;
 import zone.wim.token.ComponentReference;
 

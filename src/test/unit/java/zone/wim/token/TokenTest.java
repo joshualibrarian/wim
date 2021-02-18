@@ -13,7 +13,7 @@ public class TokenTest {
 	@Test
 	void parseTestIsDomain() {
 		try {
-			Token token = Token.parse("@test.net");
+			Token token = Token.decode("@test.net");
 			assert (token instanceof AtDomainAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -23,7 +23,7 @@ public class TokenTest {
 	@Test
 	void parseTestIsHost() {
 		try {
-			Token token = Token.parse("192.168.0.1");
+			Token token = Token.decode("192.168.0.1");
 			assert (token instanceof HostAddress);
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -33,7 +33,7 @@ public class TokenTest {
 	@Test
 	void parseTestIsUnknown() {
 		try {
-			Token.parse("INVALID TOKEN!");
+			Token.decode("INVALID TOKEN!");
 		} catch (Exception e) {
 			assert (e instanceof Unknown);
 		}

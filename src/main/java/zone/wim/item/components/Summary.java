@@ -1,7 +1,8 @@
-package zone.wim.item;
+package zone.wim.item.components;
 
 import java.util.Map;
 import javax.jdo.annotations.EmbeddedOnly;
+
 import zone.wim.token.Type;
 
 @EmbeddedOnly

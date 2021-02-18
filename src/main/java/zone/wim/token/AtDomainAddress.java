@@ -28,7 +28,7 @@ public class AtDomainAddress implements Address {
 	}
 	
 	public static AtDomainAddress parse(String address) throws Exception {
-		LOGGER.info("AtAddress.parse(" + address + ")");
+		LOGGER.info("AtAddress.parse(" + address.toString() + ")");
 		return new AtDomainAddress(address);
 	}
 	

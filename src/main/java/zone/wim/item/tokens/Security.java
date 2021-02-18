@@ -1,8 +1,8 @@
-package zone.wim.item;
+package zone.wim.item.tokens;
 
-public enum Security {
-	PUBLIC(0xFF), PRIVATE(0);
-	
+import zone.wim.item.Item;
+
+public class Security extends ControlCharToken {	
 	int value;
 	
 	Security(int value) {

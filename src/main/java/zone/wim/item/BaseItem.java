@@ -12,10 +12,16 @@ import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
 import zone.wim.client.*;
+import zone.wim.codec.EncodeAdapter;
 import zone.wim.token.*;
 import zone.wim.token.AddressException.Invalid;
 import zone.wim.exception.ItemException.*;
-import zone.wim.library.EncodeAdapter;
+import zone.wim.item.components.Content;
+import zone.wim.item.components.ItemComponent;
+import zone.wim.item.components.Manifest;
+import zone.wim.item.components.Relation;
+import zone.wim.item.components.Summary;
+import zone.wim.item.tokens.Security;
 
 @PersistenceCapable
 public abstract class BaseItem implements Item {
@@ -193,7 +199,7 @@ public abstract class BaseItem implements Item {
 	 * This callback can be used by any subclasses to clean up their state
 	 * and be sure all the item components are ready to be written.
 	 */
-	public void prepareToWrite() {
+	public void prepareToEncode() {
 		
 	}
 	

@@ -1,4 +1,4 @@
-package zone.wim.library;
+package zone.wim.codec;
 
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
@@ -9,12 +9,12 @@ import java.util.Date;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
-
 import zone.wim.item.*;
+import zone.wim.item.tokens.Security;
 
 /**
- * The `EncodeAdapater` is used by `ItemComponent` and its subclasses to serialize the content of
- * a given item component in a given charset.
+ * The `EncodeAdapater` is used by `Token` and its subclasses to serialize the content of
+ * a given set of tokens in a given set of codecs.
  * 
  * @author joshua
  *
@@ -35,6 +35,10 @@ public class EncodeAdapter {
 		this.out = out;
 		signifyEncoding();
 		in.encode(this);
+	}
+	
+	public void writeElement(String element) {
+		
 	}
 	
 	public void write(char c) {

@@ -1,9 +1,13 @@
-package zone.wim.item;
+package zone.wim.item.components;
 
 import java.util.List;
 import javax.jdo.annotations.*;
 
-import zone.wim.library.EncodeAdapter;
+import zone.wim.codec.DecodeAdapter;
+import zone.wim.codec.EncodeAdapter;
+import zone.wim.item.Reference;
+import zone.wim.item.Signer;
+import zone.wim.item.tokens.Security;
 
 @EmbeddedOnly
 public class Relation extends ItemComponent {
@@ -19,6 +23,10 @@ public class Relation extends ItemComponent {
 		super(enclosingItem.item(), creator, security);
 	}
 
+	protected Relation(DecodeAdapter adapter) {
+		super(adapter);
+	}
+	
 	@Override
 	public void encode(EncodeAdapter adapter) {
 		// TODO Auto-generated method stub

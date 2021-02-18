@@ -3,6 +3,8 @@ package zone.wim.item;
 import java.util.logging.Logger;
 import javax.jdo.annotations.EmbeddedOnly;
 import zone.wim.exception.LibraryException.NotInitialized;
+import zone.wim.item.components.Content;
+import zone.wim.item.components.Relation;
 import zone.wim.library.Library;
 import zone.wim.token.Address;
 
