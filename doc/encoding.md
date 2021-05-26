@@ -3,10 +3,8 @@
 Throughout the WIM, in the components of items themselves and in the network protocol, it's all mostly text, and all unicode encodings are supported, with the same patterns being used to specify encodings, and even escape the encoding or shift into another.  Potentially supported encodings are:
 
 * UTF-8 (default)
-* UTF-16LE
-* UTF-16BE
-* UTF-32LE
-* UTF-32BE
+* UTF-16 (LE/BE)
+* UTF-32 (LE/BE)
 * UTF-7
 
 At the beginning of each file containing items or post-initiation communication of the protocol, a default of UTF-8 encoding will be assumed *unless* a `BYTE_ORDER_MARK` (`BOM`, U+FEFF) in any supported encoding is found at the beginning of the stream.  If the encoding that follows is a valid UTF encoding, then the `BOM` will indicate what encoding that is in only between one and five bytes of data, and then that encoding will be used.  If the initial encoding is UTF-8, the `BOM` is not required, but it is allowed.  Any other encoding must be specified by beginning the stream with that character.

@@ -13,8 +13,10 @@ import zone.wim.codec.EscapeCharsetProvider;
 public abstract class Charset extends Codec implements Comparable<Charset> {
 	
 	public static Charset UTF_8 = forName("UTF-8");
-	public static Charset UTF_16 = forName("UTF-16");
-	public static Charset UTF_32 = forName("UTF-32");
+	public static Charset UTF_16LE = forName("UTF-16");
+	public static Charset UTF_16BE = forName("UTF-16");
+	public static Charset UTF_32LE = forName("UTF-32");
+	public static Charset UTF_32BE = forName("UTF-32");
 	public static Charset UTF_7 = forName("UTF-7");
 	
 	// Cache of the most-recently-returned charsets,

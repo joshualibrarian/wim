@@ -11,7 +11,6 @@ import zone.wim.item.tokens.Security;
 
 @EmbeddedOnly
 public class Relation extends ItemComponent {
-
 	
 	private Signer creator;
 	private int index;
@@ -30,6 +29,9 @@ public class Relation extends ItemComponent {
 	@Override
 	public void encode(EncodeAdapter adapter) {
 		// TODO Auto-generated method stub
-		
 	}
+	
+//	protected void decode(DecodeAdapter adapter) {
+//		
+//	}
 }

@@ -14,7 +14,7 @@ Take this cluster of example issues with the current paradigm:  A research paper
 
 ## Items
 
-The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an [*item*](doc/item.md).  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done in a way that is indexed by natural language.  These items are then passed around the network, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates.
+The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an [*item*](doc/item.md).  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done in a way that is _indexed by natural language_.  These items are each like their own distributed database table, to which updates are then passed around the network using a gossip-type protocol, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates and relations, both private and public.
 
 So now, take our above example moved into the WIM: let's say that I am subscribed to the news item `@acmenews.com` which publishes a story about that interesting new research paper, say "A Study of Foo.  Johnson, et al."
 

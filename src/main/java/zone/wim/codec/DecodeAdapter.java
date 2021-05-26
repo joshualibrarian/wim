@@ -171,24 +171,24 @@ public class DecodeAdapter {
 		b[0] = bytes.readByte() & 0xFF;
 		b[1] = bytes.readByte() & 0xFF;
 		if (b[0] == 0xFE && b[1] == 0xFF) {			// UTF-16BE
-//			charset = CharsetICU.forNameICU("UTF-16BE");
+			charset = Charset.UTF_16BE;
 		} else if (b[0] == 0xFF && b[1] == 0xFE) {	// could be UTF-16LE or UTF-32LE
 			bytes.markReaderIndex();
 			b[2] = bytes.readByte() & 0xFF;
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[2] == 0x00 && b[3] == 0x00) {		// UTF-32LE
-//				charset = CharsetICU.forNameICU("UTF-32LE");
+				charset = Charset.UTF_32LE;
 			} else {										// UTF-16LE
 				bytes.resetReaderIndex();	// set the buffer position to after the actual BOM
-//				charset = CharsetICU.forNameICU("UTF-16LE");
+				charset = Charset.UTF_16LE;
 			}
 		} else if (b[0] == 0x00 && b[1] == 0x00) {	// possibly UTF-32BE
 			b[2] = bytes.readByte() & 0xFF;
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[2] == 0xFE && b[3] == 0xFF) {
-//				charset = CharsetICU.forNameICU("UTF-32BE");
+				charset = Charset.UTF_32BE;
 			} else {
 				// TODO: throw MisplacedNullException (or some such)?
 			}
@@ -196,7 +196,7 @@ public class DecodeAdapter {
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[3] == 0xBF) {
-//				charset = CharsetICU.forNameICU("UTF-8");
+				charset = Charset.UTF_8;
 			} 
 		} else if (b[0] == 0x2B && b[1] == 0x2F) { // possibly UTF-7
 			b[2] = bytes.readByte() & 0xFF;
@@ -205,12 +205,12 @@ public class DecodeAdapter {
 				b[3] = bytes.readByte() & 0xFF;
 				
 				if (b[3] == 0x38 || b[3] == 0x39 || b[3] == 0x2B || b[3] == 0x2F) {
-//					charset = CharsetICU.forNameICU("UTF-7");
+					charset = Charset.UTF_7;
 				} else if (b[3] == 0x38) {
 					b[4] = bytes.readByte() & 0xFF;
 					
 					if (b[4] == 0x2D) {
-//						charset = CharsetICU.forNameICU("UTF-7");
+						charset = Charset.UTF_7;
 					}
 				}
 			}
