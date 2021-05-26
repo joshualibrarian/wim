@@ -16,9 +16,6 @@ Take this cluster of example issues with the current paradigm:  A research paper
 
 The WIM is indeed yet another peer to peer system, which has at its core a novel data structure, called an [*item*](doc/item.md).  This is a sort of data-wrapper consisting of a collection of components which validate and contain the content of the item, its properties, and *relationships* to other items, serving as a universal mechanism to add properties, comments, and connections to other items and this is done in a way that is _indexed by natural language_.  These items are each like their own distributed database table, to which updates are then passed around the network using a gossip-type protocol, changing the paradigm of "going to" a particular resource, to one of "having" a given resource, which may be receiving ongoing updates and relations, both private and public.
 
-So now, take our above example moved into the WIM: let's say that I am subscribed to the news item `@acmenews.com` which publishes a story about that interesting new research paper, say "A Study of Foo.  Johnson, et al."
-
-
 Items in the WIM use a kind of content-addressing, though one with human-readable addresses which can be chosen by users.  Each address always referring to a particular item, no matter on what host we find it.  While any address space may be added and used (.onion, IPFS hashes, local device names, etc), the default address space is human-readable and backwards-compatible with our current email and DNS system, which is herein called *"at domain"* addressing.
 
 The familiar structure of "sites" are used to mirror the domain space and act in the WIM like a sort of organizational account which creates regular user accounts, just like in today's email structure.  Items to represent each host device, including the local one, are self-created and generate strong key pairs.  These *host* items then can create sites they want to host, with their own strong key pairs, which can be signed by the host.  Sites are then used to create users with their key pairs, all of which can generate various kinds of certificates to indicate types and levels of trust for each item.  Any of these *signer* type items may create regular (non-signer) items.
@@ -38,6 +35,10 @@ Absolutely anything and everything that is addressable in the WIM is represented
 * applications (sand-boxed)
 
 All items consist of four different types of components.  When an item is published, it contains a fixed set of core item components, signed by the creator and immutable.  However, any user can add components to any item, and determine how public or private they want that component to be, as well as how far, and to whom, they want those components to propagate.
+
+
+So now, take our above example moved into the WIM: let's say that I am subscribed to the news item `@acmenews.com` which publishes a story about that interesting new research paper, say "A Study of Foo.  Johnson, et al."  Each user that comments has a persistent identity, and that identity can have endorsements signed by others, and the chains of trust and signatures are used to generate relative trust scores.  Since copies of items and their various components are distributed around the system, no single authority can delete it, only create a "delete request", which any user can decline, so maintaining a copy.
+
 
 ## Item Components
 
