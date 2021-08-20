@@ -7,10 +7,7 @@ import java.security.Security;
 
 import java.net.*;
 import java.util.*;
-import java.util.concurrent.TimeUnit;
 import java.util.logging.*;
-
-import javax.imageio.ImageIO;
 
 import org.apache.commons.daemon.*;
 import org.bouncycastle.jce.provider.*;
@@ -19,12 +16,11 @@ import com.kstruct.gethostname4j.Hostname;
 
 import io.netty.util.concurrent.Future;
 import javafx.application.Application;
-import javafx.application.Platform;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
 import zone.wim.client.DesktopClient;
-import zone.wim.codec.Codec;
-import zone.wim.codec.text.Charset;
+import zone.wim.codec.text.TextCodec;
+import zone.wim.codec.text.unicode.UnicodeCodec;
 import zone.wim.exception.StoreException.*;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.item.*;
@@ -95,8 +91,8 @@ public class Library implements Daemon, Runnable {
 	
 	@Option(names = { "-c", "--charset" }, 
 			description = "set preferred text encoding")
-	private Charset textEncoding = Charset.UTF_8;
-	public Charset textEncoding() {
+	private TextCodec textEncoding = UnicodeCodec.UTF_8;
+	public TextCodec textEncoding() {
 		return textEncoding;
 	}
 	

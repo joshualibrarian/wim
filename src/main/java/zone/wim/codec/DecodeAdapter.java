@@ -1,28 +1,17 @@
 package zone.wim.codec;
 
-import java.io.UnsupportedEncodingException;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.nio.*;
 import java.nio.charset.CharacterCodingException;
-import java.text.ParseException;
-import java.text.BreakIterator;
 import java.util.*;
 //import java.nio.charset.*;
-import org.apache.commons.lang.StringUtils;
 import com.ibm.icu.lang.UCharacter;
 
 import io.netty.buffer.ByteBuf;
-import zone.wim.codec.text.Charset;
-import zone.wim.codec.text.CharsetDecoder;
-import zone.wim.codec.text.CodingEscapedException;
-import zone.wim.codec.text.UTF_8;
-import zone.wim.exception.MustImplementStaticMethod;
+import zone.wim.codec.text.TextCodec;
+import zone.wim.codec.text.TextDecoder;
+import zone.wim.codec.text.unicode.UTF_8;
+import zone.wim.codec.text.unicode.UnicodeCodec;
 import zone.wim.item.Item;
-import zone.wim.token.Token;
-
-import com.ibm.icu.charset.*;
 
 public class DecodeAdapter {
 	
@@ -31,7 +20,7 @@ public class DecodeAdapter {
 	public static int BYTE_ORDER_MARK = '\uFEFF';
 	public static int[] ESCAPE_CHARS = { Item.SPACE_CHAR, SHIFT_OUT, Item.BINARY_CHAR };
 	
-    List<CharsetDecoder> charsetDecoders = new ArrayList<>();
+    List<TextDecoder> textDecoders = new ArrayList<>();
     
 	private ByteBuf bytes = null;
 	private CharBuffer chars = null;
@@ -46,17 +35,17 @@ public class DecodeAdapter {
 	
 	public DecodeAdapter(ByteBuf in) {
 		this.bytes = in;
-		CharsetDecoder decoder = detectEncoding();
-		charsetDecoders.add(decoder);
+		TextDecoder decoder = detectEncoding();
+		textDecoders.add(decoder);
 		try {
 			// this convenient method is used only the first time 
 			// to create the output buffer for us
-			chars = decoder.decode(bytes);
-		} catch (CodingEscapedException e) {
+			chars = decoder.decode(bytes.nioBuffer());
+		} catch (CodingException.Escaped e) {
 			// this is to be expected, and would only *not* occur if
 			// there is only a single token in the data before any escapes
-			currentCodepoint = e.getEscapeChar();
-			currentChar = UCharacter.toString(e.getEscapeChar());
+			currentCodepoint = e.escapedCodepoint;
+			currentChar = UCharacter.toString(e.escapedCodepoint);
 			
 			if (currentCodepoint == Item.SPACE_CHAR) {
 				endIndexOfCurrentToken = chars.position() - 1;
@@ -77,14 +66,12 @@ public class DecodeAdapter {
 	}
 	
 	protected void shiftOut() {
-		byte[] 
-		String indicator = chars.get()
 	}
 	
 //	protected 
 	
-	protected CharsetDecoder currentDecoder() {
-		return charsetDecoders.get(charsetDecoders.size() - 1);
+	protected TextDecoder currentDecoder() {
+		return textDecoders.get(textDecoders.size() - 1);
 	}
 	
 	protected void decodeToken() {
@@ -126,9 +113,9 @@ public class DecodeAdapter {
 //	
 //	}
 	
-	private CharsetDecoder currentDecoder(ByteBuf byteBuffer) {
+	private TextDecoder currentDecoder(ByteBuf byteBuffer) {
 		this.bytes = byteBuffer;
-		return charsetDecoders.get(charsetDecoders.size() - 1);
+		return textDecoders.get(textDecoders.size() - 1);
 		
 	}
 
@@ -164,31 +151,31 @@ public class DecodeAdapter {
 	 * 
 	 * @return CharacterDecoder
 	 */
-	private CharsetDecoder detectEncoding() {
-		Charset charset = null;
+	private TextDecoder detectEncoding() {
+		TextCodec charset = null;
 		bytes.markReaderIndex(); 		// mark the first byte so we can reset if no BOM found
 		int[] b = new int[5];
 		b[0] = bytes.readByte() & 0xFF;
 		b[1] = bytes.readByte() & 0xFF;
 		if (b[0] == 0xFE && b[1] == 0xFF) {			// UTF-16BE
-			charset = Charset.UTF_16BE;
+			charset = UnicodeCodec.UTF_16BE;
 		} else if (b[0] == 0xFF && b[1] == 0xFE) {	// could be UTF-16LE or UTF-32LE
 			bytes.markReaderIndex();
 			b[2] = bytes.readByte() & 0xFF;
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[2] == 0x00 && b[3] == 0x00) {		// UTF-32LE
-				charset = Charset.UTF_32LE;
+				charset = UnicodeCodec.UTF_32LE;
 			} else {										// UTF-16LE
 				bytes.resetReaderIndex();	// set the buffer position to after the actual BOM
-				charset = Charset.UTF_16LE;
+				charset = UnicodeCodec.UTF_16LE;
 			}
 		} else if (b[0] == 0x00 && b[1] == 0x00) {	// possibly UTF-32BE
 			b[2] = bytes.readByte() & 0xFF;
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[2] == 0xFE && b[3] == 0xFF) {
-				charset = Charset.UTF_32BE;
+				charset = UnicodeCodec.UTF_32BE;
 			} else {
 				// TODO: throw MisplacedNullException (or some such)?
 			}
@@ -196,7 +183,7 @@ public class DecodeAdapter {
 			b[3] = bytes.readByte() & 0xFF;
 			
 			if (b[3] == 0xBF) {
-				charset = Charset.UTF_8;
+				charset = UnicodeCodec.UTF_8;
 			} 
 		} else if (b[0] == 0x2B && b[1] == 0x2F) { // possibly UTF-7
 			b[2] = bytes.readByte() & 0xFF;
@@ -205,12 +192,12 @@ public class DecodeAdapter {
 				b[3] = bytes.readByte() & 0xFF;
 				
 				if (b[3] == 0x38 || b[3] == 0x39 || b[3] == 0x2B || b[3] == 0x2F) {
-					charset = Charset.UTF_7;
+					charset = UnicodeCodec.UTF_7;
 				} else if (b[3] == 0x38) {
 					b[4] = bytes.readByte() & 0xFF;
 					
 					if (b[4] == 0x2D) {
-						charset = Charset.UTF_7;
+						charset = UnicodeCodec.UTF_7;
 					}
 				}
 			}
@@ -222,7 +209,7 @@ public class DecodeAdapter {
 		}
 		charset = new UTF_8();
 		
-		return charset.newDecoder();
+		return (TextDecoder)charset.decoder();
 	}
 	
 }

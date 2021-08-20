@@ -9,6 +9,8 @@ import java.util.Date;
 import java.util.List;
 
 import io.netty.buffer.ByteBuf;
+import zone.wim.codec.text.TextCodec;
+import zone.wim.codec.text.unicode.UnicodeCodec;
 import zone.wim.item.*;
 import zone.wim.item.tokens.Security;
 
@@ -23,7 +25,7 @@ import zone.wim.item.tokens.Security;
 public class EncodeAdapter {
 	SelfCoding in;
 	ByteBuf out;
-	Codec charset = Codec.UTF_8;
+	Codec charset = UnicodeCodec.UTF_8;
 	List<Codec> codecStack;
 	
 	public EncodeAdapter(SelfCoding in) {
@@ -54,7 +56,7 @@ public class EncodeAdapter {
 	}
 	
 	public void write(Date datetime) {
-		SimpleDateFormat format = new SimpleDateFormat(Codec.DATE_TIME_FORMAT);
+		SimpleDateFormat format = new SimpleDateFormat(TextCodec.DATE_TIME_FORMAT);
 		String dateString = format.format(datetime);
 		out.writeBytes(charset().encode(dateString));
 	}
@@ -64,13 +66,13 @@ public class EncodeAdapter {
 	}
 	
 	private void signifyEncoding() {
-		if (charset != Codec.UTF_8) {
-			out.writeBytes(charset().encode(Codec.BOM));
+		if (charset != UnicodeCodec .UTF_8) {
+//			out.writeBytes(charset().encode(Codec.UnicodeCodec.BYTE_ORDER_MARK_STRING));
 		}
 		
 	}
 	
 	private Charset charset() {
-		return charset.instance();
+		return charset;
 	}
 }

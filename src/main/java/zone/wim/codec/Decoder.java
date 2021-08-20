@@ -1,10 +1,16 @@
 package zone.wim.codec;
 
-import java.nio.Buffer;
 import java.nio.ByteBuffer;
+import java.nio.charset.CodingErrorAction;
 
-public abstract class Decoder {
+public abstract class Decoder extends Coder {
 
-	protected abstract CoderResult decodeLoop(ByteBuffer in, Buffer out);
+	protected Decoder(Codec codec) {
+		this.codec = codec;
+		state = CodingState.RESET;
+	}
+
+
+	protected abstract CoderResult decodeLoop(ByteBuffer in, Object out);
 	
 }

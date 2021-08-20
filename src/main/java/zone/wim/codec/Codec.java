@@ -1,54 +1,36 @@
 package zone.wim.codec;
 
-//import java.nio.charset.Charset;
-//import com.ibm.icu.charset.CharsetICU;
+import java.nio.ByteOrder;
 
 public abstract class Codec {
-	
-	public static String BOM = "\uFEFF";
-	
-	public static String DATE_TIME_FORMAT = "yyyymmddHHmmssZ";
 
-//	public abstract Object decode(DecodeAdapter adapter);
+	public abstract String canonicalName();
+	public abstract String[] aliases();
+	public abstract boolean byteOrderSensitive();
+
 	public abstract Decoder decoder();
 	public abstract Encoder encoder();
 
-	
-}
-/*
-public enum Codec {
-	UTF_8("UTF-8"),
-	UTF_16("UTF-16"),
-	UTF_16BE("UTF-16BE"),
-	UTF_16LE("UTF-16LE"),
-	UTF_32("UTF-32"),
-	UTF_32BE("UTF-32BE"),
-	UTF_32LE("UTF-32LE"),
-	UTF_7("UTF-7");
-	
+	protected ByteOrder byteOrder = null;
 
-	public static String formatString(String format) {
-		if (format != null) {
-			// TODO: figure out how to store time codecs
-			
-		}
-		return DATE_TIME_FORMAT;
-		
+	public Codec(ByteOrder byteOrder) { this.byteOrder = byteOrder; }
+
+	public ByteOrder byteOrder() {
+		return byteOrder;
 	}
-	
-	String name;
-	
-	Codec(String name) {
-		this.name = name;
+	public void byteOrder(ByteOrder byteOrder) {
+		this.byteOrder = byteOrder;
 	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public Charset instance() {
-		return CharsetICU.forNameICU(name);
-	}
-	
+
+	//	public abstract Object decode(DecodeAdapter adapter);
+
+
+	//TODO: all the caching and instance managing thing here
+	//
+	// Cache of the most-recently-returned charsets,
+	// along with the names that were used to find them
+	//
+	//private static volatile Object[] cache1; // "Level 1" cache
+	//private static volatile Object[] cache2; // "Level 2" cache
+
 }
-*/

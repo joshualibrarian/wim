@@ -33,8 +33,6 @@ import java.nio.charset.MalformedInputException;
 import java.nio.charset.UnmappableCharacterException;
 import java.util.concurrent.ConcurrentHashMap;
 
-import zone.wim.codec.text.CodingEscapedException;
-
 import java.util.Map;
 
 /**
@@ -277,7 +275,7 @@ public class CoderResult {
     	return new CoderResult(CR_ESCAPED, codepoint);
     }
     
-    /**
+    /** TODO: fix comment doc here
      * Throws an exception appropriate to the result described by this object.
      *
      * @throws  BufferUnderflowException
@@ -294,15 +292,13 @@ public class CoderResult {
      *          If this object represents an unmappable-character error; the
      *          exceptions length value will be that of this object
      */
-    public void throwException()
-        throws CharacterCodingException
-    {
+    public void throwException() throws CharacterCodingException {
         switch (type) {
         case CR_UNDERFLOW:   throw new BufferUnderflowException();
         case CR_OVERFLOW:    throw new BufferOverflowException();
-        case CR_MALFORMED:   throw new MalformedInputException(value);
+        case CR_MALFORMED:   throw new CodingException.MalformedInput(value);
         case CR_UNMAPPABLE:  throw new UnmappableCharacterException(value);
-        case CR_ESCAPED:	 throw new CodingEscapedException(value);
+        case CR_ESCAPED:	 throw new CodingException.Escaped(value);
         default:
             assert false;
         }

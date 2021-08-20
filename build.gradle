@@ -3,8 +3,8 @@ plugins {
 	id 'java'
 	id 'application'
 	id 'java-library'
-	id 'eclipse'
-	id 'org.openjfx.javafxplugin' version '0.0.7'
+//	id 'eclipse'
+	id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
 sourceCompatibility = '12'
@@ -14,7 +14,7 @@ group = 'zone.wim'
 version = '0.0.2'
 
 application {
-	mainClassName = 'zone.wim.library.Library'
+	mainClass = 'zone.wim.library.Library'
 }
 
 javafx {
@@ -28,14 +28,16 @@ jar {
                    'Main-Class': 'zone.wim.library.Library'
     }
 }
-	
+
+/*
 task enhance(type: JavaExec) {
   main = 'com.objectdb.Enhancer'
   classpath = sourceSets.main.runtimeClasspath
   args '-cp', 'src/main/java', 'app.model.*', 'app.model_dir_two.*'
 }
-
 compileJava.finalizedBy(enhance)
+*/
+
 
 test {
 	useJUnitPlatform()
@@ -62,12 +64,10 @@ sourceSets {
 repositories {
     jcenter()
     mavenCentral()   
-	maven {
-		url 'https://codewizards.co/maven/release'
-		url 'https://oss.sonatype.org/content/repositories/snapshots'
-		url 'http://download.osgeo.org/webdav/geotools/'
-		url 'http://m2.objectdb.com'
-	}
+	maven { url 'https://codewizards.co/maven/release' }
+	maven { url 'https://oss.sonatype.org/content/repositories/snapshots' }
+	maven { url 'https://download.osgeo.org/webdav/geotools/' }
+	maven { url 'https://m2.objectdb.com' }
 }
 
 dependencies {
@@ -79,19 +79,19 @@ dependencies {
     implementation group: 'org.apache.commons', name: 'commons-collections4', version: '4.4'
 	implementation group: 'org.apache.commons', name: 'commons-compress', version: '1.20'
 	
-	implementation group: 'info.picocli', name: 'picocli', version: '4.0.4'
+	implementation group: 'info.picocli', name: 'picocli', version: '4.6.1'
 	annotationProcessor group: 'info.picocli', name: 'picocli-codegen', version: '4.0.0'
 	
 	// persistence API (JPA & JDO)
 	implementation group: 'javax.persistence', name: 'javax.persistence-api', version: '2.2'
 	implementation group: 'javax.transaction', name: 'javax.transaction-api', version: '1.3'
-	compile group: 'javax.jdo', name: 'jdo-api', version: '3.1'
+	compileOnly group: 'javax.jdo', name: 'jdo-api', version: '3.1'
 	
 	// persistence implementations
 	implementation group: 'com.objectdb', name: 'objectdb', version: '2.8.1'
 	
 	// networking
-    api group: 'io.netty', name: 'netty-all', version:'4.1.50.Final'
+    api group: 'io.netty', name: 'netty-all', version:'4.1.67.Final'
 
 	// encryption
     implementation group: 'org.bouncycastle', name: 'bcprov-jdk15on', version: '1.65'
@@ -113,7 +113,9 @@ dependencies {
     implementation group:'com.kstruct', name:'gethostname4j', version:'0.0.3'
     
     implementation group: 'net.harawata', name: 'appdirs', version: '1.1.0'
-	
+
+	compileOnly group: 'org.projectlombok', name: 'lombok', version: '1.18.20'
+
 	// testing	
     testImplementation "org.jmockit:jmockit:1.+"    
 	testImplementation 'org.junit.jupiter:junit-jupiter-api:5.4.1'

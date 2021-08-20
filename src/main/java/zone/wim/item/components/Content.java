@@ -43,7 +43,7 @@ public class Content extends ItemComponent {
 		enclosingItem.getAddress().encode(adapter);
 		adapter.write(name);
 		encodeIndex(adapter);
-		encodeVersion()
+		encodeVersion();
 		
 	}
 	

@@ -1,18 +1,15 @@
 package zone.wim.item;
 
-import java.io.InputStream;
-
-import java.nio.ByteBuffer;
 import java.util.*;
 import javax.jdo.annotations.*;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
 import zone.wim.client.*;
-import zone.wim.codec.Codec;
 import zone.wim.codec.DecodeAdapter;
 import zone.wim.codec.SelfCoding;
-import zone.wim.codec.text.Charset;
+import zone.wim.codec.text.TextCodec;
+import zone.wim.codec.text.unicode.UnicodeCodec;
 import zone.wim.item.components.Content;
 import zone.wim.item.components.ItemComponent;
 import zone.wim.item.components.Manifest;
@@ -85,8 +82,8 @@ public interface Item extends SelfCoding {
 		return (this instanceof Group);
 	}
 	
-	public default Charset preferredEncoding() {
-		return Charset.UTF_8;
+	public default TextCodec preferredEncoding() {
+		return UnicodeCodec.UTF_8;
 	}
 	
 //	public abstract Address generateAddress(String name, ItemType type) throws Invalid;
