@@ -1,7 +1,8 @@
 package zone.wim.exception;
 
+import zone.wim.coding.SelfCoding;
+
 import java.util.List;
-import zone.wim.token.Token;
 
 @SuppressWarnings("serial")
 public class TypeException extends Exception {
@@ -23,13 +24,13 @@ public class TypeException extends Exception {
 	}
 	
 	public static class Duplicate extends Exception {
-		List<Token> duplicates;
+		List<SelfCoding> duplicates;
 	
 		public Duplicate(String type) {
 			super(type);
 		}
 		
-		public Duplicate(List<Token> duplicates) {
+		public Duplicate(List<SelfCoding> duplicates) {
 			this.duplicates = duplicates;
 		}
 	}

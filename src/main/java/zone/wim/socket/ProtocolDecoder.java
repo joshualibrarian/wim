@@ -5,16 +5,16 @@ import java.util.List;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.ByteToMessageDecoder;
-import io.netty.handler.codec.DelimiterBasedFrameDecoder;
-import zone.wim.codec.DecodeAdapter;
-import zone.wim.protocol.ProtocolComponent;
+import zone.wim.coding.DecodeAdapter;
+import zone.wim.socket.protocol.*;
 
 public class ProtocolDecoder extends ByteToMessageDecoder {
 
 	@Override
 	protected void decode(ChannelHandlerContext ctx, ByteBuf in, List<Object> out) throws Exception {
 		DecodeAdapter decodeAdapter = new DecodeAdapter(in);
-		ProtocolComponent c = ProtocolComponent.parse(decodeAdapter);
+		ProtocolComponent c = ProtocolComponent.decode(decodeAdapter);
+
 		out.add(c);
 	}
 	

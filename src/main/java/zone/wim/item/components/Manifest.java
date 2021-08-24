@@ -1,25 +1,25 @@
 package zone.wim.item.components;
 
-import java.io.InputStream;
-import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.util.Date;
 
 import java.util.List;
 
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.codec.DecodeAdapter;
-import zone.wim.codec.EncodeAdapter;
+import zone.wim.coding.DecodeAdapter;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.coding.SelfCoding;
+import zone.wim.coding.SelfCodingUnit;
 import zone.wim.item.Item;
 import zone.wim.item.Signer;
 import zone.wim.item.tokens.Security;
-import zone.wim.token.Address;
+import zone.wim.coding.token.Address;
 import zone.wim.token.ComponentReference;
 
 @EmbeddedOnly
-public class Manifest extends ItemComponent {
-	
+@SelfCodingUnit(name = "test", returns = "test",  parameters = {"test"},  exceptions = { "test"})
+public class Manifest extends ItemComponent implements SelfCoding {
+
 	public static Manifest parse(DecodeAdapter adapter) {
 		return null;
 		

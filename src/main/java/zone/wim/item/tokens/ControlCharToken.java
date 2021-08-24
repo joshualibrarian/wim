@@ -3,14 +3,12 @@ package zone.wim.item.tokens;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import zone.wim.codec.DecodeAdapter;
-import zone.wim.codec.EncodeAdapter;
-import zone.wim.token.AddressException;
-import zone.wim.token.Token;
-import zone.wim.token.AddressException.Invalid;
-import zone.wim.token.AtDomainAddress.Regex;
+import zone.wim.coding.DecodeAdapter;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.coding.SelfCoding;
+import zone.wim.coding.token.AddressException.Invalid;
 
-public abstract class ControlCharToken implements Token {
+public abstract class ControlCharToken implements SelfCoding {
 
 	public static class Regex {
 		static String CHAR_CONTROLLED_TOKEN = "(?<pre>.)?(?<control>\\p{Cntrl})(?<post>.)?";

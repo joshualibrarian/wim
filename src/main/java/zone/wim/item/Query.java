@@ -7,10 +7,9 @@ import javafx.beans.property.ListProperty;
 import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.scene.layout.Pane;
-import zone.wim.client.QueryPane;
+import zone.wim.coding.token.Address;
+import zone.wim.coding.token.AddressException;
 import zone.wim.language.Fragment;
-import zone.wim.token.*;
 
 public class Query extends BaseItem implements Group {
 private static String WORD = "query";

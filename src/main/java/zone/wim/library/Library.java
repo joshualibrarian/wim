@@ -18,16 +18,15 @@ import io.netty.util.concurrent.Future;
 import javafx.application.Application;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import zone.wim.client.DesktopClient;
-import zone.wim.codec.text.TextCodec;
-import zone.wim.codec.text.unicode.UnicodeCodec;
-import zone.wim.exception.StoreException.*;
+import zone.wim.ui.graphical.GraphicalClient;
+import zone.wim.coding.text.TextCodec;
+import zone.wim.coding.text.unicode.UnicodeCodec;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.item.*;
 import zone.wim.item.components.ItemComponent;
 import zone.wim.language.Fragment;
 import zone.wim.library.store.*;
-import zone.wim.protocol.Request;
+import zone.wim.socket.protocol.Request;
 import zone.wim.socket.*;
 
 @Command(name="wim")
@@ -35,7 +34,18 @@ public class Library implements Daemon, Runnable {
 	private static Logger LOGGER = Logger.getLogger(Library.class.getCanonicalName());
 	private static Library INSTANCE = null;
 
-	public static synchronized Library instance() throws NotInitialized {
+	public static synchronized Library local() {
+		try {
+			Library library = instance();
+			return library;
+		} catch (NotInitialized nie) {
+			// TODO: here is where we report the connectivity issue or whatever
+			nie.printStackTrace();
+		}
+		return null;
+	}
+
+	private static synchronized Library instance() throws NotInitialized {
 		if (INSTANCE != null && INSTANCE.isInitialized) {
 			return INSTANCE;
 		} else throw new NotInitialized();
@@ -57,11 +67,11 @@ public class Library implements Daemon, Runnable {
 		}
 	}
 	
-	@Option(names = { "-u", "--system-user" }, 
-			description = "")
-	private String systemUser = System.getProperty("user.name");
+//	@Option(names = { "-u", "--system-user" },
+//			description = "")
+//	private String systemUser = System.getProperty("user.name");
 	
-	@Option(names = { "-l", "--local-path" }, 
+	@Option(names = { "-l", "--local-path" },
 			description = "specify the local system filesystem path to store library data")
 	private String localPath = null;
 	
@@ -142,7 +152,7 @@ public class Library implements Daemon, Runnable {
 	public void start() throws Exception {
 		LOGGER.info("start()");
 		
-		store.open();
+//		store.open();
 		localHost = getLocalhost();
 
 		if (runServer) {
@@ -155,7 +165,7 @@ public class Library implements Daemon, Runnable {
 
 		if (graphicalClient) {
 			LOGGER.info("SHOW GRAPHICAL CLIENT!");
-			Application.launch(DesktopClient.class, new String[0]);
+			Application.launch(GraphicalClient.class, new String[0]);
 		}
 	}
 
@@ -171,8 +181,8 @@ public class Library implements Daemon, Runnable {
 		LOGGER.info("stop()");
 		System.out.println("stop()");
 		
-		index.close();
-		store.close();
+//		index.close();
+//		store.close();
 		
 		if (runServer) {
 			server.stop();
@@ -247,12 +257,12 @@ public class Library implements Daemon, Runnable {
 		if (!(localHost instanceof Host)) {
 			String hostname = Hostname.getHostname();
 			InetAddress netAddress = InetAddress.getLoopbackAddress();
-			try {
-				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
-			} catch (NotFound e) {
-				localHost = Host.create(netAddress);
-				integrate(localHost);
-			}
+//			try {
+//				localHost = (Host)store.get(netAddress.getHostAddress(), Host.class);
+//			} catch (NotFound e) {
+//				localHost = Host.create(netAddress);
+//				integrate(localHost);
+//			}
 		}
 		return localHost;
 	}

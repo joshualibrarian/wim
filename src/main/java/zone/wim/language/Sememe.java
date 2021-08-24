@@ -2,12 +2,11 @@ package zone.wim.language;
 
 import zone.wim.item.*;
 
-import zone.wim.token.*;
+import zone.wim.coding.token.Address;
+
 import java.util.*;
 
 import org.apache.commons.collections4.MultiValuedMap;
-
-import javafx.scene.layout.Pane;
 
 public class Sememe extends BaseItem {
 	

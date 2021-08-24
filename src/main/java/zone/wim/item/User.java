@@ -3,10 +3,8 @@ package zone.wim.item;
 import java.util.*;
 
 import javafx.beans.property.ListProperty;
-import javafx.scene.layout.Pane;
 import zone.wim.exception.ItemException.SignersOnly;
-import zone.wim.exception.ItemException.SitesOnly;
-import zone.wim.token.Address;
+import zone.wim.coding.token.Address;
 
 public class User extends Signer {
 

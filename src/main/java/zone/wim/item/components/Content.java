@@ -1,12 +1,11 @@
 package zone.wim.item.components;
 
-import java.security.KeyPair;
-
 import java.security.PublicKey;
 import java.util.List;
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.codec.EncodeAdapter;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.coding.SelfCoding;
 import zone.wim.item.Item;
 import zone.wim.item.Reference;
 import zone.wim.item.Signer;
@@ -14,7 +13,7 @@ import zone.wim.item.tokens.Security;
 import zone.wim.token.*;
 
 @EmbeddedOnly
-public class Content extends ItemComponent {
+public class Content extends ItemComponent implements SelfCoding {
 
 	String name;
 	String blurb;

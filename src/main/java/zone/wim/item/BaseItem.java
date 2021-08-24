@@ -1,6 +1,5 @@
 package zone.wim.item;
 
-import java.nio.ByteBuffer;
 import java.util.*;
 
 
@@ -11,10 +10,9 @@ import javax.jdo.annotations.*;
 import org.apache.commons.collections4.MultiValuedMap;
 import org.apache.commons.collections4.multimap.ArrayListValuedHashMap;
 
-import zone.wim.client.*;
-import zone.wim.codec.EncodeAdapter;
-import zone.wim.token.*;
-import zone.wim.token.AddressException.Invalid;
+import zone.wim.ui.*;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.coding.token.Address;
 import zone.wim.exception.ItemException.*;
 import zone.wim.item.components.Content;
 import zone.wim.item.components.ItemComponent;

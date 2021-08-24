@@ -2,8 +2,7 @@ package zone.wim.item;
 
 import javax.jdo.annotations.PersistenceCapable;
 
-import zone.wim.item.BaseItem;
-import zone.wim.token.Address;
+import zone.wim.coding.token.Address;
 
 @PersistenceCapable
 public class TestItem extends BaseItem {

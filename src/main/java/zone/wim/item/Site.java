@@ -3,11 +3,8 @@ package zone.wim.item;
 import java.util.List;
 
 import javafx.beans.property.ListProperty;
-import javafx.scene.layout.Pane;
-import zone.wim.client.ItemUserInterface;
-import zone.wim.client.LanguagePane;
 import zone.wim.exception.ItemException.SignersOnly;
-import zone.wim.token.Address;
+import zone.wim.coding.token.Address;
 
 public class Site extends Signer implements Group {
 

@@ -2,9 +2,9 @@ package zone.wim.language;
 
 import java.util.Locale;
 import zone.wim.item.*;
-import zone.wim.token.Address;
-import zone.wim.client.ItemUserInterface;
-import zone.wim.client.LanguagePane;
+import zone.wim.coding.token.Address;
+import zone.wim.ui.ItemUserInterface;
+import zone.wim.ui.LanguagePane;
 
 public class Language extends BaseItem {
 

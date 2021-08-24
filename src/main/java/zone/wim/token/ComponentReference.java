@@ -1,8 +1,9 @@
 package zone.wim.token;
 
+import zone.wim.coding.SelfCoding;
 import zone.wim.exception.TypeException;
 
-public class ComponentReference implements Token {
+public class ComponentReference implements SelfCoding {
 	
 	public static ComponentReference parse(String className) throws Throwable {
 		// TODO stub

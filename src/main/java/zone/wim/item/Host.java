@@ -5,23 +5,16 @@ import java.util.*;
 import java.util.logging.*;
 
 import java.net.InetAddress;
-import java.nio.ByteBuffer;
 
 import javax.jdo.annotations.PersistenceCapable;
 
 import javafx.beans.property.ListProperty;
-import javafx.scene.layout.Pane;
-import zone.wim.client.HostPane;
-import zone.wim.client.ItemUserInterface;
-import zone.wim.client.LanguagePane;
-import zone.wim.codec.EncodeAdapter;
+import zone.wim.ui.HostPane;
+import zone.wim.ui.ItemUserInterface;
 import zone.wim.exception.ItemException.*;
-import zone.wim.exception.LibraryException;
 import zone.wim.exception.LibraryException.*;
 import zone.wim.library.Library;
 import zone.wim.token.*;
-import zone.wim.token.AddressException.*;
-import zone.wim.item.*;
 
 @PersistenceCapable
 public class Host extends Signer implements Group {

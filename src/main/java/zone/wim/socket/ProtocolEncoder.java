@@ -3,9 +3,8 @@ package zone.wim.socket;
 import io.netty.buffer.ByteBuf;
 import io.netty.channel.ChannelHandlerContext;
 import io.netty.handler.codec.MessageToByteEncoder;
-import zone.wim.codec.EncodeAdapter;
-import zone.wim.library.Library;
-import zone.wim.protocol.ProtocolComponent;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.socket.protocol.ProtocolComponent;
 
 public class ProtocolEncoder extends MessageToByteEncoder<ProtocolComponent> {
 

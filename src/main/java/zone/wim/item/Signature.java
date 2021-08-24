@@ -1,9 +1,9 @@
 package zone.wim.item;
 
+import zone.wim.coding.SelfCoding;
 import zone.wim.exception.TypeException;
-import zone.wim.token.Token;
 
-public class Signature implements Token {
+public class Signature implements SelfCoding {
 	
 	private String text;
 	private byte[] bytes;
@@ -17,15 +17,6 @@ public class Signature implements Token {
 	public Signature(String text) {
 		this.text = text;
 	}
-	
-	@Override
-	public String getText() {
-		return text;
-	}
 
-	@Override
-	public void setText(String text) throws Exception {
-		this.text = text;		
-	}
 
 }

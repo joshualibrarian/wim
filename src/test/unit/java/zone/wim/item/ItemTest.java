@@ -1,8 +1,7 @@
 package zone.wim.item;
 
 import org.junit.jupiter.api.BeforeAll;
-import zone.wim.item.*;
-import zone.wim.token.*;
+import zone.wim.coding.token.Address;
 
 public class ItemTest {
 

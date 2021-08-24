@@ -10,11 +10,11 @@ import edu.mit.jwi.*;
 import edu.mit.jwi.Dictionary;
 import edu.mit.jwi.item.*;
 import zone.wim.item.*;
+import zone.wim.coding.token.AddressException;
 import zone.wim.language.*;
 import zone.wim.language.english.DictionaryException.*;
 import zone.wim.library.*;
-import zone.wim.token.AddressException.*;
-import zone.wim.token.*;
+import zone.wim.coding.token.AddressException.*;
 import zone.wim.exception.LibraryException.*;
 
 public class Generator {

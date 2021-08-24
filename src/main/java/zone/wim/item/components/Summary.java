@@ -3,7 +3,7 @@ package zone.wim.item.components;
 import java.util.Map;
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.token.Type;
+import zone.wim.coding.token.Type;
 
 @EmbeddedOnly
 public class Summary extends ItemComponent {

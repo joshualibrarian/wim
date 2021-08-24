@@ -1,9 +1,8 @@
 package zone.wim.token;
 
-import java.util.List;
 import zone.wim.item.*;
 
-import zone.wim.exception.TypeException;
+import zone.wim.coding.token.Type;
 
 public interface ItemType extends Type {
 	public static Type parse(String type) throws Exception {

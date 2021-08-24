@@ -3,9 +3,8 @@ package zone.wim.token;
 import org.junit.jupiter.api.*;
 
 import java.util.logging.Logger;
-import zone.wim.item.*;
-import zone.wim.token.AtDomainAddress;
-import zone.wim.exception.*;
+
+import zone.wim.item.tokens.AtDomainAddress;
 
 public class AtAddressTest {
 	static Logger LOGGER = Logger.getLogger(AtAddressTest.class.getCanonicalName());

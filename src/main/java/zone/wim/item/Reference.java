@@ -6,7 +6,7 @@ import zone.wim.exception.LibraryException.NotInitialized;
 import zone.wim.item.components.Content;
 import zone.wim.item.components.Relation;
 import zone.wim.library.Library;
-import zone.wim.token.Address;
+import zone.wim.coding.token.Address;
 
 @EmbeddedOnly
 public class Reference {

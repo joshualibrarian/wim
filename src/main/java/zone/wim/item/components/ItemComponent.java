@@ -1,24 +1,48 @@
 package zone.wim.item.components;
 
-import java.io.InputStream;
-
-import java.nio.ByteBuffer;
-import java.nio.CharBuffer;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
+import java.util.PrimitiveIterator;
 import javax.jdo.annotations.EmbeddedOnly;
 
-import zone.wim.codec.DecodeAdapter;
-import zone.wim.codec.EncodeAdapter;
-import zone.wim.codec.SelfCoding;
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.Getter;
+import zone.wim.coding.DecodeAdapter;
+import zone.wim.coding.EncodeAdapter;
+import zone.wim.coding.SelfCoding;
+import zone.wim.coding.token.Address;
 import zone.wim.item.*;
 import zone.wim.item.tokens.Security;
 
-@EmbeddedOnly
+@AllArgsConstructor
+@Getter
+enum ItemComponentType {
+	MANIFEST (Manifest.class, Item.MANIFEST_CHAR),
+	SUMMARY (Summary.class, Item.SUMMARY_CHAR),
+	CONTENT (Content.class, Item.CONTENT_CHAR),
+	RELATION (Relation.class, Item.RELATION_CHAR);
+
+	Class<? extends ItemComponent> clazz;
+	int specifyingChar;
+
+	static int[] chars() {
+		return Arrays.stream(values())
+				.map(t -> t.specifyingChar())
+				.mapToInt(c -> c.intValue()).toArray();
+	}
+}
+
 public abstract class ItemComponent implements SelfCoding {
 
 	public static ItemComponent decode(DecodeAdapter adapter) {
-		
+
+//		adapter.expect(Summary.class, Manifest.class, Content.class, Relation.class);
+		adapter.mark();
+		expect(Address.class, ItemComponentType.chars());
+
+
 		ItemComponent result = null;
 		
 		adapter.currentToken();

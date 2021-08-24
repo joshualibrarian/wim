@@ -5,23 +5,26 @@ import javax.jdo.annotations.*;
 
 import org.apache.commons.collections4.MultiValuedMap;
 
-import zone.wim.client.*;
-import zone.wim.codec.DecodeAdapter;
-import zone.wim.codec.SelfCoding;
-import zone.wim.codec.text.TextCodec;
-import zone.wim.codec.text.unicode.UnicodeCodec;
+import zone.wim.ui.*;
+import zone.wim.coding.DecodeAdapter;
+import zone.wim.coding.SelfCoding;
+import zone.wim.coding.text.TextCodec;
+import zone.wim.coding.text.unicode.UnicodeCodec;
 import zone.wim.item.components.Content;
 import zone.wim.item.components.ItemComponent;
 import zone.wim.item.components.Manifest;
 import zone.wim.item.components.Relation;
 import zone.wim.item.components.Summary;
-import zone.wim.token.*;
+import zone.wim.coding.token.Address;
 
 @PersistenceCapable
 public interface Item extends SelfCoding {
-	
 	public static char SPACE_CHAR = '\u0020';
-	
+	public static char NEWLINE_CHAR = '\n';
+
+	public static int SHIFT_OUT = '\u000E';
+	public static int SHIFT_IN = '\u000F';
+
 	// component identifying chars
 	public static char MANIFEST_CHAR = '\u0011';	// DC1
 	public static char RELATION_CHAR = '\u0012';	// DC2
@@ -45,15 +48,52 @@ public interface Item extends SelfCoding {
 
 	// relation specific
 	public static char OBJECT_CHAR = '\u0001';		// SOH
-	
-	public static Item parse(DecodeAdapter decodeAdapter) {
-		List<ItemComponent> components = new ArrayList<>();
-		
+
+	public static Item decode(DecodeAdapter adapter) {
+		Item item = null;
+
+		List<Summary> summaries = new ArrayList<>();
+		List<Manifest> manifests = new ArrayList<>();
+		List<Content> contents = new ArrayList<>();
+		List<Relation> relations = new ArrayList<>();
+
+		adapter.tokenizers(new int[]
+				{ SPACE_CHAR, SHIFT_OUT,
+						MANIFEST_CHAR, SUMMARY_CHAR, CONTENT_CHAR, RELATION_CHAR });
+		adapter.signifyMyEnding(new int[] { NEWLINE_CHAR });
+
+		// loop until we are no longer finding item components
 		while(true) {
-			
+			ItemComponent c = (ItemComponent) adapter.expect(ItemComponent.class);
+			if (c instanceof Summary) {
+				summaries.add((Summary)c);
+			} else if (c instanceof Manifest) {
+				manifests.add((Manifest)c);
+			} else if (c instanceof Content) {
+				contents.add((Content)c);
+			} else if (c instanceof Relation) {
+				relations.add((Relation)c);
+			} else {
+				break;
+			}
 		}
+
+		Address address = null;
+		List<ItemComponent> l = null;
+		if (!manifests.isEmpty()) {
+			for (Manifest m : manifests) {
+//				addressx
+			}
+		} else if (summaries.size() > 0) {
+
+		}
+		if (summaries.size() > 0 || manifests.size() > 0) {
+
+		}
+		//TODO: here's where I construct the item from the item components
+		return item;
 	}
-	
+
 	@PrimaryKey
 	public String getAddressKey();
 	public void setAddressKey(String key);
@@ -65,14 +105,14 @@ public interface Item extends SelfCoding {
 
 	public List<String> words(Reference reference);
 	
-	public List<Manifest> manifests(Signer requestor);
-	public List<Summary> summaries(Signer requestor);
-	public List<Content> contents(Signer requestor);
-	public List<Relation> relations(Signer requstor);
+	public List<Manifest> manifests(Signer requester);
+	public List<Summary> summaries(Signer requester);
+	public List<Content> contents(Signer requester);
+	public List<Relation> relations(Signer requester);
 	
-	public List<Relation> relationsRelatedBy(Signer requestor, Item... items);
-	public List<Relation> relationsRelatedTo(Signer requestor, Item... items);
-	public List<Relation> relationsCreatedBy(Signer requestor, Signer creator);
+	public List<Relation> relationsRelatedBy(Signer requester, Item... items);
+	public List<Relation> relationsRelatedTo(Signer requester, Item... items);
+	public List<Relation> relationsCreatedBy(Signer requester, Signer creator);
 	
 	public ItemUserInterface getUserInterface();
 	

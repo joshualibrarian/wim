@@ -5,10 +5,11 @@ import java.net.InetAddress;
 import java.net.UnknownHostException;
 import java.util.logging.Logger;
 import javax.jdo.annotations.EmbeddedOnly;
-import javax.jdo.annotations.Persistent;
-import org.apache.commons.validator.routines.InetAddressValidator;
+
+import zone.wim.coding.EncodeAdapter;
 import zone.wim.item.Signer;
-import zone.wim.token.AddressException.Invalid;
+import zone.wim.coding.token.Address;
+import zone.wim.coding.token.AddressException.Invalid;
 
 @EmbeddedOnly
 public class HostAddress implements Address {
@@ -24,21 +25,6 @@ public class HostAddress implements Address {
 	
 	public HostAddress(InetAddress host) {
 		text = host.getHostAddress();
-	}
-	
-	@Override
-	public String getText() {
-		return text;
-	}
-	
-	@Override
-	public void setText(String text) {
-		this.text = text;
-	}
-
-	@Override
-	public String getSitePart() {
-		return text;
 	}
 
 	@Override
@@ -59,4 +45,13 @@ public class HostAddress implements Address {
 		}
 	}
 
+	@Override
+	public String sitePart() {
+		return null;
+	}
+
+	@Override
+	public void encode(EncodeAdapter adapter) {
+
+	}
 }

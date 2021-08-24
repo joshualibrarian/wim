@@ -3,16 +3,13 @@ package zone.wim.item;
 import java.lang.reflect.Constructor;
 
 import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 import java.security.*;
 import java.security.spec.*;
 
-import io.netty.buffer.ByteBuf;
-import javafx.scene.layout.Pane;
 import zone.wim.exception.ItemException.SignersOnly;
-import zone.wim.item.components.Content;
+import zone.wim.coding.token.Address;
 import zone.wim.token.*;
-import zone.wim.token.AddressException.Invalid;
+import zone.wim.coding.token.AddressException.Invalid;
 
 public abstract class Signer extends BaseItem implements Group {
 	
@@ -52,15 +49,15 @@ public abstract class Signer extends BaseItem implements Group {
 	}
 	
 	private void keyStore(KeyStore keyStore) {
-		Content keyStoreContent = new Content(this, creator.item(), )
+//		Content keyStoreContent = new Content(this, creator.item(), )
 	}
 	
 	public KeyStore keyStore() {
-		
+		return null;
 	}
 	
 	private void publicKey(PublicKey publicKey) {
-		Content c = new Content(this, )
+//		Content c = new Content(this, )
 	}
 	
 	private void privateKey(PrivateKey privateKey) {
