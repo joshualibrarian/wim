@@ -18,7 +18,7 @@ import io.netty.util.concurrent.Future;
 import javafx.application.Application;
 import picocli.CommandLine;
 import picocli.CommandLine.Command;
-import zone.wim.ui.graphical.GraphicalClient;
+import zone.wim.ui.graphical.GraphicalUI;
 import zone.wim.coding.text.TextCodec;
 import zone.wim.coding.text.unicode.UnicodeCodec;
 import zone.wim.exception.LibraryException.*;
@@ -83,11 +83,11 @@ public class Library implements Daemon, Runnable {
 			description = "run the local server and receive incoming connections")
 	private boolean runServer = false;
 	
-	@Option(names = { "-g", "--graphical-client" }, 
+	@Option(names = { "-g", "--graphical-user-interface" },
 			description = "activate the graphical client")
     private boolean graphicalClient = false;
 	
-	@Option(names = { "-t", "--terminal-client" }, 
+	@Option(names = { "-t", "--terminal-user-interface" },
 			description = "activate the terminal client")
 	private boolean terminalClient = false;
 	
@@ -165,7 +165,7 @@ public class Library implements Daemon, Runnable {
 
 		if (graphicalClient) {
 			LOGGER.info("SHOW GRAPHICAL CLIENT!");
-			Application.launch(GraphicalClient.class, new String[0]);
+			Application.launch(GraphicalUI.class, new String[0]);
 		}
 	}
 

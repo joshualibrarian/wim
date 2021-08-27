@@ -35,50 +35,49 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.charset.CodingErrorAction;
 
+import io.netty.buffer.ByteBuf;
 import lombok.Getter;
 import lombok.Setter;
-import zone.wim.coding.CoderResult;
-import zone.wim.coding.CodingException;
-import zone.wim.coding.CodingState;
-import zone.wim.coding.Decoder;
+import zone.wim.coding.*;
 
 public abstract class TextDecoder extends Decoder {
 
     protected TextCodec textCodec;    // convenience to minimize casting
-    protected ByteBuffer src;
+    protected ByteBuf src;
     protected CharBuffer dst;
     protected String replacement;
     protected int [] escapes;
     @Getter @Setter
     protected int countdown = -1;
+    protected int decodedCount = 0;
 
-    protected TextDecoder(TextCodec codec, ByteBuffer src, CharBuffer dst) {
+    protected TextDecoder(TextCodec codec, ByteBuf src, CharBuffer dst) {
         super(codec);
         this.src = src;
         this.dst = dst;
         replacement(textCodec.defaultReplacement());
     }
 
-    protected boolean isEscape(int value) {
-        for (int e : escapes) {
-            if (value == e) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    protected CoderResult shouldStop(Integer currentCodepoint) {
+//        decodedCount++;
+//        CoderResult result = null;
+//        if (isEscape(currentCodepoint)) {
+//            result = CoderResult.escaped(currentCodepoint);
+//        }
+//        if (doCountdown()) {
+//            result = CoderResult.stopped(currentCodepoint);
+//        }
+//        return result;
+//    }
 
-    protected boolean countdownDecrementAndIsReached() {
-        if (countdown > -1) {
-            if(countdown >= 0) {
-                countdown--;
-            }
-            if (countdown == -1) {
-                return true;
-            }
-        }
-        return false;
-    }
+//    protected boolean isEscape(int value) {
+//        for (int e : escapes) {
+//            if (value == e) {
+//                return true;
+//            }
+//        }
+//        return false;
+//    }
 
     public final TextDecoder replacement(String newReplacement) {
         if (newReplacement == null)
@@ -106,7 +105,7 @@ public abstract class TextDecoder extends Decoder {
     protected void implReplaceWith(String newReplacement) { }
 
     public final CoderResult decode(boolean endOfInput) {
-        ByteBuffer in = src;
+        ByteBuf in = src;
 
         CodingState newState = endOfInput ? CodingState.END : CodingState.CODING;
         if ((state != CodingState.RESET) && (state != CodingState.CODING)
@@ -124,12 +123,12 @@ public abstract class TextDecoder extends Decoder {
                 throw new CodingException.BufferOverflow();
             }
 
-            if (cr.isOverflow() || cr.isEscaped())
+            if (cr.isOverflow() || cr.isEscaped() || cr.isStopped())
                 return cr;
 
             if (cr.isUnderflow()) {
-                if (endOfInput && in.hasRemaining()) {
-                    cr = CoderResult.malformedForLength(in.remaining());
+                if (endOfInput && in.isReadable()) {
+                    cr = CoderResult.malformedForLength(in.readableBytes());
                     // Fall through to malformed-input case
                 } else {
                     return cr;
@@ -156,7 +155,7 @@ public abstract class TextDecoder extends Decoder {
             if ((action == CodingErrorAction.IGNORE)
                 || (action == CodingErrorAction.REPLACE)) {
                 // Skip erroneous input either way
-                in.position(in.position() + cr.length());
+                in.readerIndex(in.readerIndex() + cr.length());
                 continue;
             }
 

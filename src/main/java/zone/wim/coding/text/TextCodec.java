@@ -5,19 +5,15 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 import java.nio.charset.Charset;
 
-import lombok.Getter;
-import lombok.Setter;
-import zone.wim.coding.Codec;
+import io.netty.buffer.ByteBuf;
+import zone.wim.coding.ByteSourceCodec;
 import zone.wim.coding.CodingException;
-import zone.wim.coding.Decoder;
 
-public abstract class TextCodec extends Codec {
+public abstract class TextCodec extends ByteSourceCodec {
 
     public static int SHIFT_OUT = '\u000E';
     public static int SHIFT_IN = '\u000F';
     public static int BYTE_ORDER_MARK = '\uFEFF';
-
-    public static String DATE_TIME_FORMAT = "yyyymmddhhmmssZZ";
 
     public TextCodec(ByteOrder byteOrder) {
         super(byteOrder);
@@ -30,16 +26,16 @@ public abstract class TextCodec extends Codec {
     public abstract String defaultReplacement();
 
     @Override
-    public zone.wim.coding.Decoder decoder(ByteBuffer src, Object dst) {
+    public TextDecoder decoder(ByteBuf src, Object dst) {
         return decoder(src, (CharBuffer)dst);
     }
-    public abstract TextDecoder decoder(ByteBuffer src, CharBuffer dst);
+    public abstract TextDecoder decoder(ByteBuf src, CharBuffer dst);
 
     @Override
-    public zone.wim.coding.Encoder encoder(Object src, ByteBuffer dst) {
+    public TextEncoder encoder(Object src, ByteBuf dst) {
         return encoder((CharBuffer)src, dst);
     }
-    public abstract TextEncoder encoder(CharBuffer src, ByteBuffer dst);
+    public abstract TextEncoder encoder(CharBuffer src, ByteBuf dst);
 
     public abstract Charset charset() throws CodingException.UnsupportedCodec;
 

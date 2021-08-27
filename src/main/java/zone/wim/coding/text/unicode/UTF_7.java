@@ -1,14 +1,12 @@
 package zone.wim.coding.text.unicode;
 
 import com.ibm.icu.charset.CharsetICU;
-import zone.wim.coding.CoderResult;
-import zone.wim.coding.text.TextCodec;
+import io.netty.buffer.ByteBuf;
 import zone.wim.coding.text.TextDecoder;
 import zone.wim.coding.text.TextEncoder;
 
 import java.nio.ByteBuffer;
 import java.nio.CharBuffer;
-import java.nio.IntBuffer;
 import java.nio.charset.Charset;
 
 public class UTF_7 extends UnicodeCodec {
@@ -32,12 +30,12 @@ public class UTF_7 extends UnicodeCodec {
     public boolean byteOrderSensitive() { return false; }
 
     @Override
-    public TextDecoder decoder(ByteBuffer src, CharBuffer dst) {
+    public TextDecoder decoder(ByteBuf src, CharBuffer dst) {
         return null;
     }
 
     @Override
-    public TextEncoder encoder(CharBuffer src, ByteBuffer dst) {
+    public TextEncoder encoder(CharBuffer src, ByteBuf dst) {
         return null;
     }
 }

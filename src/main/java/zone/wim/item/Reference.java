@@ -13,7 +13,7 @@ public class Reference {
 	private static Logger LOGGER = Logger.getLogger(Reference.class.getCanonicalName());
 	
 	public static final String MANIFEST_CHAR = "~";
-	public static final String RELATION_CHAR = ";";
+	public static final String RELATION_CHAR = "|";
 	public static final String CONTENT_CHAR = "^";
 	public static final String SUMMARY_CHAR = "`";
 	
@@ -24,12 +24,12 @@ public class Reference {
 	private String asEntered = null;		//  (  ...  )
 	private Relation relation = null;		//  [  ...  ]
 	private Content range = null;			// 	[  ...  ]	
-	
+
 	public Reference(Item item) {
 		this.item = item;
 		address = item.getAddress();
 	}
-	
+
 	public Reference(Address address) { 
 		this.address = address;
 	}

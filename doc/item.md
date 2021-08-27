@@ -14,7 +14,7 @@ Items are the base unit of organization in the WIM.  An item is fundamentally a 
 
 Each of the four different *item components* shares a similar format and several common parts.  They are all stored as a list of tokens, separated by spaces (`U+0020`, specifically), some with particular control characters denoting them.  The tokens which are common to all components, and the basic format of an item component is:
 
-	[ITEM ADDRESSES]+<COMPONENT_IDENTIFYING_CHAR>[CREATOR_ADDRESS][<FS>INDEX] [<GS>SECURITY] [<RS>TIMESTAMP] <ITEM_SPECIFIC_TOKENS>+ [[SIGNER]<US><SIGNATURE>]+<CR>
+	[ITEM ADDRESSES]+<COMPONENT_IDENTIFYING_CHAR> <CREATOR_ADDRESS><<FS>INDEX> <<US>VERSION> [<GS>SECURITY] [<RS>TIMESTAMP] <ITEM_SPECIFIC_TOKENS>+ [[SIGNER]<US><SIGNATURE>]+<CR>
 	
 As you can see, each component can begin with the address of that component followed by a required `<COMPONENT_IDENTIFYING_CHAR>`, each a different control character identifying one of the four types.  The `INDEX`, `SECURITY`, `TIMESTAMP`, and `SIGNATURE` tokens each have their own identifying control characters and syntax as well, as do most of the tokens specific to each item component.  Each is addressed individually:
 

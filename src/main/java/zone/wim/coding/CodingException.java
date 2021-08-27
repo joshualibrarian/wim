@@ -4,6 +4,10 @@ import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.nio.charset.CharacterCodingException;
 
+enum EscapeCause {
+    CHARACTER, COUNTDOWN;
+}
+
 public class CodingException {
 
     public static class UnsupportedCodec extends Exception {
@@ -44,7 +48,6 @@ public class CodingException {
         public Escaped(Object escapedCodepoint) {
             super();
             this.escapedCodepoint = escapedCodepoint;
-
         }
 
     }
@@ -54,6 +57,15 @@ public class CodingException {
         public InvalidData(String message) {
             super();
             this.message = message;
+        }
+    }
+
+    public static class NotWhatExpected extends CharacterCodingException {
+        public NotWhatExpected(String found) {
+            super();
+        }
+        public NotWhatExpected(int found) {
+            super();
         }
     }
 }

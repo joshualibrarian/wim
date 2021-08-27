@@ -6,7 +6,7 @@ import zone.wim.item.Host;
 import zone.wim.library.Library;
 import zone.wim.ui.ItemStage;
 
-public class GraphicalClient extends Application {
+public class GraphicalUI extends Application {
 	
 	private ItemStage localhostStage;
 	private Library library;

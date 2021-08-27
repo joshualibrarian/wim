@@ -19,7 +19,7 @@ import zone.wim.coding.token.Address;
 
 @PersistenceCapable
 public interface Item extends SelfCoding {
-	public static char SPACE_CHAR = '\u0020';
+	public static char TOKENIZER_CHAR = '\u0020';
 	public static char NEWLINE_CHAR = '\n';
 
 	public static int SHIFT_OUT = '\u000E';
@@ -35,13 +35,13 @@ public interface Item extends SelfCoding {
 	public static char INDEX_CHAR = '\u001C';		// FS
 	public static char SECURITY_CHAR = '\u001D';	// GS
 	public static char TIMESTAMP_CHAR = '\u001E';	// RS
-	public static char SIGNATURE_CHAR = '\u001F';	// US
+	public static char VERSION_CHAR = '\u001F';		// US
 	
 	public static char ENCRYPTION_CHAR = '\u0005';	// ENQ
 	
 	public static char TYPE_CHAR = '\u001A';		// SUB
 	public static char DELETE_CHAR = '\u007F';		// DEL
-	public static char VERSION_CHAR = '\u0016';		// SYN
+	public static char SIGNATURE_CHAR = '\u0016';	// SYN
 	
 	public static char COUNT_CHAR = '\u0009';		// HT
 	public static char BINARY_CHAR = '\u0007';		// BEL
@@ -57,14 +57,9 @@ public interface Item extends SelfCoding {
 		List<Content> contents = new ArrayList<>();
 		List<Relation> relations = new ArrayList<>();
 
-		adapter.tokenizers(new int[]
-				{ SPACE_CHAR, SHIFT_OUT,
-						MANIFEST_CHAR, SUMMARY_CHAR, CONTENT_CHAR, RELATION_CHAR });
-		adapter.signifyMyEnding(new int[] { NEWLINE_CHAR });
-
 		// loop until we are no longer finding item components
 		while(true) {
-			ItemComponent c = (ItemComponent) adapter.expect(ItemComponent.class);
+			ItemComponent c = (ItemComponent)adapter.expect(ItemComponent.class, Item.NEWLINE_CHAR);
 			if (c instanceof Summary) {
 				summaries.add((Summary)c);
 			} else if (c instanceof Manifest) {
@@ -88,9 +83,9 @@ public interface Item extends SelfCoding {
 
 		}
 		if (summaries.size() > 0 || manifests.size() > 0) {
+			//TODO: here's where I construct the item from the item components
 
 		}
-		//TODO: here's where I construct the item from the item components
 		return item;
 	}
 

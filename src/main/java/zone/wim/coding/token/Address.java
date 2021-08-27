@@ -28,18 +28,15 @@ public interface Address extends SelfCoding {
 		
 	}
 	public static Address decode(DecodeAdapter adapter) throws Exception {
-
+		String text = adapter.expectString();
+		return (Address)SelfCoding.decode(text, Address.class);
 
 	}
-	
-	public static Address parse(String address) throws Exception {
-		return (Address) SelfCoding.decode(address, Address.class);
-	}
-	
+
 	public Address generate(Signer creator, String name, ItemType type) throws Invalid;
 	
 	public String sitePart();
-	public default String uUserPart() {
+	public default String userPart() {
 		return null;
 	}
 	public default String thingPart() {

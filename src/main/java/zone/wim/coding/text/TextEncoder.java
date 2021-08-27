@@ -33,10 +33,10 @@ import java.nio.CharBuffer;
 import java.nio.BufferOverflowException;
 import java.nio.BufferUnderflowException;
 import java.lang.ref.WeakReference;
-import java.nio.charset.CharacterCodingException;
 import java.nio.charset.CodingErrorAction;
 import java.util.Arrays;
 
+import io.netty.buffer.ByteBuf;
 import zone.wim.coding.*;
 import zone.wim.coding.CoderResult;
 
@@ -44,7 +44,7 @@ public abstract class TextEncoder extends Encoder {
 
     protected TextCodec textCodec;
     protected CharBuffer src;
-    protected ByteBuffer dst;
+    protected ByteBuf dst;
     protected byte[] replacement;
 
     // Optional array of escape characters
@@ -57,7 +57,7 @@ public abstract class TextEncoder extends Encoder {
 //        replaceWith(replacement);
 //    }
 
-    protected TextEncoder(TextCodec codec, CharBuffer src, ByteBuffer dst) {
+    protected TextEncoder(TextCodec codec, CharBuffer src, ByteBuf dst) {
         super(codec);
         this.src = src;
         this.dst = dst;
@@ -184,9 +184,9 @@ public abstract class TextEncoder extends Encoder {
                 return cr;
 
             if (action == CodingErrorAction.REPLACE) {
-                if (dst.remaining() < replacement.length)
+                if (dst.writableBytes() < replacement.length)
                     return CoderResult.OVERFLOW;
-                dst.put(replacement);
+                dst.writeBytes(replacement);
             }
 
             if ((action == CodingErrorAction.IGNORE)

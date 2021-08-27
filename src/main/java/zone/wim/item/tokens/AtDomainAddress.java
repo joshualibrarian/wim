@@ -37,7 +37,7 @@ public class AtDomainAddress implements Address {
 	}
 
 	public static AtDomainAddress decode(DecodeAdapter adapter) throws Invalid {
-		String text = adapter.readStringUntil(int codepoint);
+		String text = adapter.expectString();
 		return new AtDomainAddress(text);
 	}
 
@@ -54,9 +54,9 @@ public class AtDomainAddress implements Address {
 	private String sitePart;
 	private String userPart;
 	private String thingPart;
-	
+
 	public AtDomainAddress(String address) throws Invalid {
-		LOGGER.info("DomainedAddress(" + address + ")");
+		log.entering(this.getClass().getCanonicalName(), "AtDomainAddress(String)");
 		Matcher m = Regex.PATTERN.matcher(address);
 		
 		if (!m.matches()) {

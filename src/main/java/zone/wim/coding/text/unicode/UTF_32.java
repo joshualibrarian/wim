@@ -1,7 +1,6 @@
 package zone.wim.coding.text.unicode;
 
-import zone.wim.coding.Decoder;
-import zone.wim.coding.Encoder;
+import io.netty.buffer.ByteBuf;
 import zone.wim.coding.text.TextDecoder;
 import zone.wim.coding.text.TextEncoder;
 
@@ -32,12 +31,12 @@ public class UTF_32 extends UnicodeCodec {
     }
 
     @Override
-    public TextDecoder decoder(ByteBuffer src, CharBuffer dst) {
+    public TextDecoder decoder(ByteBuf src, CharBuffer dst) {
         return null;
     }
 
     @Override
-    public TextEncoder encoder(CharBuffer src, ByteBuffer dst) {
+    public TextEncoder encoder(CharBuffer src, ByteBuf dst) {
         return null;
     }
 

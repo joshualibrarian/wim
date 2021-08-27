@@ -11,7 +11,7 @@ public class Delivery extends ProtocolComponent {
 
 	public static Delivery decode(DecodeAdapter adapter) {
 
-		adapter.expect(ItemComponent.class, );
+		adapter.expect(ItemComponent.class, Item.TOKENIZER_CHAR);
 	}
 
 
@@ -27,7 +27,7 @@ public class Delivery extends ProtocolComponent {
 		adapter.write(ProtocolComponent.PROTOCOL_CHAR);
 		adapter.write(IDENTIFYING_CHAR);
 		for (ItemComponent component : payload) {
-			adapter.write(Item.SPACE_CHAR);
+			adapter.write(Item.TOKENIZER_CHAR);
 			component.encode(adapter);
 		}
 		

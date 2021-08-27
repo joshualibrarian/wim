@@ -10,6 +10,7 @@ package zone.wim.coding.text.unicode;
 //import java.nio.CharBuffer;
 
 
+import io.netty.buffer.ByteBuf;
 import zone.wim.coding.text.TextDecoder;
 import zone.wim.coding.text.TextEncoder;
 
@@ -18,6 +19,9 @@ import java.nio.ByteOrder;
 import java.nio.CharBuffer;
 
 public class UTF_16 extends UnicodeCodec {
+
+//    protected static final char BYTE_ORDER_MARK = '\uFEFF';
+//    protected static final char REVERSED_MARK = '\uFFFE';
 
     public static String CANONICAL_NAME = "UTF-16";
     public static String[] ALIASES = {"utf16", "utf-16"};
@@ -36,12 +40,12 @@ public class UTF_16 extends UnicodeCodec {
     public boolean byteOrderSensitive() { return true; }
 
     @Override
-    public TextDecoder decoder(ByteBuffer src, CharBuffer dst) {
+    public TextDecoder decoder(ByteBuf src, CharBuffer dst) {
         return null;
     }
 
     @Override
-    public TextEncoder encoder(CharBuffer src, ByteBuffer dst) {
+    public TextEncoder encoder(CharBuffer src, ByteBuf dst) {
         return null;
     }
 
@@ -52,36 +56,9 @@ public class UTF_16 extends UnicodeCodec {
 }
 
 //public class UTF_16 extends UnicodeCodec {
-//
-//    public static String CANONICAL_NAME = "UTF-16";
-//    public static String[] ALIASES = {"utf16", "utf-16"};
-//    public static float AVERAGE_BYTES_PER_CHAR = 2.0f;
-//    public static float MAX_BYTES_PER_CHAR = 4.0f;
-//    public static float AVERAGE_CHARS_PER_BYTE = 0.6f;
-//    public static float MAX_CHARS_PER_BYTE = 0.5f;
-//
-//    public String canonicalName() {
-//        return CANONICAL_NAME;
-//    }
-//    public String[] aliases() { return ALIASES; }
-//    public float averageBytesPerChar() { return AVERAGE_BYTES_PER_CHAR; }
-//    public float maxBytesPerChar() { return MAX_BYTES_PER_CHAR; }
-//    public float averageCharsPerByte() { return AVERAGE_CHARS_PER_BYTE; }
-//    public float maxCharsPerByte() { return MAX_CHARS_PER_BYTE; }
-//
-//    public UTF_16(ByteOrder byteOrder) {
-//        super(byteOrder);
-//    }
-//
-//    @Override
-//    public boolean byteOrderSensitive() {
-//        return true;
-//    }
-//
 //    private static class Encoder extends TextEncoder {
 //
-//        protected static final char BYTE_ORDER_MARK = '\uFEFF';
-//        protected static final char REVERSED_MARK = '\uFFFE';
+
 //
 //        private boolean usesMark;   /* Write an initial BOM */
 //        private boolean needsMark;

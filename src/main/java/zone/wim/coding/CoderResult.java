@@ -110,17 +110,16 @@ enum Result {
 
 public class CoderResult {
 
-    private static final int CR_STOPPED    = 0;
-    private static final int CR_ESCAPED    = 1;
-    private static final int CR_UNDERFLOW  = 2;
-    private static final int CR_OVERFLOW   = 3;
-    private static final int CR_ERROR_MIN  = 4;
-    private static final int CR_MALFORMED  = 4;
-    private static final int CR_UNMAPPABLE = 5;
+    private static final int CR_ESCAPED    = 0;
+    private static final int CR_UNDERFLOW  = 1;
+    private static final int CR_OVERFLOW   = 2;
+    private static final int CR_ERROR_MIN  = 2;
+    private static final int CR_MALFORMED  = 3;
+    private static final int CR_UNMAPPABLE = 4;
 
 
     private static final String[] names
-        = { "STOPPED", "ESCAPED", "UNDERFLOW", "OVERFLOW", "MALFORMED", "UNMAPPABLE" };
+        = { "ESCAPED", "UNDERFLOW", "OVERFLOW", "MALFORMED", "UNMAPPABLE" };
 
     private final int type;
     private final int value;
@@ -128,10 +127,6 @@ public class CoderResult {
     private CoderResult(int type, int value) {
         this.type = type;
         this.value = value;
-    }
-
-    public boolean isStopped() {
-        return (type == CR_STOPPED);
     }
 
     public boolean isEscaped() {
@@ -255,7 +250,5 @@ public class CoderResult {
     public static CoderResult escaped(int codepoint) {
     	return new CoderResult(CR_ESCAPED, codepoint);
     }
-
-    public static CoderResult stopped(int codepoint) { return new CoderResult(CR_STOPPED, codepoint); }
 
 }

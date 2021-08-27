@@ -3,15 +3,12 @@ package zone.wim.item.components;
 import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
-import java.util.PrimitiveIterator;
-import javax.jdo.annotations.EmbeddedOnly;
 
 import lombok.AllArgsConstructor;
-import lombok.Data;
 import lombok.Getter;
 import zone.wim.coding.DecodeAdapter;
-import zone.wim.coding.EncodeAdapter;
 import zone.wim.coding.SelfCoding;
+import zone.wim.coding.SelfCodingException;
 import zone.wim.coding.token.Address;
 import zone.wim.item.*;
 import zone.wim.item.tokens.Security;
@@ -32,23 +29,27 @@ enum ItemComponentType {
 				.map(t -> t.specifyingChar())
 				.mapToInt(c -> c.intValue()).toArray();
 	}
+	static ItemComponentType type(int codepoint) {
+		for( ItemComponentType t : values()) {
+			if (t.specifyingChar == codepoint) {
+				return t;
+			}
+		}
+		return null;
+	}
 }
 
 public abstract class ItemComponent implements SelfCoding {
 
-	public static ItemComponent decode(DecodeAdapter adapter) {
+	public static ItemComponent decode(DecodeAdapter adapter) throws SelfCodingException.IncorrectlyCoded {
+//		adapter.mark();
 
-//		adapter.expect(Summary.class, Manifest.class, Content.class, Relation.class);
-		adapter.mark();
-		expect(Address.class, ItemComponentType.chars());
+		Address a = (Address)adapter.expect(Address.class, ItemComponentType.chars());
+		adapter.preCoded().push(a);
 
+		ItemComponentType t = ItemComponentType.type(adapter.lastDecodedChar());
+		return (ItemComponent)adapter.expect(t.clazz(), Item.TOKENIZER_CHAR);
 
-		ItemComponent result = null;
-		
-		adapter.currentToken();
-		
-		
-		return result;
 	}
 	
 //	public static ItemComponent parse(UnicodeReader<ItemComponent> parser) {
@@ -81,56 +82,11 @@ public abstract class ItemComponent implements SelfCoding {
 	}
 	
 	protected ItemComponent(Reference enclosingItem, DecodeAdapter adapter) {
-		
+
 	}
 	
 	protected ItemComponent(String address) {
 		this.address = address;
 	}
 
-	protected void encodeTimestamp(EncodeAdapter adapter) {
-		adapter.write(Item.TIMESTAMP_CHAR);
-		adapter.write(timestamp);
-	}
-	
-	protected void decodeTimestamp(DecodeAdapter adapter) {
-		
-	}
-	
-	protected void encodeSecurity(EncodeAdapter adapter) {
-		adapter.write(Item.SECURITY_CHAR);
-		adapter.write(security);
-	}
-	
-	protected void encodeSignatures(EncodeAdapter adapter) {
-		
-	}
-	
-	public Item enclosingItem() {
-		return enclosingItem;
-	}
-	
-	public void enclosingItem(Item enclosingItem) {
-		this.enclosingItem = enclosingItem;
-	}
-
-	public Date timestamp() {
-		return timestamp;
-	}
-	
-	public Security security() {
-		return security;
-	}
-	
-	public void security(Security security) {
-		this.security = security;
-	}
-	
-	public List<Signature> signatures() {
-		return signatures;
-	}
-	
-	public void signatures(List<Signature> signatures) {
-		this.signatures = signatures;
-	}
 }

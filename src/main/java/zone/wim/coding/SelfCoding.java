@@ -36,24 +36,37 @@ import java.util.List;
  */
 public interface SelfCoding {
 
+
+	/**
+	 * This is what it WOULD look like if this were allowed,
+	 * requiring at compile time that every implementer of this
+	 * interface must implement this static function, which
+	 * is not inherited, but required:
+	 *
+	 * abstract static SelfCoding decode(DecodeAdapter adapter);
+	 *
+	 * For that matter, if we could have this, we could have
+	 * the same with properties, to hold information about that class:
+	 *
+	 * abstract static SOME_CLASS_PROPERTY_OR_WHATEVER;
+	 *
+	 */
+	/**
 	// this is what it WOULD look like if this were allowed,
-	// requiring at compile time that every implementer of this 
-	// interface must implement this static function, which 
-	// is not inherited:
-//	abstract static SelfCoding decode(DecodeAdapter adapter);
+	//
 
 
-	public static SelfCoding decode(DecodeAdapter adapter) throws Exception {
-		SelfCoding result = null;
+	*/
 
-		Class<? extends SelfCoding> expectingType = adapter.expecting();
-
-		// TODO we need to be caching these classes, and possibly pre-ordering the first several
-		ClassInfoList selfCodingTypes = new ClassGraph().enableClassInfo()
-				.scan().getClassesImplementing(expectingType.getCanonicalName());
-
-		return result;
-	}
+//	public static SelfCoding decode(DecodeAdapter adapter) throws Exception {
+//		SelfCoding result = null;
+//
+//		result = Class<? extends SelfCoding> expectingType = adapter.expecting();
+//
+//		// TODO we need to be caching these classes, and possibly pre-ordering the first several
+//
+//		// unfinished...
+//	}
 
 	public static SelfCoding decode(String tokenText, Class<? extends SelfCoding> type) throws Exception {
 		// TODO we need to be caching these classes, and possibly pre-ordering the first several

@@ -15,11 +15,11 @@ public abstract class ProtocolComponent implements SelfCoding {
 
 	public static ProtocolComponent decode(DecodeAdapter adapter) throws InvalidData {
 		ProtocolComponent result = null;
-		int firstCodepoint = adapter.readSingleCodepoint();
+		int firstCodepoint = adapter.expectCodepoint();
 		if (firstCodepoint != PROTOCOL_CHAR) {
 			throw new InvalidData("protocol component must begin with " + PROTOCOL_CHAR);
 		}
-		int secondCodepoint = adapter.readSingleCodepoint();
+		int secondCodepoint = adapter.expectCodepoint();
 		if (secondCodepoint == Request.IDENTIFYING_CHAR) {
 			result = Request.decode(adapter);
 		} else if (secondCodepoint == Delivery.IDENTIFYING_CHAR) {
